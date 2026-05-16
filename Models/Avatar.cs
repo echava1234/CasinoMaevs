@@ -1,4 +1,4 @@
-namespace Casino_POO.Models;
+namespace CasinoMaevs.Models;
 
 public class Avatar
 {
