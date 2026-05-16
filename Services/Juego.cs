@@ -1,6 +1,6 @@
-namespace Casino_POO.Services;
+namespace CasinoMAEVS.Services;
 
-using Casino_POO.Models;
+using CasinoMAEVS.Models;
 
 // ─── CLASE ABSTRACTA BASE ────────────────────────────────────────────────────
 
