@@ -1,26 +1,14 @@
 namespace CasinoMaevs.Models;
 
-public enum Rareza
+public class Avatar
 {
-    Comun,
-    Raro,
-    Epico,
-    Legendario
-}
+    public string Estilo { get; set; }
 
-public class ItemEstetico
-{
-    public string Nombre { get; set; }
-    public Rareza Rareza { get; set; }
-    public double Multiplicador { get; set; }
-
-    public ItemEstetico(string nombre, Rareza rareza, double multiplicador)
+    public Avatar(string estilo = "Clásico")
     {
-        Nombre = nombre;
-        Rareza = rareza;
-        Multiplicador = multiplicador;
+        Estilo = estilo;
     }
 
     public override string ToString()
-        => $"[{Rareza}] {Nombre} (x{Multiplicador} multiplicador)";
+        => $"Avatar ({Estilo})";
 }
