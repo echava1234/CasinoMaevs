@@ -45,6 +45,70 @@ class Program
         Console.WriteLine("╚══════════════════════════════════════╝\n");
         Console.WriteLine($"🎮 Jugador activo en sesión: {usuario.Username}\n");
 
+        // ═══════════════════════════════════════════════════════════════════════════════
+        // 🔐 ENDPOINTS DE AUTENTICACIÓN (Delegados a AuthService)
+        // ═══════════════════════════════════════════════════════════════════════════════
+
+        // 🌐 ENDPOINT 1: Registrar nuevo usuario
+        app.MapPost("/api/auth/registrar", (RegistroRequest req) => {
+            try {
+                authService.Registrar(req.Username, req.Contraseña, req.EstiloAvatar ?? "Clásico");
+                return Results.Ok(new { mensaje = "Usuario registrado exitosamente", username = req.Username });
+            } catch (Exception ex) {
+                return Results.BadRequest(new { error = ex.Message });
+            }
+        });
+
+        // 🌐 ENDPOINT 2: Login de usuario
+        app.MapPost("/api/auth/login", (LoginRequest req) => {
+            try {
+                authService.Login(req.Username, req.Contraseña);
+                Usuario usuarioActual = authService.ObtenerUsuarioAutenticado();
+                return Results.Ok(new { 
+                    mensaje = "Login exitoso", 
+                    username = usuarioActual.Username,
+                    tokens = usuarioActual.MaevsTokens
+                });
+            } catch (Exception ex) {
+                return Results.BadRequest(new { error = ex.Message });
+            }
+        });
+
+        // 🌐 ENDPOINT 3: Verificar estado de autenticación
+        app.MapGet("/api/auth/estado", () => {
+            if (!authService.EstaAutenticado())
+                return Results.Unauthorized();
+            
+            Usuario usuario = authService.ObtenerUsuarioAutenticado();
+            return Results.Ok(new { 
+                autenticado = true, 
+                username = usuario.Username 
+            });
+        });
+
+        // 🌐 ENDPOINT 4: Logout
+        app.MapPost("/api/auth/logout", () => {
+            authService.Logout();
+            return Results.Ok(new { mensaje = "Sesión cerrada" });
+        });
+
+        // 🌐 ENDPOINT 5: Cambiar contraseña
+        app.MapPost("/api/auth/cambiar-contraseña", (CambiarContraseñaRequest req) => {
+            try {
+                if (!authService.EstaAutenticado())
+                    return Results.Unauthorized();
+                
+                authService.CambiarContraseña(req.ContraseñaAntigua, req.ContraseñaNueva);
+                return Results.Ok(new { mensaje = "Contraseña cambiada exitosamente" });
+            } catch (Exception ex) {
+                return Results.BadRequest(new { error = ex.Message });
+            }
+        });
+
+        // ═══════════════════════════════════════════════════════════════════════════════
+        // 🎮 ENDPOINTS DE JUEGO (Requieren autenticación)
+        // ═══════════════════════════════════════════════════════════════════════════════
+
         // 🌐 ENDPOINT 1: Obtener el estado del jugador en tiempo real
         app.MapGet("/api/usuario", () => Results.Ok(new {
             username = usuario.Username,
