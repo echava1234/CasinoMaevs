@@ -18,6 +18,10 @@ class Program
     private static BlackjackSimplificado blackjack = new BlackjackSimplificado();
     private static RuletaSuerte ruleta = new RuletaSuerte();
 
+    // ✨ SOLUCIÓN AL ERROR: Instanciar el servicio de autenticación para que exista en el contexto
+    // (Asegúrate de que la clase se llame 'AuthService' en tu Backend, si tiene otro nombre como 'AutenticacionService', cámbialo aquí)
+    private static AuthService authService = new AuthService();
+
     // Creamos un usuario global en memoria para simular las partidas en la web local
     private static Usuario usuario = new Usuario("MaevsPlayer01", "Guerrero Galáctico");
     
@@ -72,7 +76,7 @@ class Program
                     username = usuarioActual.Username,
                     tokens = usuarioActual.MaevsTokens
                 });
-            } catch (Exception ex) {
+            } catch (Exception) { // ✨ Corrección de la advertencia (warning CS0168) al remover la variable 'ex' que no se usaba
                 return Results.Unauthorized();
             }
         });
@@ -82,10 +86,10 @@ class Program
             if (!authService.EstaAutenticado())
                 return Results.Unauthorized();
 
-            Usuario usuario = authService.ObtenerUsuarioAutenticado();
+            Usuario usuarioAutenticado = authService.ObtenerUsuarioAutenticado();
             return Results.Ok(new { 
                 autenticado = true, 
-                username = usuario.Username 
+                username = usuarioAutenticado.Username 
             });
         });
 
@@ -113,28 +117,35 @@ class Program
         // ═══════════════════════════════════════════════════════════════════════════════
 
         // 🌐 ENDPOINT 1: Obtener el estado del jugador en tiempo real
-        app.MapGet("/api/usuario", () => Results.Ok(new {
-            username = usuario.Username,
-            tokens = usuario.MaevsTokens,
-            avatarEstilo = usuario.Avatar.EstiloBase,
-            multiplicador = usuario.Avatar.MultiplicadorTotal,
-            itemsEquipados = usuario.Avatar.ItemsEquipados.Select(i => i.ToString()).ToList()
-        }));
+        app.MapGet("/api/usuario", () => {
+            // Modificación inteligente: Si el usuario ya inició sesión mediante authService, usamos ese. Si no, usamos el global por defecto.
+            Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+
+            return Results.Ok(new {
+                username = usuarioActual.Username,
+                tokens = usuarioActual.MaevsTokens,
+                avatarEstilo = usuarioActual.Avatar.EstiloBase,
+                multiplicador = usuarioActual.Avatar.MultiplicadorTotal,
+                itemsEquipados = usuarioActual.Avatar.ItemsEquipados.Select(i => i.ToString()).ToList()
+            });
+        });
 
         // 🌐 ENDPOINT 2: Procesar recarga simulada de PayPal
         app.MapPost("/api/paypal/recargar", (RecargaRequest req) => {
-            bool exito = paypalService.ProcesarRecarga(usuario, req.MontoUsd);
+            Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+            bool exito = paypalService.ProcesarRecarga(usuarioActual, req.MontoUsd);
             if (exito)
-                return Results.Ok(new { mensaje = "Recarga exitosa", saldoActual = usuario.MaevsTokens });
+                return Results.Ok(new { mensaje = "Recarga exitosa", saldoActual = usuarioActual.MaevsTokens });
             return Results.BadRequest(new { mensaje = "Error al procesar el pago" });
         });
 
         // 🌐 ENDPOINT 3: Jugar a los Slots (Tragamonedas)
         app.MapPost("/api/jugar/slots", (ApuestaRequest req) => {
             try {
-                double saldoAntes = usuario.MaevsTokens;
-                double ganado = slots.Jugar(usuario, req.Apuesta);
-                return Results.Ok(new { exito = true, juego = "Slots", saldoAntes, ganado, saldoActual = usuario.MaevsTokens });
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                double saldoAntes = usuarioActual.MaevsTokens;
+                double ganado = slots.Jugar(usuarioActual, req.Apuesta);
+                return Results.Ok(new { exito = true, juego = "Slots", saldoAntes, ganado, saldoActual = usuarioActual.MaevsTokens });
             } catch (Exception ex) {
                 return Results.BadRequest(new { exito = false, mensaje = ex.Message });
             }
@@ -143,7 +154,6 @@ class Program
         // 🌐 ENDPOINT 4: Generar el Pool de 6 Cajas Misteriosas
         app.MapGet("/api/cajas/generar", () => {
             ultimasCajasGeneradas = casino.Generar6Cajas();
-            // Retorna las cajas estructuradas para que JavaScript las dibuje en pantalla
             return Results.Ok(ultimasCajasGeneradas.Select(c => new { c.Id, c.FueAbierta, desc = c.Descripcion }));
         });
 
@@ -153,27 +163,27 @@ class Program
                 if (ultimasCajasGeneradas.Count == 0)
                     return Results.BadRequest(new { mensaje = "Primero debes generar las cajas." });
 
-                double saldoAntes = usuario.MaevsTokens;
-                // Ejecuta tu lógica real filtrada con LINQ
-                casino.SeleccionarYAbrirCajas(usuario, ultimasCajasGeneradas, req.IdsSeleccionados);
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                double saldoAntes = usuarioActual.MaevsTokens;
+                
+                casino.SeleccionarYAbrirCajas(usuarioActual, ultimasCajasGeneradas, req.IdsSeleccionados);
 
                 return Results.Ok(new { 
                     exito = true, 
-                    saldoActual = usuario.MaevsTokens,
-                    itemsTotales = usuario.Avatar.ItemsEquipados.Select(i => i.ToString()).ToList(),
-                    multiplicadorFinal = usuario.Avatar.MultiplicadorTotal
+                    saldoActual = usuarioActual.MaevsTokens,
+                    itemsTotales = usuarioActual.Avatar.ItemsEquipados.Select(i => i.ToString()).ToList(),
+                    multiplicadorFinal = usuarioActual.Avatar.MultiplicadorTotal
                 });
             } catch (Exception ex) {
                 return Results.BadRequest(new { mensaje = ex.Message });
             }
         });
 
-        // Mantiene el hilo de ejecución corriendo de fondo de manera asíncrona
         await app.RunAsync();
     }
 }
 
-// 📦 CLASES DTO (Data Transfer Objects) para mapear el JSON que envía el JavaScript del HTML
+// 📦 CLASES DTO (Data Transfer Objects)
 public class RegistroRequest 
 { 
     public string Username { get; set; }
