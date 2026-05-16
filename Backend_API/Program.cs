@@ -18,8 +18,8 @@ class Program
     private static BlackjackSimplificado blackjack = new BlackjackSimplificado();
     private static RuletaSuerte ruleta = new RuletaSuerte();
 
-    // ✨ SOLUCIÓN AL ERROR: Instanciar el servicio de autenticación para que exista en el contexto
-    // (Asegúrate de que la clase se llame 'AuthService' en tu Backend, si tiene otro nombre como 'AutenticacionService', cámbialo aquí)
+    
+    
     private static AuthService authService = new AuthService();
 
     // Creamos un usuario global en memoria para simular las partidas en la web local
