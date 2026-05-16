@@ -174,6 +174,25 @@ class Program
 }
 
 // 📦 CLASES DTO (Data Transfer Objects) para mapear el JSON que envía el JavaScript del HTML
+public class RegistroRequest 
+{ 
+    public string Username { get; set; }
+    public string Contraseña { get; set; }
+    public string EstiloAvatar { get; set; }
+}
+
+public class LoginRequest 
+{ 
+    public string Username { get; set; }
+    public string Contraseña { get; set; }
+}
+
+public class CambiarContraseñaRequest 
+{ 
+    public string ContraseñaAntigua { get; set; }
+    public string ContraseñaNueva { get; set; }
+}
+
 public class RecargaRequest { public double MontoUsd { get; set; } }
 public class ApuestaRequest { public double Apuesta { get; set; } }
 public class AbrirCajasRequest { public List<int> IdsSeleccionados { get; set; } }
