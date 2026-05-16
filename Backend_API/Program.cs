@@ -52,14 +52,17 @@ class Program
         // 🌐 ENDPOINT 1: Registrar nuevo usuario
         app.MapPost("/api/auth/registrar", (RegistroRequest req) => {
             try {
+                if (string.IsNullOrWhiteSpace(req.Username) || string.IsNullOrWhiteSpace(req.Contraseña))
+                    return Results.BadRequest(new { mensaje = "Username y contraseña son requeridos." });
+
                 authService.Registrar(req.Username, req.Contraseña, req.EstiloAvatar ?? "Clásico");
-                return Results.Ok(new { mensaje = "Usuario registrado exitosamente", username = req.Username });
+                return Results.Ok(new { mensaje = "Usuario registrado exitosamente.", username = req.Username });
             } catch (Exception ex) {
-                return Results.BadRequest(new { error = ex.Message });
+                return Results.BadRequest(new { mensaje = ex.Message });
             }
         });
 
-        // 🌐 ENDPOINT 2: Login de usuario
+        // 🌐 ENDPOINT 2: Login
         app.MapPost("/api/auth/login", (LoginRequest req) => {
             try {
                 authService.Login(req.Username, req.Contraseña);
@@ -70,7 +73,7 @@ class Program
                     tokens = usuarioActual.MaevsTokens
                 });
             } catch (Exception ex) {
-                return Results.BadRequest(new { error = ex.Message });
+                return Results.Unauthorized();
             }
         });
 
@@ -78,7 +81,7 @@ class Program
         app.MapGet("/api/auth/estado", () => {
             if (!authService.EstaAutenticado())
                 return Results.Unauthorized();
-            
+
             Usuario usuario = authService.ObtenerUsuarioAutenticado();
             return Results.Ok(new { 
                 autenticado = true, 
@@ -89,7 +92,7 @@ class Program
         // 🌐 ENDPOINT 4: Logout
         app.MapPost("/api/auth/logout", () => {
             authService.Logout();
-            return Results.Ok(new { mensaje = "Sesión cerrada" });
+            return Results.Ok(new { mensaje = "Sesión cerrada exitosamente." });
         });
 
         // 🌐 ENDPOINT 5: Cambiar contraseña
@@ -97,11 +100,11 @@ class Program
             try {
                 if (!authService.EstaAutenticado())
                     return Results.Unauthorized();
-                
+
                 authService.CambiarContraseña(req.ContraseñaAntigua, req.ContraseñaNueva);
-                return Results.Ok(new { mensaje = "Contraseña cambiada exitosamente" });
+                return Results.Ok(new { mensaje = "Contraseña cambiada exitosamente." });
             } catch (Exception ex) {
-                return Results.BadRequest(new { error = ex.Message });
+                return Results.BadRequest(new { mensaje = ex.Message });
             }
         });
 
