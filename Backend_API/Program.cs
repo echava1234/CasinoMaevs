@@ -151,6 +151,30 @@ class Program
             }
         });
 
+        // 🌐 ENDPOINT: Jugar Blackjack
+        app.MapPost("/api/jugar/blackjack", (ApuestaRequest req) => {
+            try {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                double saldoAntes = usuarioActual.MaevsTokens;
+                double ganado = blackjack.Jugar(usuarioActual, req.Apuesta);
+                return Results.Ok(new { exito = true, juego = "Blackjack", saldoAntes, ganado, saldoActual = usuarioActual.MaevsTokens });
+            } catch (Exception ex) {
+                return Results.BadRequest(new { exito = false, mensaje = ex.Message });
+            }
+        });
+        
+        // 🌐 ENDPOINT: Jugar Ruleta
+        app.MapPost("/api/jugar/ruleta", (ApuestaRequest req) => {
+            try {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                double saldoAntes = usuarioActual.MaevsTokens;
+                double ganado = ruleta.Jugar(usuarioActual, req.Apuesta);
+                return Results.Ok(new { exito = true, juego = "Ruleta", saldoAntes, ganado, saldoActual = usuarioActual.MaevsTokens });
+            } catch (Exception ex) {
+                return Results.BadRequest(new { exito = false, mensaje = ex.Message });
+            }
+        });
+
         // 🌐 ENDPOINT 4: Generar el Pool de 6 Cajas Misteriosas
         app.MapGet("/api/cajas/generar", () => {
             ultimasCajasGeneradas = casino.Generar6Cajas();
