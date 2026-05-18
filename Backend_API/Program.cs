@@ -11,7 +11,16 @@ class Program
         clientId:       "AYSq3RDGsmBLJE-otTkBtM-jBRd1TCQwFf9RGfwddNXWz0uFU9ztymylOuICfZjL",
         clientSecret:   "EGnHDxD_qRPdaLdZz8iCr8N7_MnF7UGpaXplBqk_ANpJo47-FjwWVImRW15-4PCi",
         tasaConversion: 100
+
+        
     );
+
+    private static DistorsionService distorsionService = new DistorsionService();
+    private static PanicSystem panicSystem = new PanicSystem();
+    private static LogroService logroService = new LogroService();
+    private static BlackMarketService blackMarket = new BlackMarketService();
+    private static OverloadMode overloadMode = new OverloadMode();
+
 
     private static CasinoController casino = new CasinoController();
     private static SlotsJuego slots = new SlotsJuego();
@@ -181,6 +190,176 @@ class Program
             return Results.Ok(ultimasCajasGeneradas.Select(c => new { c.Id, c.FueAbierta, desc = c.Descripcion }));
         });
 
+                    // 🌐 Obtener componentes de hardware disponibles
+            app.MapGet("/api/hardware/componentes", () => {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                return Results.Ok(usuarioActual.Avatar.ComponentesHardware.Select(c => new {
+                    id = usuarioActual.Avatar.ComponentesHardware.IndexOf(c),
+                    nombre = c.Nombre,
+                    nivel = c.Nivel,
+                    nivelMaximo = c.NivelMaximo,
+                    bonus = c.BonusMultiplicador,
+                    costoProxima = c.CalcularCostoProxima()
+                }));
+            });
+            
+            // 🌐 Mejorar un componente específico
+            app.MapPost("/api/hardware/mejorar/{id}", (int id) => {
+                try {
+                    Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                    
+                    if (usuarioActual.Avatar.MejorarComponente(id, usuarioActual))
+                    {
+                        return Results.Ok(new {
+                            exito = true,
+                            mensaje = "Componente mejorado",
+                            multiplicadorTotal = usuarioActual.Avatar.MultiplicadorTotal,
+                            saldoActual = usuarioActual.MaevsTokens
+                        });
+                    }
+                    return Results.BadRequest(new { mensaje = "No hay fondos o componente inválido" });
+                } catch (Exception ex) {
+                    return Results.BadRequest(new { mensaje = ex.Message });
+                }
+            });
+            
+            // ──────────────────────────────────────────────────────────────
+            // ⚡ ENDPOINTS DE DISTORSIÓN (Eventos Climáticos)
+            // ──────────────────────────────────────────────────────────────
+            
+            // 🌐 Obtener distorsión activa actual
+            app.MapGet("/api/distorsion/actual", () => {
+                var distorsion = distorsionService.ObtenerDistorsionActiva();
+                if (distorsion == null)
+                    return Results.Ok(new { activa = false });
+            
+                return Results.Ok(new {
+                    activa = distorsion.EstaActiva,
+                    nombre = distorsion.Nombre,
+                    descripcion = distorsion.Descripcion,
+                    bonusGanancia = distorsion.BonusGanancia,
+                    multiplicadorApuesta = distorsion.MultiplicadorApuesta,
+                    tiempoRestante = distorsion.TiempoRestante()
+                });
+            });
+            
+            // ──────────────────────────────────────────────────────────────
+            // 🚨 ENDPOINTS DE PÁNICO (Emergency Extract)
+            // ──────────────────────────────────────────────────────────────
+            
+            // 🌐 Activar retiro de emergencia
+            app.MapPost("/api/panic/extract", (ExtractRequest req) => {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                
+                var (exito, mensaje, montoBloqueado) = panicSystem.EmergencyExtract(usuarioActual, req.ApuestaActual);
+                
+                return Results.Ok(new {
+                    exito,
+                    mensaje,
+                    montoBloqueado,
+                    saldoActual = usuarioActual.MaevsTokens,
+                    tiempoEnfriamiento = panicSystem.ObtenerTiempoEnfriamientoRestante(usuarioActual)
+                });
+            });
+            
+            // ──────────────────────────────────────────────────────────────
+            // 🏆 ENDPOINTS DE LOGROS
+            // ──────────────────────────────────────────────────────────────
+            
+            // 🌐 Obtener todos los logros del usuario
+            app.MapGet("/api/logros", () => {
+                return Results.Ok(new {
+                    logros = logroService.ObtenerLogrosDesbloqueados(),
+                    progreso = logroService.ObtenerPorcentajeProgreso()
+                });
+            });
+            
+            // 🌐 Desbloquear un logro (endpoint interno para validación)
+            app.MapPost("/api/logros/desbloquear/{id}", (string id) => {
+                bool desbloqueado = logroService.DesbloquearLogro(id);
+                return Results.Ok(new { desbloqueado });
+            });
+            
+            // ──────────────────────────────────────────────────────────────
+            // 📈 ENDPOINTS DE MERCADO NEGRO
+            // ──────────────────────────────────────────────────────────────
+            
+            // 🌐 Obtener precio actual del token
+            app.MapGet("/api/mercado/precio", () => {
+                return Results.Ok(new {
+                    precioUSD = blackMarket.PrecioActual,
+                    ultimaActualizacion = DateTime.UtcNow
+                });
+            });
+            
+            // 🌐 Comprar tokens en el mercado
+            app.MapPost("/api/mercado/comprar", (CompraTokensRequest req) => {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                
+                double tokensObtenidos = blackMarket.ComprarTokens(req.USD);
+                usuarioActual.MaevsTokens += tokensObtenidos;
+                
+                return Results.Ok(new {
+                    usdUsados = req.USD,
+                    tokensObtenidos = tokensObtenidos,
+                    precioUsado = blackMarket.PrecioActual,
+                    saldoActual = usuarioActual.MaevsTokens
+                });
+            });
+            
+            // 🌐 Vender tokens en el mercado
+            app.MapPost("/api/mercado/vender", (VenderTokensRequest req) => {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                
+                if (usuarioActual.MaevsTokens < req.Tokens)
+                    return Results.BadRequest(new { mensaje = "No tienes suficientes tokens" });
+                
+                double usdObtenidos = blackMarket.VenderTokens(req.Tokens);
+                usuarioActual.MaevsTokens -= req.Tokens;
+                
+                return Results.Ok(new {
+                    tokensVendidos = req.Tokens,
+                    usdObtenidos = usdObtenidos,
+                    precioUsado = blackMarket.PrecioActual,
+                    saldoTokens = usuarioActual.MaevsTokens
+                });
+            });
+            
+            // ──────────────────────────────────────────────────────────────
+            // 🔴 ENDPOINTS DE OVERLOAD MODE
+            // ──────────────────────────────────────────────────────────────
+            
+            // 🌐 Obtener nivel de energía
+            app.MapGet("/api/overload/energia/{username}", (string username) => {
+                double energia = overloadMode.ObtenerEnergia(username);
+                bool puedeActivar = overloadMode.PuedeActivarOverload(username);
+                
+                return Results.Ok(new {
+                    energia,
+                    energiaMaxima = 100.0,
+                    puedeActivar,
+                    porcentaje = (energia / 100.0) * 100
+                });
+            });
+            
+            // 🌐 Activar modo Overload
+            app.MapPost("/api/overload/activar", () => {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                
+                var (activado, multiplicador) = overloadMode.ActivarOverload(usuarioActual.Username);
+                
+                return Results.Ok(new {
+                    activado,
+                    multiplicador,
+                    tirosRestantes = activado ? 5 : 0,
+                    mensaje = activado ? "¡OVERLOAD MODE ACTIVADO! x3 por 5 tiros" : "Necesitas 100 de energía"
+                });
+            });
+            
+            // Iniciar servicios en segundo plano
+            distorsionService.IniciarServicio(intervaloSegundos: 300); // Cada 5 minutos
+            blackMarket.IniciarMercado(intervaloSegundos: 30);        // Cada 30 segundos
+
         // 🌐 ENDPOINT 5: Abrir las 3 cajas seleccionadas por el usuario desde el navegador
         app.MapPost("/api/cajas/abrir", (AbrirCajasRequest req) => {
             try {
@@ -230,3 +409,8 @@ public class CambiarContraseñaRequest
 public class RecargaRequest { public double MontoUsd { get; set; } }
 public class ApuestaRequest { public double Apuesta { get; set; } }
 public class AbrirCajasRequest { public List<int> IdsSeleccionados { get; set; } }
+
+
+public class ExtractRequest { public double ApuestaActual { get; set; } }
+public class CompraTokensRequest { public double USD { get; set; } }
+public class VenderTokensRequest { public double Tokens { get; set; } }
