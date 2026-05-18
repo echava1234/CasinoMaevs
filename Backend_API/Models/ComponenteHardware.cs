@@ -1,9 +1,9 @@
 namespace CasinoMaevs.Models;
 
-/// <summary>
+
 /// Representa un componente de hardware que el usuario puede mejorar
 /// para aumentar su multiplicador. Cada componente tiene un nivel, costo y bonus.
-/// </summary>
+
 public class ComponenteHardware
 {
     // Propiedades automáticas con encapsulamiento
@@ -24,10 +24,10 @@ public class ComponenteHardware
         CostoPorNivel = costoBase;
     }
 
-    /// <summary>
+    
     /// Mejora el componente al siguiente nivel.
     /// Usa una validación por propiedad para evitar superar el nivel máximo.
-    /// </summary>
+    
     public bool MejorarNivel()
     {
         if (Nivel >= NivelMaximo)
@@ -38,10 +38,10 @@ public class ComponenteHardware
         return true;
     }
 
-    /// <summary>
+    
     /// Calcula el costo total para mejorar al siguiente nivel.
     /// Usa una función con escalado exponencial.
-    /// </summary>
+    
     public double CalcularCostoProxima()
     {
         if (Nivel >= NivelMaximo)
