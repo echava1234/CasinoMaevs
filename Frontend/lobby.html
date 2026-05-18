@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casino Maevs — Lobby del Nexo</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <style>
+    /* ── LOBBY BG ── */
+    .lobby-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 40% at 20% 10%, rgba(0,245,255,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 85%, rgba(255,0,200,0.05) 0%, transparent 60%),
+        var(--bg-void);
+    }
+
+    /* ── DASHBOARD ── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── TOKEN BALANCE HERO ── */
+    .balance-hero {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(0,245,255,0.06) 0%, rgba(255,0,200,0.04) 100%);
+      border: 1px solid rgba(0,245,255,0.2);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-hero::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+    }
+
+    .balance-hero::after {
+      content: '₮';
+      position: absolute; right: 2rem; top: 50%;
+      transform: translateY(-50%);
+      font-size: 8rem;
+      color: rgba(255,215,0,0.04);
+      font-family: var(--font-display);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .balance-left h2 {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.3rem;
+    }
+
+    .balance-amount {
+      font-family: var(--font-mono);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--neon-gold);
+      text-shadow: var(--shadow-gold);
+      line-height: 1;
+    }
+
+    .balance-sub {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      color: var(--neon-gold);
+      letter-spacing: 0.2em;
+      opacity: 0.6;
+    }
+
+    .balance-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* ── PAYPAL PANEL ── */
+    .paypal-panel {
+      background: rgba(0,245,255,0.03);
+      border: 1px solid rgba(0,245,255,0.15);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+
+    .paypal-logo {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--neon-cyan);
+    }
+
+    .paypal-input-wrap { display: flex; gap: 0.5rem; align-items: center; flex: 1; min-width: 200px; }
+
+    .paypal-prefix {
+      font-family: var(--font-mono);
+      color: var(--neon-gold);
+      font-size: 0.9rem;
+    }
+
+    /* ── GAMES GRID ── */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .game-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(0,245,255,0.15);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,245,255,0.5);
+      box-shadow: var(--shadow-cyan);
+    }
+
+    .game-header {
+      padding: 1.75rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 100%, var(--game-color, rgba(0,245,255,0.12)) 0%, transparent 70%);
+    }
+
+    .game-icon {
+      font-size: 3.5rem;
+      display: block;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 12px var(--game-glow, rgba(0,245,255,0.6)));
+    }
+
+    .game-name {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--neon-cyan);
+      margin-top: 0.75rem;
+      position: relative; z-index: 1;
+    }
+
+    .game-card:nth-child(2) .game-name { color: var(--neon-magenta); }
+    .game-card:nth-child(3) .game-name { color: var(--neon-gold); }
+
+    .game-body { padding: 1.25rem; }
+
+    .game-desc {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .game-stats {
+      display: flex; gap: 0.75rem; margin-bottom: 1.25rem;
+    }
+
+    .game-stat {
+      flex: 1; text-align: center;
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem;
+    }
+
+    .game-stat-val {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--neon-cyan);
+    }
+
+    .game-card:nth-child(2) .game-stat-val { color: var(--neon-magenta); }
+    .game-card:nth-child(3) .game-stat-val { color: var(--neon-gold); }
+
+    .game-stat-lbl {
+      font-family: var(--font-display);
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-top: 0.1rem;
+    }
+
+    /* ── BET INPUT ── */
+    .bet-row {
+      display: flex; gap: 0.5rem; align-items: center;
+    }
+
+    .bet-input {
+      flex: 1;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(0,245,255,0.2);
+      border-radius: var(--radius-sm);
+      color: var(--neon-gold);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      padding: 0.5rem 0.75rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .bet-input:focus { border-color: var(--neon-gold); box-shadow: 0 0 0 2px rgba(255,215,0,0.1); }
+
+    /* ── RESULT BOX ── */
+    .result-box {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      border: 1px solid rgba(0,245,255,0.2);
+      background: rgba(0,0,0,0.3);
+      color: var(--text-secondary);
+      min-height: 2.5rem;
+      transition: var(--transition);
+      display: none;
+    }
+
+    .result-box.win  { border-color: var(--neon-green); color: var(--neon-green); background: rgba(57,255,20,0.05); display: block; }
+    .result-box.lose { border-color: var(--neon-red);   color: var(--neon-red);   background: rgba(255,32,82,0.05); display: block; }
+    .result-box.tie  { border-color: var(--neon-gold);  color: var(--neon-gold);  background: rgba(255,215,0,0.05); display: block; }
+    .result-box.show { display: block; }
+
+    /* ── HISTORY ── */
+    .history-section { margin-bottom: 2rem; }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .history-table th {
+      font-family: var(--font-display);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(0,245,255,0.1);
+    }
+
+    .history-table td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid rgba(0,0,0,0.3);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .hist-win  { color: var(--neon-green) !important; }
+    .hist-lose { color: var(--neon-red) !important; }
+    .hist-tie  { color: var(--neon-gold) !important; }
+
+    /* ── QUICK ACTIONS ── */
+    .quick-nav {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .quick-btn {
+      flex: 1; min-width: 160px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      padding: 1.25rem;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(0,245,255,0.12);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .quick-btn:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      background: rgba(0,245,255,0.04);
+      transform: translateY(-3px);
+    }
+
+    .quick-btn-icon { font-size: 1.8rem; }
+    .quick-btn-label { font-family: var(--font-display); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <div class="lobby-bg"></div>
+  <div class="grid-bg"></div>
+  <div id="toast-container"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <span class="navbar-logo">🎰 CASINO <span>MAEVS</span></span>
+    <div class="navbar-links">
+      <a href="index.html" class="nav-link">🔐 Login</a>
+      <a href="lobby.html" class="nav-link active">🎮 Lobby</a>
+      <a href="avatar.html" class="nav-link">👤 Avatar</a>
+      <a href="rewards.html" class="nav-link">🎁 Cajas</a>
+    </div>
+    <div class="navbar-tokens">⚡ <span id="nav-tokens">0</span> MAEVS</div>
+  </nav>
+
+  <div class="page-content">
+
+    <!-- BALANCE HERO -->
+    <div class="dashboard-grid">
+      <div class="balance-hero fade-in">
+        <div class="balance-left">
+          <h2>SALDO ACTUAL</h2>
+          <div class="balance-amount" id="balance-display">0</div>
+          <div class="balance-sub">MAEVS TOKENS</div>
+        </div>
+        <div class="balance-actions">
+          <button class="btn btn-cyan" onclick="togglePaypal()">💳 RECARGAR</button>
+          <a href="avatar.html" class="btn btn-magenta">👤 AVATAR</a>
+          <a href="rewards.html" class="btn btn-gold">🎁 CAJAS</a>
+        </div>
+      </div>
+
+      <div class="stat-box fade-in">
+        <div class="stat-value" id="stat-mult">1.00x</div>
+        <div class="stat-label">Multiplicador</div>
+      </div>
+      <div class="stat-box fade-in">
+        <div class="stat-value" id="stat-items">0</div>
+        <div class="stat-label">Ítems equipados</div>
+      </div>
+      <div class="stat-box fade-in">
+        <div class="stat-value" id="stat-avatar">—</div>
+        <div class="stat-label">Estilo avatar</div>
+      </div>
+    </div>
+
+    <!-- PAYPAL PANEL -->
+    <div class="paypal-panel" id="paypal-panel" style="display:none; margin-bottom:2rem;">
+      <div class="paypal-logo">💳 PAYPAL SANDBOX</div>
+      <div class="paypal-input-wrap">
+        <span class="paypal-prefix">$</span>
+        <input type="number" id="paypal-amount" class="input-neon" placeholder="0.00" min="1" max="1000" style="flex:1;" />
+      </div>
+      <button class="btn btn-gold" onclick="doRecharge()">💰 CONVERTIR A TOKENS</button>
+      <small style="color:var(--text-dim); font-family:var(--font-mono); font-size:0.7rem;">1 USD = 100 MAEVS</small>
+    </div>
+
+    <!-- QUICK NAV -->
+    <div class="quick-nav">
+      <a href="avatar.html" class="quick-btn">
+        <span class="quick-btn-icon">👤</span>
+        <span class="quick-btn-label">Personalizar Avatar</span>
+      </a>
+      <a href="rewards.html" class="quick-btn">
+        <span class="quick-btn-icon">📦</span>
+        <span class="quick-btn-label">Abrir Cajas</span>
+      </a>
+      <div class="quick-btn" onclick="loadHistory()">
+        <span class="quick-btn-icon">📊</span>
+        <span class="quick-btn-label">Ver Historial</span>
+      </div>
+      <div class="quick-btn" onclick="doLogout()">
+        <span class="quick-btn-icon">🚪</span>
+        <span class="quick-btn-label">Cerrar Sesión</span>
+      </div>
+    </div>
+
+    <!-- GAMES -->
+    <div class="section-header">
+      <div class="section-icon">🎮</div>
+      <h2>JUEGOS DEL NEXO</h2>
+    </div>
+
+    <div class="games-grid">
+
+      <!-- SLOTS -->
+      <div class="game-card fade-in">
+        <div class="game-header" style="--game-color:rgba(0,245,255,0.12);--game-glow:rgba(0,245,255,0.7);">
+          <span class="game-icon">🎰</span>
+          <div class="game-name">SLOTS FORTUNA</div>
+        </div>
+        <div class="game-body">
+          <p class="game-desc">Gira los carretes y combina símbolos. ¡3 iguales = 5x jackpot!</p>
+          <div class="game-stats">
+            <div class="game-stat"><div class="game-stat-val">5x</div><div class="game-stat-lbl">Jackpot</div></div>
+            <div class="game-stat"><div class="game-stat-val">1.5x</div><div class="game-stat-lbl">2 iguales</div></div>
+            <div class="game-stat"><div class="game-stat-val">10</div><div class="game-stat-lbl">Apuesta mín.</div></div>
+          </div>
+          <div class="bet-row">
+            <input type="number" class="bet-input" id="slots-bet" placeholder="Tokens" min="10" />
+            <button class="btn btn-cyan" onclick="playSlots()">🎰 GIRAR</button>
+          </div>
+          <div class="result-box" id="slots-result"></div>
+        </div>
+      </div>
+
+      <!-- BLACKJACK -->
+      <div class="game-card fade-in" style="animation-delay:0.1s;">
+        <div class="game-header" style="--game-color:rgba(255,0,200,0.12);--game-glow:rgba(255,0,200,0.7);">
+          <span class="game-icon">🃏</span>
+          <div class="game-name">BLACKJACK NEXO</div>
+        </div>
+        <div class="game-body">
+          <p class="game-desc">Supera el puntaje de la casa. Empate devuelve tu apuesta.</p>
+          <div class="game-stats">
+            <div class="game-stat"><div class="game-stat-val">2x</div><div class="game-stat-lbl">Victoria</div></div>
+            <div class="game-stat"><div class="game-stat-val">1x</div><div class="game-stat-lbl">Empate</div></div>
+            <div class="game-stat"><div class="game-stat-val">20</div><div class="game-stat-lbl">Apuesta mín.</div></div>
+          </div>
+          <div class="bet-row">
+            <input type="number" class="bet-input" id="bj-bet" placeholder="Tokens" min="20" style="color:var(--neon-magenta);" />
+            <button class="btn btn-magenta" onclick="playBlackjack()">🃏 JUGAR</button>
+          </div>
+          <div class="result-box" id="bj-result"></div>
+        </div>
+      </div>
+
+      <!-- RULETA -->
+      <div class="game-card fade-in" style="animation-delay:0.2s;">
+        <div class="game-header" style="--game-color:rgba(255,215,0,0.1);--game-glow:rgba(255,215,0,0.6);">
+          <span class="game-icon">🎡</span>
+          <div class="game-name">RULETA DE SUERTE</div>
+        </div>
+        <div class="game-body">
+          <p class="game-desc">45% de probabilidad de duplicar tu apuesta al color correcto.</p>
+          <div class="game-stats">
+            <div class="game-stat"><div class="game-stat-val">2x</div><div class="game-stat-lbl">Victoria</div></div>
+            <div class="game-stat"><div class="game-stat-val">45%</div><div class="game-stat-lbl">Win rate</div></div>
+            <div class="game-stat"><div class="game-stat-val">15</div><div class="game-stat-lbl">Apuesta mín.</div></div>
+          </div>
+          <div class="bet-row">
+            <input type="number" class="bet-input" id="rul-bet" placeholder="Tokens" min="15" style="color:var(--neon-gold);" />
+            <button class="btn btn-gold" onclick="playRuleta()">🎡 GIRAR</button>
+          </div>
+          <div class="result-box" id="rul-result"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-section">
+      <div class="section-header">
+        <div class="section-icon">📊</div>
+        <h2>HISTORIAL DE PARTIDAS</h2>
+      </div>
+      <div class="card">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Juego</th><th>Apuesta</th><th>Resultado</th><th>Ganado</th><th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody id="history-body">
+            <tr><td colspan="5" style="color:var(--text-dim);text-align:center;padding:1.5rem;">Sin partidas aún</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000';
+    let history = [];
+
+    // ── Toast ──
+    function toast(msg, type='info') {
+      const t = document.createElement('div');
+      t.className = `toast toast-${type}`;
+      t.textContent = msg;
+      document.getElementById('toast-container').appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    }
+
+    // ── Load user data ──
+    async function loadUser() {
+      try {
+        const res = await fetch(`${API}/api/usuario`);
+        if (!res.ok) return;
+        const d = await res.json();
+        document.getElementById('balance-display').textContent = d.tokens.toLocaleString();
+        document.getElementById('nav-tokens').textContent = d.tokens.toLocaleString();
+        document.getElementById('stat-mult').textContent = (1 + d.multiplicador).toFixed(2) + 'x';
+        document.getElementById('stat-items').textContent = d.itemsEquipados.length;
+        document.getElementById('stat-avatar').textContent = d.avatarEstilo;
+      } catch { /* servidor offline */ }
+    }
+
+    // ── PayPal toggle ──
+    function togglePaypal() {
+      const p = document.getElementById('paypal-panel');
+      p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    // ── Recharge ──
+    async function doRecharge() {
+      const amount = parseFloat(document.getElementById('paypal-amount').value);
+      if (!amount || amount <= 0) { toast('Ingresa un monto válido', 'error'); return; }
+      try {
+        const res = await fetch(`${API}/api/paypal/recargar`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ montoUsd: amount })
+        });
+        const d = await res.json();
+        if (res.ok) {
+          toast(`💰 +${amount*100} MAEVS añadidos!`, 'gold');
+          loadUser();
+        } else { toast(d.mensaje || 'Error en recarga', 'error'); }
+      } catch { toast('No se pudo conectar al servidor', 'error'); }
+    }
+
+    // ── Generic play ──
+    async function playGame(endpoint, betId, resultId, gameName) {
+      const bet = parseFloat(document.getElementById(betId).value);
+      const box = document.getElementById(resultId);
+      if (!bet || bet <= 0) { toast('Ingresa una apuesta válida', 'error'); return; }
+
+      box.className = 'result-box show';
+      box.textContent = '⟳ Procesando...';
+
+      try {
+        const res = await fetch(`${API}/api/jugar/${endpoint}`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ apuesta: bet })
+        });
+        const d = await res.json();
+
+        if (res.ok) {
+          const won = d.ganado > 0;
+          const tied = d.ganado === bet;
+          box.className = `result-box ${won ? (tied ? 'tie' : 'win') : 'lose'}`;
+          if (d.ganado > 0) {
+            box.textContent = `✅ Ganaste ${d.ganado} MAEVS! Saldo: ${d.saldoActual.toLocaleString()}`;
+            toast(`🏆 +${d.ganado} MAEVS en ${gameName}!`, 'success');
+          } else {
+            box.textContent = `❌ Sin ganancia. Saldo: ${d.saldoActual.toLocaleString()} MAEVS`;
+            toast(`💨 No hubo suerte en ${gameName}`, 'error');
+          }
+          addHistory(gameName, bet, d.ganado, d.saldoActual);
+          loadUser();
+        } else {
+          box.className = 'result-box lose';
+          box.textContent = `⚠️ ${d.mensaje}`;
+          toast(d.mensaje, 'error');
+        }
+      } catch {
+        box.className = 'result-box lose';
+        box.textContent = '⚠️ Error de conexión con el servidor';
+        toast('Error de conexión', 'error');
+      }
+    }
+
+    function playSlots()     { playGame('slots',    'slots-bet', 'slots-result', 'Slots'); }
+    function playBlackjack() { playGame('blackjack', 'bj-bet',   'bj-result',   'Blackjack'); }
+    function playRuleta()    { playGame('ruleta',    'rul-bet',   'rul-result',  'Ruleta'); }
+
+    // ── History ──
+    function addHistory(juego, apuesta, ganado, saldo) {
+      history.unshift({ juego, apuesta, ganado, saldo, ts: new Date().toLocaleTimeString() });
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const tbody = document.getElementById('history-body');
+      if (history.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-dim);text-align:center;padding:1.5rem;">Sin partidas aún</td></tr>';
+        return;
+      }
+      tbody.innerHTML = history.slice(0, 10).map(h => {
+        const cls = h.ganado > h.apuesta ? 'hist-win' : (h.ganado === h.apuesta ? 'hist-tie' : 'hist-lose');
+        const label = h.ganado > h.apuesta ? '✅ Victoria' : (h.ganado > 0 ? '🤝 Empate' : '❌ Derrota');
+        return `<tr>
+          <td>${h.juego}</td>
+          <td>${h.apuesta}</td>
+          <td class="${cls}">${label}</td>
+          <td class="${cls}">${h.ganado > 0 ? '+' : ''}${h.ganado}</td>
+          <td>${h.saldo.toLocaleString()}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function loadHistory() {
+      toast('Historial actualizado', 'info');
+      renderHistory();
+    }
+
+    // ── Logout ──
+    async function doLogout() {
+      await fetch(`${API}/api/auth/logout`, { method: 'POST' }).catch(() => {});
+      window.location.href = 'index.html';
+    }
+
+    loadUser();
+    setInterval(loadUser, 10000);
+  </script>
+</body>
+</html>

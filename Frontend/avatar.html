@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casino Maevs — Avatar</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <style>
+    .avatar-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 20%, rgba(255,0,200,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 75% 80%, rgba(0,245,255,0.05) 0%, transparent 60%),
+        var(--bg-void);
+    }
+
+    /* ── AVATAR LAYOUT ── */
+    .avatar-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .avatar-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── AVATAR PREVIEW ── */
+    .avatar-preview-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,0,200,0.25);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      position: sticky;
+      top: 80px;
+    }
+
+    .avatar-preview-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--neon-magenta), var(--neon-cyan));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .avatar-figure {
+      width: 180px; height: 220px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* SVG-based avatar layers */
+    .avatar-svg-wrap {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .avatar-base {
+      font-size: 8rem;
+      line-height: 1;
+      display: block;
+      filter: drop-shadow(0 0 20px var(--neon-magenta));
+      animation: avatarFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes avatarFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .avatar-accessory {
+      position: absolute;
+      font-size: 2.5rem;
+      filter: drop-shadow(0 0 10px var(--neon-gold));
+    }
+
+    .acc-top    { top: 0; left: 50%; transform: translateX(-50%); }
+    .acc-middle { top: 40%; right: 0; }
+    .acc-bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
+
+    .avatar-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--neon-magenta);
+      text-shadow: var(--shadow-magenta);
+      margin-bottom: 0.25rem;
+    }
+
+    .avatar-style {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── MULTIPLIER RING ── */
+    .mult-ring {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      border: 2px solid var(--neon-gold);
+      box-shadow: var(--shadow-gold), inset 0 0 20px rgba(255,215,0,0.06);
+      flex-direction: column;
+      margin: 0 auto 1.5rem;
+    }
+
+    .mult-value {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      color: var(--neon-gold);
+      line-height: 1;
+    }
+
+    .mult-label {
+      font-family: var(--font-display);
+      font-size: 0.45rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+    }
+
+    /* ── EQUIPPED LIST ── */
+    .equipped-list {
+      text-align: left;
+      border-top: 1px solid rgba(255,0,200,0.15);
+      padding-top: 1.25rem;
+    }
+
+    .equipped-title {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .equipped-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      background: rgba(255,0,200,0.04);
+      border: 1px solid rgba(255,0,200,0.15);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.5rem;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    .equipped-item-icon { font-size: 1.3rem; }
+
+    .equipped-item-info { flex: 1; }
+
+    .equipped-item-name {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .equipped-item-mult {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--neon-magenta);
+    }
+
+    .empty-equipped {
+      text-align: center;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 1rem;
+    }
+
+    /* ── RIGHT PANEL ── */
+    .avatar-right { display: flex; flex-direction: column; gap: 2rem; }
+
+    /* ── STYLE SELECTOR ── */
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .style-opt {
+      padding: 1rem 0.75rem;
+      text-align: center;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,0,200,0.15);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .style-opt:hover {
+      border-color: rgba(255,0,200,0.5);
+      background: rgba(255,0,200,0.05);
+      transform: translateY(-3px);
+    }
+
+    .style-opt.active {
+      border-color: var(--neon-magenta);
+      background: rgba(255,0,200,0.1);
+      box-shadow: var(--shadow-magenta);
+    }
+
+    .style-emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .style-name {
+      font-family: var(--font-display);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+    }
+
+    .style-opt.active .style-name { color: var(--neon-magenta); }
+
+    /* ── LOOT CATALOG ── */
+    .loot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .loot-item {
+      background: rgba(0,0,0,0.35);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .loot-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-cyan);
+      border-color: rgba(0,245,255,0.3);
+    }
+
+    .loot-item.legendario:hover { box-shadow: var(--shadow-gold); border-color: rgba(255,215,0,0.4); }
+    .loot-item.epico:hover { box-shadow: var(--shadow-magenta); border-color: rgba(255,0,200,0.4); }
+
+    .loot-icon { font-size: 2.5rem; text-align: center; display: block; margin-bottom: 0.75rem; }
+    .loot-name { font-size: 0.9rem; color: var(--text-primary); margin-bottom: 0.5rem; }
+    .loot-mult {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--neon-gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .info-note {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="avatar-bg"></div>
+  <div class="grid-bg"></div>
+  <div id="toast-container"></div>
+
+  <nav class="navbar">
+    <span class="navbar-logo">🎰 CASINO <span>MAEVS</span></span>
+    <div class="navbar-links">
+      <a href="index.html" class="nav-link">🔐 Login</a>
+      <a href="lobby.html" class="nav-link">🎮 Lobby</a>
+      <a href="avatar.html" class="nav-link active">👤 Avatar</a>
+      <a href="rewards.html" class="nav-link">🎁 Cajas</a>
+    </div>
+    <div class="navbar-tokens">⚡ <span id="nav-tokens">0</span> MAEVS</div>
+  </nav>
+
+  <div class="page-content">
+
+    <div class="section-header" style="margin-bottom:2rem;">
+      <div class="section-icon">👤</div>
+      <h2>IDENTIDAD DEL NEXO</h2>
+    </div>
+
+    <div class="avatar-layout">
+
+      <!-- LEFT: Avatar Preview -->
+      <div class="avatar-preview-card fade-in">
+        <div class="avatar-figure">
+          <div class="avatar-svg-wrap">
+            <span class="avatar-base" id="avatar-emoji">⚔️</span>
+            <span class="avatar-accessory acc-top"    id="acc-top"></span>
+            <span class="avatar-accessory acc-middle" id="acc-mid"></span>
+            <span class="avatar-accessory acc-bottom" id="acc-bot"></span>
+          </div>
+        </div>
+
+        <div class="avatar-name" id="avatar-username">Jugador</div>
+        <div class="avatar-style" id="avatar-style-label">Guerrero Galáctico</div>
+
+        <div class="mult-ring">
+          <div class="mult-value" id="mult-display">1.00x</div>
+          <div class="mult-label">MULTIPLICADOR</div>
+        </div>
+
+        <div class="equipped-list">
+          <div class="equipped-title">⚡ Ítems equipados</div>
+          <div id="equipped-items-list">
+            <div class="empty-equipped">Sin ítems equipados.<br/>Abre cajas para obtener items.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.25rem;">
+          <a href="rewards.html" class="btn btn-gold" style="width:100%;justify-content:center;">
+            📦 Ir a Cajas de Recompensa
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Customization -->
+      <div class="avatar-right">
+
+        <!-- Style Selector -->
+        <div class="card card-magenta fade-in">
+          <h3 style="color:var(--neon-magenta);margin-bottom:1.25rem;font-size:0.75rem;letter-spacing:0.15em;">
+            🎭 ESTILO BASE DEL AVATAR
+          </h3>
+          <div class="style-grid">
+            <div class="style-opt active" data-style="Guerrero Galáctico" data-emoji="⚔️" onclick="selectStyle(this)">
+              <span class="style-emoji">⚔️</span>
+              <div class="style-name">Guerrero</div>
+            </div>
+            <div class="style-opt" data-style="Ciberpunk" data-emoji="🤖" onclick="selectStyle(this)">
+              <span class="style-emoji">🤖</span>
+              <div class="style-name">Ciberpunk</div>
+            </div>
+            <div class="style-opt" data-style="Sombra del Vacío" data-emoji="🌑" onclick="selectStyle(this)">
+              <span class="style-emoji">🌑</span>
+              <div class="style-name">Sombra</div>
+            </div>
+            <div class="style-opt" data-style="Mago Cuántico" data-emoji="🔮" onclick="selectStyle(this)">
+              <span class="style-emoji">🔮</span>
+              <div class="style-name">Mago</div>
+            </div>
+            <div class="style-opt" data-style="Neon Phantom" data-emoji="👻" onclick="selectStyle(this)">
+              <span class="style-emoji">👻</span>
+              <div class="style-name">Phantom</div>
+            </div>
+            <div class="style-opt" data-style="Dragón Digital" data-emoji="🐉" onclick="selectStyle(this)">
+              <span class="style-emoji">🐉</span>
+              <div class="style-name">Dragón</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item Catalog -->
+        <div class="card fade-in" style="animation-delay:0.1s;">
+          <h3 style="color:var(--neon-cyan);margin-bottom:0.5rem;font-size:0.75rem;letter-spacing:0.15em;">
+            🛡️ CATÁLOGO DE ÍTEMS
+          </h3>
+          <p class="info-note" style="margin-bottom:1.25rem;">
+            Los ítems se obtienen abriendo cajas en la sección de Recompensas. Cada ítem otorga un multiplicador pasivo de MAEVS TOKENS.
+          </p>
+          <div class="loot-grid" id="loot-catalog">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="card fade-in" style="animation-delay:0.2s;">
+          <h3 style="color:var(--neon-cyan);margin-bottom:1.25rem;font-size:0.75rem;letter-spacing:0.15em;">
+            📊 ESTADÍSTICAS DEL NEXO
+          </h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;">
+            <div class="stat-box"><div class="stat-value" id="stat-tokens">0</div><div class="stat-label">MAEVS Tokens</div></div>
+            <div class="stat-box"><div class="stat-value" id="stat-items-count">0</div><div class="stat-label">Ítems en avatar</div></div>
+            <div class="stat-box"><div class="stat-value" id="stat-mult-stat">1.00x</div><div class="stat-label">Multiplicador total</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000';
+
+    function toast(msg, type='info') {
+      const t = document.createElement('div');
+      t.className = `toast toast-${type}`;
+      t.textContent = msg;
+      document.getElementById('toast-container').appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    }
+
+    const lootPool = [
+      { nombre: 'Corona de Luz',        rareza: 'Legendario', mult: 2.50, emoji: '👑' },
+      { nombre: 'Capa del Vacío',        rareza: 'Epico',      mult: 1.80, emoji: '🌀' },
+      { nombre: 'Escudo Estelar',        rareza: 'Epico',      mult: 1.60, emoji: '🛡️' },
+      { nombre: 'Guantelete de Cristal', rareza: 'Raro',       mult: 1.30, emoji: '🧤' },
+      { nombre: 'Botas de Mercurio',     rareza: 'Raro',       mult: 1.20, emoji: '👟' },
+      { nombre: 'Amuleto Común',         rareza: 'Comun',      mult: 1.05, emoji: '📿' },
+      { nombre: 'Antorcha de Bronce',    rareza: 'Comun',      mult: 1.02, emoji: '🔦' },
+      { nombre: 'Máscara de Neón',       rareza: 'Legendario', mult: 2.80, emoji: '🎭' },
+    ];
+
+    function renderCatalog() {
+      document.getElementById('loot-catalog').innerHTML = lootPool.map(item => `
+        <div class="loot-item ${item.rareza.toLowerCase()}">
+          <span class="loot-icon">${item.emoji}</span>
+          <div class="loot-name">${item.nombre}</div>
+          <div class="loot-mult">+${item.mult}x multiplicador</div>
+          <span class="badge badge-${item.rareza.toLowerCase()}">${item.rareza}</span>
+        </div>
+      `).join('');
+    }
+
+    async function loadUser() {
+      try {
+        const res = await fetch(`${API}/api/usuario`);
+        if (!res.ok) return;
+        const d = await res.json();
+
+        document.getElementById('nav-tokens').textContent    = d.tokens.toLocaleString();
+        document.getElementById('avatar-username').textContent = d.username;
+        document.getElementById('avatar-style-label').textContent = d.avatarEstilo;
+        document.getElementById('stat-tokens').textContent     = d.tokens.toLocaleString();
+        document.getElementById('stat-items-count').textContent = d.itemsEquipados.length;
+
+        const mult = (1 + d.multiplicador).toFixed(2) + 'x';
+        document.getElementById('mult-display').textContent    = mult;
+        document.getElementById('stat-mult-stat').textContent  = mult;
+
+        // Match style emoji
+        const styleMap = { 'Guerrero Galáctico':'⚔️', 'Ciberpunk':'🤖', 'Sombra del Vacío':'🌑', 'Mago Cuántico':'🔮', 'Neon Phantom':'👻', 'Dragón Digital':'🐉' };
+        document.getElementById('avatar-emoji').textContent = styleMap[d.avatarEstilo] || '⚔️';
+
+        // Equipped items
+        if (d.itemsEquipados.length > 0) {
+          const accIcons = ['acc-top','acc-mid','acc-bot'];
+          const emojiMap = { 'Corona':'👑', 'Capa':'🌀', 'Escudo':'🛡️', 'Guantelete':'🧤', 'Botas':'👟', 'Amuleto':'📿', 'Antorcha':'🔦', 'Máscara':'🎭' };
+
+          d.itemsEquipados.forEach((item, i) => {
+            const emoji = Object.entries(emojiMap).find(([k]) => item.includes(k))?.[1] || '✨';
+            if (i < 3) document.getElementById(accIcons[i]).textContent = emoji;
+          });
+
+          document.getElementById('equipped-items-list').innerHTML = d.itemsEquipados.map(item => {
+            const found = lootPool.find(l => item.includes(l.nombre));
+            return `<div class="equipped-item">
+              <span class="equipped-item-icon">${found?.emoji || '✨'}</span>
+              <div class="equipped-item-info">
+                <div class="equipped-item-name">${found?.nombre || item}</div>
+                <div class="equipped-item-mult">+${found?.mult || '?'}x mult</div>
+              </div>
+              ${found ? `<span class="badge badge-${found.rareza.toLowerCase()}">${found.rareza}</span>` : ''}
+            </div>`;
+          }).join('');
+        }
+
+        // Mark active style
+        document.querySelectorAll('.style-opt').forEach(opt => {
+          opt.classList.toggle('active', opt.dataset.style === d.avatarEstilo);
+        });
+      } catch { /* offline */ }
+    }
+
+    function selectStyle(el) {
+      document.querySelectorAll('.style-opt').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      const emoji = el.dataset.emoji;
+      const name  = el.dataset.style;
+      document.getElementById('avatar-emoji').textContent = emoji;
+      document.getElementById('avatar-style-label').textContent = name;
+      toast(`✅ Estilo "${name}" seleccionado`, 'success');
+    }
+
+    renderCatalog();
+    loadUser();
+  </script>
+</body>
+</html>

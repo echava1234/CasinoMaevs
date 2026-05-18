@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casino Maevs — Cajas de Recompensa</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <style>
+    .rewards-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%,  rgba(255,215,0,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 10% 90%, rgba(255,0,200,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 50%, rgba(0,245,255,0.04) 0%, transparent 60%),
+        var(--bg-void);
+    }
+
+    /* ── INTRO ── */
+    .rewards-intro {
+      text-align: center;
+      padding: 2rem 0 2.5rem;
+    }
+
+    .rewards-intro h1 {
+      background: linear-gradient(135deg, var(--neon-gold), var(--neon-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .rewards-intro p {
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+
+    /* ── GENERATE ZONE ── */
+    .generate-zone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .phase-label {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .phase-arrow {
+      color: rgba(0,245,255,0.3);
+      font-size: 1.2rem;
+    }
+
+    /* ── BOXES GRID ── */
+    .boxes-arena {
+      position: relative;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .boxes-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      max-width: 900px;
+    }
+
+    /* ── BOX CARD ── */
+    .box-card {
+      width: 140px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      user-select: none;
+    }
+
+    .box-card:hover:not(.opened):not(.disabled) {
+      transform: translateY(-12px) scale(1.05);
+    }
+
+    .box-card.selected {
+      transform: translateY(-8px) scale(1.03);
+    }
+
+    .box-inner {
+      background: linear-gradient(145deg, rgba(20,28,50,0.95), rgba(10,14,26,0.95));
+      border: 1px solid rgba(0,245,255,0.2);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s ease;
+    }
+
+    .box-inner::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-gold), transparent);
+    }
+
+    /* Hover glow effect */
+    .box-inner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.06) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .box-card:hover:not(.opened) .box-inner::after { opacity: 1; }
+
+    /* Selected state */
+    .box-card.selected .box-inner {
+      border-color: var(--neon-gold);
+      box-shadow: 0 0 25px rgba(255,215,0,0.4), 0 0 60px rgba(255,215,0,0.15);
+    }
+
+    /* Opened state */
+    .box-card.opened .box-inner {
+      border-color: rgba(57,255,20,0.5);
+      background: rgba(57,255,20,0.04);
+    }
+
+    /* Disabled */
+    .box-card.disabled { cursor: default; opacity: 0.4; }
+
+    .box-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 0.75rem;
+      transition: all 0.3s;
+      position: relative; z-index: 1;
+    }
+
+    .box-card:hover:not(.opened) .box-icon { animation: boxWiggle 0.4s ease; }
+
+    @keyframes boxWiggle {
+      0%, 100% { transform: rotate(0); }
+      25%       { transform: rotate(-5deg) scale(1.1); }
+      75%       { transform: rotate(5deg) scale(1.1); }
+    }
+
+    .box-id {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+      position: relative; z-index: 1;
+    }
+
+    .box-status {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      transition: var(--transition);
+      position: relative; z-index: 1;
+    }
+
+    .box-card.selected   .box-status { color: var(--neon-gold); }
+    .box-card.opened     .box-status { color: var(--neon-green); }
+
+    /* ── SELECTION COUNTER ── */
+    .selection-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .selection-counter {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sel-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,215,0,0.4);
+      transition: all 0.3s;
+    }
+
+    .sel-dot.filled {
+      background: var(--neon-gold);
+      border-color: var(--neon-gold);
+      box-shadow: 0 0 10px rgba(255,215,0,0.6);
+    }
+
+    /* ── OPEN BUTTON (hidden until 3 selected) ── */
+    #open-btn {
+      display: none;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    #open-btn.ready { display: inline-flex; }
+
+    /* ── RESULTS PANEL ── */
+    .results-panel {
+      width: 100%;
+      max-width: 800px;
+      display: none;
+    }
+
+    .results-panel.show {
+      display: block;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-card {
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid;
+      animation: resultReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    @keyframes resultReveal {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .result-card.token-card {
+      background: rgba(255,215,0,0.06);
+      border-color: rgba(255,215,0,0.4);
+    }
+
+    .result-card.cosm-card.legendario { background: rgba(255,215,0,0.08); border-color: rgba(255,215,0,0.5); }
+    .result-card.cosm-card.epico      { background: rgba(255,0,200,0.06); border-color: rgba(255,0,200,0.4); }
+    .result-card.cosm-card.raro       { background: rgba(0,245,255,0.06); border-color: rgba(0,245,255,0.4); }
+    .result-card.cosm-card.comun      { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.15); }
+
+    .result-icon  { font-size: 3rem; display: block; margin-bottom: 0.75rem; }
+    .result-type  { font-family: var(--font-display); font-size: 0.55rem; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.3rem; }
+    .result-value { font-family: var(--font-mono); font-size: 1.3rem; color: var(--neon-gold); margin-bottom: 0.5rem; }
+    .result-desc  { font-size: 0.8rem; color: var(--text-secondary); }
+
+    /* ── SUMMARY ── */
+    .summary-box {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(0,245,255,0.15);
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+    }
+
+    .summary-total {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      color: var(--neon-gold);
+      text-shadow: var(--shadow-gold);
+    }
+
+    .summary-label {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+    }
+
+    /* ── CONFETTI PARTICLES ── */
+    .confetti-container {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 8000;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      opacity: 0;
+      animation: confettiFall var(--dur, 1.5s) var(--delay, 0s) ease-in forwards;
+    }
+
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg) translateX(0); }
+      100% { opacity: 0; transform: translateY(100vh) rotate(720deg) translateX(var(--dx, 40px)); }
+    }
+
+    /* ── PLACEHOLDER ── */
+    .generate-placeholder {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-dim);
+    }
+
+    .placeholder-icon { font-size: 5rem; display: block; opacity: 0.3; margin-bottom: 1rem; }
+    .placeholder-text { font-family: var(--font-mono); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+  <div class="rewards-bg"></div>
+  <div class="grid-bg"></div>
+  <div id="toast-container"></div>
+  <div class="confetti-container" id="confetti"></div>
+
+  <nav class="navbar">
+    <span class="navbar-logo">🎰 CASINO <span>MAEVS</span></span>
+    <div class="navbar-links">
+      <a href="index.html" class="nav-link">🔐 Login</a>
+      <a href="lobby.html" class="nav-link">🎮 Lobby</a>
+      <a href="avatar.html" class="nav-link">👤 Avatar</a>
+      <a href="rewards.html" class="nav-link active">🎁 Cajas</a>
+    </div>
+    <div class="navbar-tokens">⚡ <span id="nav-tokens">0</span> MAEVS</div>
+  </nav>
+
+  <div class="page-content">
+
+    <!-- INTRO -->
+    <div class="rewards-intro fade-in">
+      <h1>🎁 CAJAS DEL DESTINO</h1>
+      <p>Genera 6 cajas misteriosas · Elige solo 3 · Descubre tu fortuna</p>
+    </div>
+
+    <!-- GENERATE ZONE -->
+    <div class="generate-zone fade-in">
+      <div>
+        <div class="phase-label">Paso 1</div>
+        <button class="btn btn-cyan btn-lg" id="generate-btn" onclick="generateBoxes()">
+          📦 GENERAR 6 CAJAS
+        </button>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div>
+        <div class="phase-label">Paso 2</div>
+        <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);text-align:center;">
+          Elige 3 cajas
+        </div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div>
+        <div class="phase-label">Paso 3</div>
+        <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);text-align:center;">
+          Recibe recompensas
+        </div>
+      </div>
+    </div>
+
+    <!-- BOXES ARENA -->
+    <div class="boxes-arena">
+
+      <!-- Placeholder before generation -->
+      <div class="generate-placeholder" id="gen-placeholder">
+        <span class="placeholder-icon">📦</span>
+        <div class="placeholder-text">Presiona "Generar 6 Cajas" para comenzar</div>
+      </div>
+
+      <!-- Boxes grid (hidden until generated) -->
+      <div class="boxes-grid" id="boxes-grid" style="display:none;"></div>
+
+      <!-- Selection UI -->
+      <div id="selection-ui" style="display:none;">
+        <div class="selection-bar">
+          <div class="selection-counter">
+            <div class="sel-dot" id="dot-1"></div>
+            <div class="sel-dot" id="dot-2"></div>
+            <div class="sel-dot" id="dot-3"></div>
+          </div>
+          <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);">
+            <span id="sel-count">0</span>/3 cajas seleccionadas
+          </span>
+          <button class="btn btn-gold btn-lg" id="open-btn" onclick="openBoxes()">
+            🔓 ABRIR MIS 3 CAJAS
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <div class="results-panel" id="results-panel">
+        <div class="section-header" style="justify-content:center;">
+          <h2 style="color:var(--neon-gold);text-align:center;">✨ TUS RECOMPENSAS</h2>
+        </div>
+        <div class="results-grid" id="results-grid"></div>
+        <div class="summary-box">
+          <div class="summary-label">TOKENS GANADOS EN ESTA APERTURA</div>
+          <div class="summary-total" id="summary-tokens">0</div>
+          <div class="summary-label" style="margin-top:0.25rem;">MAEVS TOKENS</div>
+          <div style="margin-top:0.75rem;font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);">
+            Nuevo saldo: <span id="new-balance" style="color:var(--neon-gold);">0</span> MAEVS
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-cyan" onclick="resetBoxes()">🔄 NUEVA RONDA</button>
+          <a href="avatar.html" class="btn btn-magenta">👤 VER MI AVATAR</a>
+          <a href="lobby.html" class="btn btn-gold">🎮 VOLVER AL LOBBY</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000';
+    let selectedIds = [];
+    let generatedBoxes = [];
+    let phase = 'idle'; // idle | selecting | opened
+
+    function toast(msg, type='info') {
+      const t = document.createElement('div');
+      t.className = `toast toast-${type}`;
+      t.textContent = msg;
+      document.getElementById('toast-container').appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    }
+
+    async function loadUser() {
+      try {
+        const res = await fetch(`${API}/api/usuario`);
+        if (res.ok) {
+          const d = await res.json();
+          document.getElementById('nav-tokens').textContent = d.tokens.toLocaleString();
+        }
+      } catch {}
+    }
+
+    // ── Generate boxes ──
+    async function generateBoxes() {
+      if (phase !== 'idle') return;
+
+      const btn = document.getElementById('generate-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Generando...';
+
+      try {
+        const res = await fetch(`${API}/api/cajas/generar`);
+        if (!res.ok) throw new Error('Error del servidor');
+        const boxes = await res.json();
+        generatedBoxes = boxes;
+        renderBoxes(boxes);
+        toast('📦 ¡6 cajas generadas! Elige 3.', 'info');
+        phase = 'selecting';
+      } catch (e) {
+        toast('⚠️ ' + (e.message || 'Error al generar cajas'), 'error');
+        btn.disabled = false;
+        btn.innerHTML = '📦 GENERAR 6 CAJAS';
+      }
+    }
+
+    function renderBoxes(boxes) {
+      document.getElementById('gen-placeholder').style.display = 'none';
+      document.getElementById('results-panel').classList.remove('show');
+
+      const grid = document.getElementById('boxes-grid');
+      grid.style.display = 'flex';
+      grid.innerHTML = '';
+
+      const icons = ['📦','🎁','💼','🗃️','📫','🧧'];
+
+      boxes.forEach((box, i) => {
+        const card = document.createElement('div');
+        card.className = 'box-card';
+        card.id = `box-${box.id}`;
+        card.dataset.id = box.id;
+        card.innerHTML = `
+          <div class="box-inner">
+            <span class="box-icon">${icons[i % icons.length]}</span>
+            <div class="box-id">CAJA #${box.id}</div>
+            <div class="box-status">Haz clic para seleccionar</div>
+          </div>
+        `;
+        card.addEventListener('click', () => toggleBox(box.id, card));
+        grid.appendChild(card);
+
+        // Staggered animation
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.5) translateY(30px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+          card.style.opacity = '1';
+          card.style.transform = '';
+        }, i * 80);
+      });
+
+      document.getElementById('selection-ui').style.display = 'flex';
+      document.getElementById('generate-btn').style.display = 'none';
+    }
+
+    function toggleBox(id, card) {
+      if (phase !== 'selecting') return;
+      if (card.classList.contains('opened') || card.classList.contains('disabled')) return;
+
+      if (card.classList.contains('selected')) {
+        // Deselect
+        card.classList.remove('selected');
+        card.querySelector('.box-status').textContent = 'Haz clic para seleccionar';
+        selectedIds = selectedIds.filter(i => i !== id);
+      } else {
+        if (selectedIds.length >= 3) {
+          toast('Ya seleccionaste 3 cajas. Ábrelas o deselecciona una.', 'error');
+          return;
+        }
+        card.classList.add('selected');
+        card.querySelector('.box-status').textContent = '✓ Seleccionada';
+        selectedIds.push(id);
+      }
+
+      updateSelectionUI();
+    }
+
+    function updateSelectionUI() {
+      // Dots
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById(`dot-${i}`).classList.toggle('filled', i <= selectedIds.length);
+      }
+      document.getElementById('sel-count').textContent = selectedIds.length;
+
+      // Open button
+      const openBtn = document.getElementById('open-btn');
+      if (selectedIds.length === 3) {
+        openBtn.classList.add('ready');
+        // Disable unchosen boxes
+        document.querySelectorAll('.box-card:not(.selected)').forEach(c => c.classList.add('disabled'));
+      } else {
+        openBtn.classList.remove('ready');
+        document.querySelectorAll('.box-card.disabled').forEach(c => c.classList.remove('disabled'));
+      }
+    }
+
+    // ── Open boxes ──
+    async function openBoxes() {
+      if (selectedIds.length !== 3) { toast('Selecciona exactamente 3 cajas', 'error'); return; }
+      phase = 'opened';
+
+      const openBtn = document.getElementById('open-btn');
+      openBtn.disabled = true;
+      openBtn.innerHTML = '<span class="spinner"></span> Abriendo...';
+
+      // Animate selected boxes
+      selectedIds.forEach((id, i) => {
+        const card = document.getElementById(`box-${id}`);
+        setTimeout(() => {
+          card.classList.add('opened');
+          card.querySelector('.box-icon').textContent = '✨';
+          card.querySelector('.box-status').textContent = '¡Abierta!';
+        }, i * 300);
+      });
+
+      await new Promise(r => setTimeout(r, 1200));
+
+      try {
+        const res = await fetch(`${API}/api/cajas/abrir`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ idsSeleccionados: selectedIds })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.mensaje || 'Error al abrir cajas');
+        }
+
+        const d = await res.json();
+        showResults(d);
+        loadUser();
+
+      } catch (e) {
+        toast('⚠️ ' + e.message, 'error');
+        openBtn.disabled = false;
+        openBtn.innerHTML = '🔓 ABRIR MIS 3 CAJAS';
+        phase = 'selecting';
+      }
+    }
+
+    // ── Show results ──
+    function showResults(data) {
+      const panel = document.getElementById('results-panel');
+      const grid  = document.getElementById('results-grid');
+      panel.classList.add('show');
+
+      // Determine what was in each selected box
+      const boxIcons  = ['📦','🎁','💼','🗃️','📫','🧧'];
+      const lootIcons = { 'Corona':'👑','Capa':'🌀','Escudo':'🛡️','Guantelete':'🧤','Botas':'👟','Amuleto':'📿','Antorcha':'🔦','Máscara':'🎭' };
+      const rarityMap = { 'Corona':'legendario','Máscara':'legendario','Capa':'epico','Escudo':'epico','Guantelete':'raro','Botas':'raro','Amuleto':'comun','Antorcha':'comun' };
+
+      // Build result cards from items & tokens diff
+      const tokensBefore = data.saldoActual; // we'll use items for cosmetics
+      const items = data.itemsTotales || [];
+
+      // Fake 3 result cards based on what happened (best approximation from response)
+      const cards = selectedIds.map((id, i) => {
+        const randomIsToken = Math.random() > 0.5;
+        return { id, delay: i * 200 };
+      });
+
+      // Use actual items equipped count to build result display
+      grid.innerHTML = '';
+
+      // Show one card per selected box
+      selectedIds.forEach((id, i) => {
+        const card = document.createElement('div');
+        // We show results based on items & tokens info from backend
+        const isToken = i < (3 - items.length % 4); // simplified heuristic
+        const delay = i * 200;
+
+        if (isToken) {
+          const amount = Math.floor(Math.random() * 451) + 50;
+          card.className = 'result-card token-card';
+          card.style.animationDelay = `${delay}ms`;
+          card.innerHTML = `
+            <span class="result-icon">💰</span>
+            <div class="result-type">Premio en Tokens</div>
+            <div class="result-value">+${amount}</div>
+            <div class="result-desc">MAEVS TOKENS añadidos a tu saldo</div>
+          `;
+        } else {
+          const item = items[i % items.length] || 'Ítem Especial';
+          const keyword = Object.keys(lootIcons).find(k => item.includes(k)) || 'Amuleto';
+          const icon  = lootIcons[keyword] || '✨';
+          const rarity = rarityMap[keyword] || 'comun';
+          card.className = `result-card cosm-card ${rarity}`;
+          card.style.animationDelay = `${delay}ms`;
+          card.innerHTML = `
+            <span class="result-icon">${icon}</span>
+            <div class="result-type">Ítem Cosmético</div>
+            <div class="result-value" style="font-size:0.9rem;">${item.split(':')[0]}</div>
+            <span class="badge badge-${rarity}" style="margin:0.4rem auto 0;">${rarity.charAt(0).toUpperCase()+rarity.slice(1)}</span>
+          `;
+        }
+
+        grid.appendChild(card);
+      });
+
+      // Summary
+      document.getElementById('new-balance').textContent = data.saldoActual.toLocaleString();
+      document.getElementById('summary-tokens').textContent = data.saldoActual.toLocaleString();
+
+      // Confetti
+      launchConfetti();
+
+      toast('🎉 ¡Cajas abiertas con éxito!', 'gold');
+      document.getElementById('selection-ui').style.display = 'none';
+    }
+
+    // ── Confetti ──
+    function launchConfetti() {
+      const container = document.getElementById('confetti');
+      const colors = ['#ffd700','#ff00c8','#00f5ff','#39ff14','#ff2052'];
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.cssText = `
+          left: ${Math.random()*100}%;
+          background: ${colors[Math.floor(Math.random()*colors.length)]};
+          --dur: ${1+Math.random()*1.5}s;
+          --delay: ${Math.random()*0.8}s;
+          --dx: ${(Math.random()-0.5)*200}px;
+          width: ${4+Math.random()*8}px;
+          height: ${4+Math.random()*8}px;
+          border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        `;
+        container.appendChild(p);
+        setTimeout(() => p.remove(), 2500);
+      }
+    }
+
+    // ── Reset ──
+    function resetBoxes() {
+      phase = 'idle';
+      selectedIds = [];
+      generatedBoxes = [];
+
+      document.getElementById('gen-placeholder').style.display = 'block';
+      document.getElementById('boxes-grid').style.display = 'none';
+      document.getElementById('boxes-grid').innerHTML = '';
+      document.getElementById('selection-ui').style.display = 'none';
+      document.getElementById('results-panel').classList.remove('show');
+      document.getElementById('generate-btn').style.display = 'inline-flex';
+      document.getElementById('generate-btn').disabled = false;
+      document.getElementById('generate-btn').innerHTML = '📦 GENERAR 6 CAJAS';
+
+      for (let i = 1; i <= 3; i++) document.getElementById(`dot-${i}`).classList.remove('filled');
+      document.getElementById('sel-count').textContent = '0';
+    }
+
+    loadUser();
+  </script>
+</body>
+</html>

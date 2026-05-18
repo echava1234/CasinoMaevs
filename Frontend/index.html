@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casino Maevs — Ingresa al Nexo</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <style>
+    /* ── INDEX-SPECIFIC ── */
+    body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+
+    /* ── HERO BG ── */
+    .hero-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(0,245,255,0.07) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 80% 80%, rgba(255,0,200,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 40% at 20% 70%, rgba(255,215,0,0.04) 0%, transparent 60%),
+                  var(--bg-void);
+    }
+
+    /* ── LOGO HERO ── */
+    .hero-logo {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .logo-casino {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      line-height: 1;
+      color: var(--neon-cyan);
+      text-shadow:
+        0 0 20px rgba(0,245,255,0.8),
+        0 0 60px rgba(0,245,255,0.4),
+        0 0 120px rgba(0,245,255,0.2);
+      animation: flicker 6s infinite;
+    }
+
+    .logo-maevs {
+      display: block;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      color: var(--neon-magenta);
+      text-shadow:
+        0 0 20px rgba(255,0,200,0.8),
+        0 0 60px rgba(255,0,200,0.4);
+      letter-spacing: 0.4em;
+      margin-top: -0.3rem;
+    }
+
+    .logo-sub {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.3em;
+      margin-top: 0.75rem;
+    }
+
+    /* Decorative line under logo */
+    .logo-line {
+      width: 200px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), transparent);
+      margin: 1rem auto 0;
+    }
+
+    /* ── AUTH PANEL ── */
+    .auth-panel {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 440px;
+      background: rgba(7,11,24,0.9);
+      border: 1px solid rgba(0,245,255,0.2);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-cyan), 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    .auth-panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      animation: shimmer 3s linear infinite;
+      background-size: 200% 100%;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* ── TABS ── */
+    .auth-tabs {
+      display: grid; grid-template-columns: 1fr 1fr;
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(0,245,255,0.1);
+    }
+
+    .tab-btn {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      padding: 0.6rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab-btn.active {
+      background: rgba(0,245,255,0.15);
+      color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0,245,255,0.2);
+    }
+
+    /* ── FORM ── */
+    .form-group { margin-bottom: 1.2rem; }
+
+    .form-label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-panel { display: none; }
+    .form-panel.active { display: block; animation: fadeInUp 0.3s ease; }
+
+    /* ── AVATAR SELECT ── */
+    .avatar-select {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem; margin-top: 0.5rem;
+    }
+
+    .avatar-opt {
+      padding: 0.5rem;
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(0,245,255,0.1);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .avatar-opt input { display: none; }
+
+    .avatar-opt:has(input:checked),
+    .avatar-opt.selected {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      background: rgba(0,245,255,0.08);
+      box-shadow: 0 0 10px rgba(0,245,255,0.15);
+    }
+
+    .avatar-icon { font-size: 1.6rem; display: block; margin-bottom: 0.3rem; }
+
+    /* ── ERROR ── */
+    .form-error {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--neon-red);
+      margin-top: 0.4rem;
+      display: none;
+    }
+
+    /* ── DECORATIVE CORNER ── */
+    .corner { position: absolute; width: 14px; height: 14px; }
+    .corner-tl { top: -1px; left: -1px; border-top: 2px solid var(--neon-cyan); border-left: 2px solid var(--neon-cyan); }
+    .corner-tr { top: -1px; right: -1px; border-top: 2px solid var(--neon-magenta); border-right: 2px solid var(--neon-magenta); }
+    .corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--neon-cyan); border-left: 2px solid var(--neon-cyan); }
+    .corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--neon-magenta); border-right: 2px solid var(--neon-magenta); }
+
+    /* ── PARTICLES ── */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--neon-cyan);
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatUp var(--dur, 8s) var(--delay, 0s) linear infinite;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-10vh) translateX(var(--dx, 50px)); opacity: 0; }
+    }
+
+    .online-count {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-top: 1.5rem;
+    }
+
+    .online-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: var(--neon-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-green);
+      animation: pulse 2s infinite;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 0 8px var(--neon-green); }
+      50%       { box-shadow: 0 0 18px var(--neon-green), 0 0 35px rgba(57,255,20,0.4); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background layers -->
+  <div class="hero-bg"></div>
+  <div class="grid-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div id="toast-container"></div>
+
+  <!-- Logo -->
+  <div class="hero-logo" style="position:relative;z-index:1;">
+    <div class="logo-casino">CASINO</div>
+    <span class="logo-maevs">MAEVS</span>
+    <p class="logo-sub">// NEXO VIRTUAL DE FORTUNA //</p>
+    <div class="logo-line"></div>
+  </div>
+
+  <!-- Auth Panel -->
+  <div class="auth-panel">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">⚡ Ingresar</button>
+      <button class="tab-btn" onclick="switchTab('register')">🔮 Registrarse</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="form-panel active" id="panel-login">
+      <div class="form-group">
+        <label class="form-label">Nombre de usuario</label>
+        <input type="text" id="login-user" class="input-neon" placeholder="Tu alias en el nexo" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" id="login-pass" class="input-neon" placeholder="••••••••" autocomplete="current-password" />
+        <div class="form-error" id="login-error">⛔ Credenciales incorrectas</div>
+      </div>
+      <button class="btn btn-cyan btn-lg" style="width:100%;margin-top:0.5rem;" onclick="doLogin()">
+        ⚡ ACCEDER AL NEXO
+      </button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="form-panel" id="panel-register">
+      <div class="form-group">
+        <label class="form-label">Nombre de usuario (mín. 3 caracteres)</label>
+        <input type="text" id="reg-user" class="input-neon" placeholder="Elige tu alias" autocomplete="username" />
+        <div class="form-error" id="reg-user-error"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña (mín. 6 caracteres)</label>
+        <input type="password" id="reg-pass" class="input-neon" placeholder="••••••••" autocomplete="new-password" />
+        <div class="form-error" id="reg-pass-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Estilo de avatar</label>
+        <div class="avatar-select">
+          <label class="avatar-opt selected" id="opt-guerrero">
+            <input type="radio" name="avatar" value="Guerrero Galáctico" checked />
+            <span class="avatar-icon">⚔️</span>Guerrero
+          </label>
+          <label class="avatar-opt" id="opt-ciberpunk">
+            <input type="radio" name="avatar" value="Ciberpunk" />
+            <span class="avatar-icon">🤖</span>Ciberpunk
+          </label>
+          <label class="avatar-opt" id="opt-sombra">
+            <input type="radio" name="avatar" value="Sombra del Vacío" />
+            <span class="avatar-icon">🌑</span>Sombra
+          </label>
+        </div>
+      </div>
+
+      <button class="btn btn-magenta btn-lg" style="width:100%;margin-top:0.5rem;" onclick="doRegister()">
+        🔮 CREAR MI IDENTIDAD
+      </button>
+    </div>
+
+    <p class="online-count" style="margin-top:1.5rem;">
+      <span class="online-dot"></span>
+      <span id="online-num">2,847</span> jugadores en el nexo ahora mismo
+    </p>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000';
+
+    // ── Particles ──
+    const pc = document.getElementById('particles');
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.cssText = `left:${Math.random()*100}%;--dur:${6+Math.random()*10}s;--delay:${Math.random()*8}s;--dx:${(Math.random()-0.5)*100}px;background:${Math.random()>0.5?'var(--neon-cyan)':'var(--neon-magenta)'};opacity:0;`;
+      pc.appendChild(p);
+    }
+
+    // ── Fake online counter ──
+    setInterval(() => {
+      const base = 2847;
+      document.getElementById('online-num').textContent = (base + Math.floor(Math.random()*50 - 25)).toLocaleString();
+    }, 3000);
+
+    // ── Toast ──
+    function toast(msg, type='info') {
+      const t = document.createElement('div');
+      t.className = `toast toast-${type}`;
+      t.textContent = msg;
+      document.getElementById('toast-container').appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    }
+
+    // ── Tab switch ──
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (tab==='login'?i===0:i===1)));
+      document.getElementById('panel-login').classList.toggle('active', tab==='login');
+      document.getElementById('panel-register').classList.toggle('active', tab==='register');
+    }
+
+    // ── Login ──
+    async function doLogin() {
+      const username = document.getElementById('login-user').value.trim();
+      const password = document.getElementById('login-pass').value;
+      if (!username || !password) { toast('Completa todos los campos', 'error'); return; }
+
+      try {
+        const res = await fetch(`${API}/api/auth/login`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ username, contraseña: password })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          toast(`✅ Bienvenido, ${data.username}!`, 'success');
+          setTimeout(() => window.location.href = 'lobby.html', 1200);
+        } else {
+          document.getElementById('login-error').style.display = 'block';
+          toast('Credenciales incorrectas', 'error');
+        }
+      } catch {
+        toast('⚠️ No se pudo conectar con el servidor. ¿Está corriendo el backend?', 'error');
+      }
+    }
+
+    // ── Register ──
+    async function doRegister() {
+      const username = document.getElementById('reg-user').value.trim();
+      const password = document.getElementById('reg-pass').value;
+      const avatar   = document.querySelector('input[name="avatar"]:checked')?.value || 'Clásico';
+
+      document.querySelectorAll('.form-error').forEach(e => e.style.display='none');
+
+      if (username.length < 3) {
+        const el = document.getElementById('reg-user-error');
+        el.textContent = 'Mínimo 3 caracteres'; el.style.display = 'block'; return;
+      }
+      if (password.length < 6) {
+        const el = document.getElementById('reg-pass-error');
+        el.textContent = 'Mínimo 6 caracteres'; el.style.display = 'block'; return;
+      }
+
+      try {
+        const res = await fetch(`${API}/api/auth/registrar`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ username, contraseña: password, estiloAvatar: avatar })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          toast(`🎉 Identidad creada: ${username}`, 'success');
+          setTimeout(() => switchTab('login'), 1500);
+        } else {
+          toast(data.mensaje || 'Error al registrar', 'error');
+        }
+      } catch {
+        toast('⚠️ No se pudo conectar con el servidor', 'error');
+      }
+    }
+
+    // Enter key support
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        if (document.getElementById('panel-login').classList.contains('active')) doLogin();
+        else doRegister();
+      }
+    });
+
+    // Avatar option click styling
+    document.querySelectorAll('.avatar-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.avatar-opt').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+  </script>
+</body>
+</html>
