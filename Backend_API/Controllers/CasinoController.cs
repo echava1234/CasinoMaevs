@@ -20,6 +20,9 @@ public class CasinoController
         new ItemEstetico("Máscara de Neón",       Rareza.Legendario, 2.80),
     };
 
+    // 🆕 Servicio de cajas
+    private CajasService _cajasService = new CajasService();
+
     // Genera exactamente 6 cajas con premios aleatorios del pool
     public List<CajaRecompensa> Generar6Cajas()
     {
@@ -46,6 +49,9 @@ public class CasinoController
 
         return cajas;
     }
+
+    // 🆕 Método para obtener el servicio (público)
+    public CajasService ObtenerServicioCajas() => _cajasService;
 
     // Filtra las 3 cajas seleccionadas por ID y las procesa para el usuario
     public void SeleccionarYAbrirCajas(Usuario usuario, List<CajaRecompensa> cajas, List<int> idsSeleccionados)
