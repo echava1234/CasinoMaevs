@@ -261,6 +261,101 @@ class Program
                     tiempoEnfriamiento = panicSystem.ObtenerTiempoEnfriamientoRestante(usuarioActual)
                 });
             });
+
+                // 🌐 ENDPOINT: Verificar si puede abrir cajas hoy
+        app.MapGet("/api/cajas/verificar-permiso", () => {
+            Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+            CajasService cajasService = casino.ObtenerServicioCajas();
+            
+            var (puedeAbrir, mensaje) = cajasService.VerificarPermisoCajasHoy(usuarioActual);
+            
+            return Results.Ok(new {
+                puedeAbrir,
+                mensaje,
+                aperturasDiaActual = usuarioActual.AccionesDiarias.AperturasDeHoyGeneradas,
+                fecha = DateTime.UtcNow.Date
+            });
+        });
+        
+        // 🌐 ENDPOINT: Generar cajas (CON VALIDACIÓN DE PERMISO)
+        app.MapGet("/api/cajas/generar", () => {
+            Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+            CajasService cajasService = casino.ObtenerServicioCajas();
+            
+            // VALIDACIÓN CRÍTICA EN BACKEND
+            var (puedeAbrir, mensaje) = cajasService.VerificarPermisoCajasHoy(usuarioActual);
+            if (!puedeAbrir)
+                return Results.BadRequest(new { exito = false, mensaje });
+            
+            // GENERAR PERSONAJE ALEATORIO
+            string personajeAleatorio = cajasService.GenerarPersonajeAleatorio();
+            
+            // Generar cajas
+            ultimasCajasGeneradas = casino.Generar6Cajas();
+            
+            return Results.Ok(new {
+                exito = true,
+                cajas = ultimasCajasGeneradas.Select(c => new { c.Id, c.FueAbierta, desc = c.Descripcion }),
+                personajeAsignado = personajeAleatorio, // El usuario NO elige
+                mensaje = $"Te tocó {personajeAleatorio}. ¡Abre las cajas!"
+            });
+        });
+        
+        // 🌐 ENDPOINT: Intentar trampa (SOLO SOMBRA)
+        app.MapPost("/api/cajas/intentar-trampa", (IntentarTrampaRequest req) => {
+            Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+            CajasService cajasService = casino.ObtenerServicioCajas();
+            
+            // Validar tiempo entre intentos (anti-bot)
+            if (!cajasService.ValidarTiempoEntreIntentos(usuarioActual))
+            {
+                return Results.BadRequest(new { 
+                    exito = false, 
+                    mensaje = "⚠️ Intentas muy rápido. Espera 2 segundos entre intentos."
+                });
+            }
+            
+            var (trampaExitosa, mensaje, bonusTokens) = cajasService.IntentarTrampa(usuarioActual, req.PersonajeActual);
+            
+            if (trampaExitosa)
+            {
+                usuarioActual.MaevsTokens += bonusTokens;
+            }
+            
+            return Results.Ok(new {
+                exito = trampaExitosa,
+                mensaje,
+                bonusTokens,
+                saldoActual = usuarioActual.MaevsTokens,
+                intentosRestantes = Math.Max(0, 3 - usuarioActual.AccionesDiarias.IntentosTrampaHoy)
+            });
+        });
+        
+        // 🌐 ENDPOINT: Abrir cajas (CON VALIDACIÓN)
+        app.MapPost("/api/cajas/abrir", (AbrirCajasRequest req) => {
+            try {
+                Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
+                CajasService cajasService = casino.ObtenerServicioCajas();
+                
+                if (ultimasCajasGeneradas.Count == 0)
+                    return Results.BadRequest(new { mensaje = "Primero debes generar las cajas." });
+        
+                casino.SeleccionarYAbrirCajas(usuarioActual, ultimasCajasGeneradas, req.IdsSeleccionados);
+                
+                // 🔑 MARCA QUE ABRIÓ CAJAS HOY (¡IMPORTANTE!)
+                cajasService.MarcarCajasAbridasHoy(usuarioActual);
+        
+                return Results.Ok(new { 
+                    exito = true, 
+                    saldoActual = usuarioActual.MaevsTokens,
+                    itemsTotales = usuarioActual.Avatar.ItemsEquipados.Select(i => i.ToString()).ToList(),
+                    multiplicadorFinal = usuarioActual.Avatar.MultiplicadorTotal,
+                    mensaje = "¡Cajas abiertas! Vuelve mañana para más."
+                });
+            } catch (Exception ex) {
+                return Results.BadRequest(new { mensaje = ex.Message });
+            }
+        });
             
             // ──────────────────────────────────────────────────────────────
             // 🏆 ENDPOINTS DE LOGROS
@@ -414,3 +509,5 @@ public class AbrirCajasRequest { public List<int> IdsSeleccionados { get; set; }
 public class ExtractRequest { public double ApuestaActual { get; set; } }
 public class CompraTokensRequest { public double USD { get; set; } }
 public class VenderTokensRequest { public double Tokens { get; set; } }
+
+public class IntentarTrampaRequest { public string PersonajeActual { get; set; } }
