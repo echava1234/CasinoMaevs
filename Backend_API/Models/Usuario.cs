@@ -33,10 +33,14 @@ public class Usuario
 
     public Avatar Avatar { get; set; }
 
+   
+    public AccionesUsuarioDiarias AccionesDiarias { get; set; }
+
     public Usuario(string username, string estiloAvatar = "Clásico")
     {
         Username = username;
         MaevsTokens = 0;
         Avatar = new Avatar(estiloAvatar);
+        AccionesDiarias = new AccionesUsuarioDiarias(); // Inicializa el rastreador
     }
 }
