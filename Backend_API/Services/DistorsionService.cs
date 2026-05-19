@@ -62,7 +62,7 @@ public class DistorsionService
     /// <summary>
     /// Aplica el multiplicador de apuesta según distorsión activa.
     /// </summary>
-    public double AplicarCostoDistorsion(double apuestaBas e)
+    public double AplicarCostoDistorsion(double apuestaBase)
     {
         if (_distorsionActual == null || !_distorsionActual.EstaActiva)
             return apuestaBase;
