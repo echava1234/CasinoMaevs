@@ -297,6 +297,148 @@
 
     .quick-btn-icon { font-size: 1.8rem; }
     .quick-btn-label { font-family: var(--font-display); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+    /* ── DISTORSIÓN BANNER ── */
+    .distorsion-banner {
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      animation: fadeIn 0.4s ease;
+      flex-wrap: wrap;
+    }
+    .distorsion-banner.activa { display: flex; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.05); color: var(--neon-gold); }
+    .distorsion-banner .dist-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .distorsion-banner .dist-info { flex: 1; }
+    .distorsion-banner .dist-nombre { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 2px; }
+    .distorsion-banner .dist-desc { font-size: 0.8rem; color: var(--text-secondary); }
+    .distorsion-banner .dist-timer { font-family: var(--font-mono); font-size: 0.8rem; color: var(--neon-gold); white-space: nowrap; }
+
+    /* ── OVERLOAD BAR ── */
+    .overload-wrap {
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,32,82,0.2);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .overload-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+    .overload-label {
+      font-family: var(--font-display);
+      font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--neon-red);
+    }
+    .overload-pct { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); }
+    .overload-track {
+      height: 8px; border-radius: 4px;
+      background: rgba(255,32,82,0.12);
+      overflow: hidden; position: relative;
+    }
+    .overload-fill {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--neon-red), #ff6600);
+      transition: width 0.5s ease;
+      box-shadow: 0 0 8px rgba(255,32,82,0.5);
+      width: 0%;
+    }
+    .overload-fill.full {
+      background: linear-gradient(90deg, #ff6600, var(--neon-gold));
+      animation: pulse-glow 1s infinite;
+    }
+    .overload-btn {
+      margin-top: 0.75rem; width: 100%;
+      display: none;
+    }
+    .overload-btn.visible { display: block; }
+
+    /* ── PANIC BUTTON ── */
+    .panic-btn {
+      position: fixed;
+      bottom: 1.5rem; right: 1.5rem;
+      z-index: 50;
+      width: 62px; height: 62px;
+      border-radius: 50%;
+      background: rgba(255,32,82,0.15);
+      border: 2px solid var(--neon-red);
+      color: var(--neon-red);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 0 16px rgba(255,32,82,0.3);
+    }
+    .panic-btn:hover {
+      background: rgba(255,32,82,0.3);
+      box-shadow: 0 0 28px rgba(255,32,82,0.6);
+      transform: scale(1.1);
+    }
+    .panic-btn.cooling {
+      opacity: 0.4; cursor: not-allowed;
+      animation: none; border-color: var(--text-muted);
+    }
+    .panic-label {
+      position: fixed; bottom: 1.5rem; right: 5.5rem;
+      font-family: var(--font-display); font-size: 0.55rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--neon-red); opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .panic-btn:hover ~ .panic-label { opacity: 1; }
+
+    /* ── MERCADO NEGRO PANEL ── */
+    .mercado-panel {
+      background: rgba(150,0,255,0.04);
+      border: 1px solid rgba(150,0,255,0.25);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    .mercado-panel.open { display: block; animation: fadeIn 0.3s ease; }
+    .mercado-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .mercado-title {
+      font-family: var(--font-display); font-size: 0.7rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #c87aff;
+    }
+    .mercado-price {
+      font-family: var(--font-mono); font-size: 0.8rem; color: var(--neon-gold);
+    }
+    .mercado-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .mercado-group { display: flex; flex-direction: column; gap: 0.35rem; flex: 1; min-width: 140px; }
+    .mercado-group label {
+      font-family: var(--font-display); font-size: 0.55rem;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim);
+    }
+    .mercado-row { display: flex; gap: 0.5rem; }
+    .mercado-row .bet-input { flex: 1; }
+
+    /* ── LOGROS MINI ── */
+    .logros-mini {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem;
+    }
+    .logro-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px;
+      background: rgba(255,215,0,0.07);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 3px;
+      font-family: var(--font-display);
+      font-size: 0.58rem; letter-spacing: 0.06em;
+      color: var(--neon-gold);
+    }
   </style>
 </head>
 <body>
@@ -359,6 +501,54 @@
       <small style="color:var(--text-dim); font-family:var(--font-mono); font-size:0.7rem;">1 USD = 100 MAEVS</small>
     </div>
 
+    <!-- DISTORSIÓN ACTIVA BANNER -->
+    <div class="distorsion-banner" id="distorsion-banner">
+      <span class="dist-icon">⚡</span>
+      <div class="dist-info">
+        <div class="dist-nombre" id="dist-nombre">—</div>
+        <div class="dist-desc" id="dist-desc">—</div>
+      </div>
+      <div class="dist-timer" id="dist-timer">—</div>
+    </div>
+
+    <!-- OVERLOAD MODE BAR -->
+    <div class="overload-wrap">
+      <div class="overload-header">
+        <span class="overload-label">⚡ OVERLOAD MODE — Energía del Nexo</span>
+        <span class="overload-pct" id="overload-pct">0 / 100</span>
+      </div>
+      <div class="overload-track">
+        <div class="overload-fill" id="overload-fill"></div>
+      </div>
+      <button class="btn btn-magenta btn-sm overload-btn" id="overload-btn" onclick="activarOverload()">
+        🔴 ¡ACTIVAR OVERLOAD MODE! — x3 multiplicador por 5 tiros
+      </button>
+    </div>
+
+    <!-- MERCADO NEGRO (toggle desde quick nav) -->
+    <div class="mercado-panel" id="mercado-panel">
+      <div class="mercado-header">
+        <span class="mercado-title">📈 Mercado Negro de Tokens</span>
+        <span class="mercado-price">1 MAEVS = $<span id="precio-maevs">1.0000</span> USD</span>
+      </div>
+      <div class="mercado-actions">
+        <div class="mercado-group">
+          <label>Comprar tokens (USD → MAEVS)</label>
+          <div class="mercado-row">
+            <input type="number" class="bet-input" id="mercado-buy-usd" placeholder="$ USD" min="0.5" style="color:var(--neon-green);" />
+            <button class="btn btn-cyan btn-sm" onclick="comprarTokens()">COMPRAR</button>
+          </div>
+        </div>
+        <div class="mercado-group">
+          <label>Vender tokens (MAEVS → USD)</label>
+          <div class="mercado-row">
+            <input type="number" class="bet-input" id="mercado-sell-tokens" placeholder="MAEVS" min="1" style="color:var(--neon-magenta);" />
+            <button class="btn btn-magenta btn-sm" onclick="venderTokens()">VENDER</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- QUICK NAV -->
     <div class="quick-nav">
       <a href="avatar.html" class="quick-btn">
@@ -369,6 +559,10 @@
         <span class="quick-btn-icon">📦</span>
         <span class="quick-btn-label">Abrir Cajas</span>
       </a>
+      <div class="quick-btn" onclick="toggleMercado()">
+        <span class="quick-btn-icon">📈</span>
+        <span class="quick-btn-label">Mercado Negro</span>
+      </div>
       <div class="quick-btn" onclick="loadHistory()">
         <span class="quick-btn-icon">📊</span>
         <span class="quick-btn-label">Ver Historial</span>
@@ -377,6 +571,15 @@
         <span class="quick-btn-icon">🚪</span>
         <span class="quick-btn-label">Cerrar Sesión</span>
       </div>
+    </div>
+
+    <!-- LOGROS DESBLOQUEADOS -->
+    <div id="logros-section" style="margin-bottom:1.5rem; display:none;">
+      <div class="section-header" style="margin-bottom:0.75rem;">
+        <div class="section-icon">🏆</div>
+        <h2>LOGROS DESBLOQUEADOS</h2>
+      </div>
+      <div class="logros-mini" id="logros-lista"></div>
     </div>
 
     <!-- GAMES -->
@@ -474,9 +677,18 @@
 
   </div>
 
+  <!-- BOTÓN DE PÁNICO FIJO -->
+  <button class="panic-btn" id="panic-btn" onclick="activarPanic()" title="Retiro de Emergencia — rescata 50% de tu última apuesta">🚨</button>
+  <span class="panic-label">RETIRO DE EMERGENCIA</span>
+
   <script>
     const API = 'http://localhost:5000';
     let history = [];
+    let currentUsername = '';
+    let lastBet = 0;                 // Para el botón de pánico
+    let overloadActive = false;      // Overload Mode activo
+    let overloadTirosRestantes = 0;  // Tiros con x3 restantes
+    let distorsionTimer = null;      // Interval del countdown
 
     // ── Toast ──
     function toast(msg, type='info') {
@@ -493,11 +705,14 @@
         const res = await fetch(`${API}/api/usuario`);
         if (!res.ok) return;
         const d = await res.json();
+        currentUsername = d.username;
         document.getElementById('balance-display').textContent = d.tokens.toLocaleString();
         document.getElementById('nav-tokens').textContent = d.tokens.toLocaleString();
         document.getElementById('stat-mult').textContent = (1 + d.multiplicador).toFixed(2) + 'x';
         document.getElementById('stat-items').textContent = d.itemsEquipados.length;
         document.getElementById('stat-avatar').textContent = d.avatarEstilo;
+        // Cargar energía overload
+        loadOverload(d.username);
       } catch { /* servidor offline */ }
     }
 
@@ -515,7 +730,7 @@
         const res = await fetch(`${API}/api/paypal/recargar`, {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ montoUsd: amount })
+          body: JSON.stringify({ MontoUsd: amount })
         });
         const d = await res.json();
         if (res.ok) {
@@ -525,36 +740,53 @@
       } catch { toast('No se pudo conectar al servidor', 'error'); }
     }
 
-    // ── Generic play ──
+    // ── Generic play (con soporte Overload) ──
     async function playGame(endpoint, betId, resultId, gameName) {
       const bet = parseFloat(document.getElementById(betId).value);
       const box = document.getElementById(resultId);
       if (!bet || bet <= 0) { toast('Ingresa una apuesta válida', 'error'); return; }
+      lastBet = bet;
 
       box.className = 'result-box show';
-      box.textContent = '⟳ Procesando...';
+      box.textContent = overloadActive ? '🔴 OVERLOAD ACTIVO — ⟳ Procesando...' : '⟳ Procesando...';
 
       try {
         const res = await fetch(`${API}/api/jugar/${endpoint}`, {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ apuesta: bet })
+          body: JSON.stringify({ Apuesta: bet })
         });
         const d = await res.json();
 
         if (res.ok) {
-          const won = d.ganado > 0;
-          const tied = d.ganado === bet;
-          box.className = `result-box ${won ? (tied ? 'tie' : 'win') : 'lose'}`;
+          // Si Overload activo, multiplicar ganancia visualmente (ya se aplica server-side si implementado)
+          let gananciaDisplay = d.ganado;
+          if (overloadActive && d.ganado > 0) {
+            gananciaDisplay = d.ganado; // el server aplica x3 internamente
+            overloadTirosRestantes--;
+            if (overloadTirosRestantes <= 0) {
+              overloadActive = false;
+              toast('⚡ Overload Mode terminado', 'info');
+            } else {
+              toast(`🔴 Overload: ${overloadTirosRestantes} tiro${overloadTirosRestantes !== 1 ? 's' : ''} restante${overloadTirosRestantes !== 1 ? 's' : ''}`, 'info');
+            }
+          }
+
+          const won = d.ganado > bet;
+          const tied = d.ganado === bet && d.ganado > 0;
+          box.className = `result-box ${won ? 'win' : tied ? 'tie' : 'lose'}`;
           if (d.ganado > 0) {
-            box.textContent = `✅ Ganaste ${d.ganado} MAEVS! Saldo: ${d.saldoActual.toLocaleString()}`;
-            toast(`🏆 +${d.ganado} MAEVS en ${gameName}!`, 'success');
+            box.textContent = `✅ Ganaste ${gananciaDisplay.toLocaleString()} MAEVS! Saldo: ${d.saldoActual.toLocaleString()}`;
+            toast(`🏆 +${gananciaDisplay} MAEVS en ${gameName}!`, 'success');
           } else {
             box.textContent = `❌ Sin ganancia. Saldo: ${d.saldoActual.toLocaleString()} MAEVS`;
             toast(`💨 No hubo suerte en ${gameName}`, 'error');
           }
           addHistory(gameName, bet, d.ganado, d.saldoActual);
           loadUser();
+
+          // Sumar energía al overload (+20 por partida)
+          if (currentUsername) loadOverload(currentUsername);
         } else {
           box.className = 'result-box lose';
           box.textContent = `⚠️ ${d.mensaje}`;
@@ -596,9 +828,170 @@
       }).join('');
     }
 
-    function loadHistory() {
-      toast('Historial actualizado', 'info');
-      renderHistory();
+    function loadHistory() { toast('Historial actualizado', 'info'); renderHistory(); }
+
+    // ── DISTORSIÓN DE RED ──
+    async function loadDistorsion() {
+      try {
+        const res = await fetch(`${API}/api/distorsion/actual`);
+        if (!res.ok) return;
+        const d = await res.json();
+        const banner = document.getElementById('distorsion-banner');
+        if (d.activa) {
+          banner.classList.add('activa');
+          document.getElementById('dist-nombre').textContent = `⚡ ${d.nombre}`;
+          document.getElementById('dist-desc').textContent = d.descripcion;
+          // Countdown en vivo
+          if (distorsionTimer) clearInterval(distorsionTimer);
+          let restante = d.tiempoRestante;
+          const timerEl = document.getElementById('dist-timer');
+          timerEl.textContent = formatSeconds(restante);
+          distorsionTimer = setInterval(() => {
+            restante = Math.max(0, restante - 1);
+            timerEl.textContent = restante > 0 ? formatSeconds(restante) : '⏰ Expirada';
+            if (restante <= 0) { clearInterval(distorsionTimer); banner.classList.remove('activa'); }
+          }, 1000);
+        } else {
+          banner.classList.remove('activa');
+          if (distorsionTimer) clearInterval(distorsionTimer);
+        }
+      } catch {}
+    }
+
+    function formatSeconds(s) {
+      const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2,'0')} restante`;
+    }
+
+    // ── OVERLOAD MODE ──
+    async function loadOverload(username) {
+      if (!username) return;
+      try {
+        const res = await fetch(`${API}/api/overload/energia/${encodeURIComponent(username)}`);
+        if (!res.ok) return;
+        const d = await res.json();
+        const pct = Math.min(100, d.porcentaje);
+        document.getElementById('overload-pct').textContent = `${Math.round(pct)} / 100`;
+        const fill = document.getElementById('overload-fill');
+        fill.style.width = pct + '%';
+        fill.classList.toggle('full', pct >= 100);
+        const btn = document.getElementById('overload-btn');
+        btn.classList.toggle('visible', d.puedeActivar && !overloadActive);
+      } catch {}
+    }
+
+    async function activarOverload() {
+      try {
+        const res = await fetch(`${API}/api/overload/activar`, { method: 'POST' });
+        const d = await res.json();
+        if (d.activado) {
+          overloadActive = true;
+          overloadTirosRestantes = d.tirosRestantes;
+          document.getElementById('overload-fill').style.width = '0%';
+          document.getElementById('overload-pct').textContent = '0 / 100';
+          document.getElementById('overload-btn').classList.remove('visible');
+          toast(`🔴 OVERLOAD MODE ACTIVADO — x${d.multiplicador} por ${d.tirosRestantes} tiros!`, 'gold');
+        } else {
+          toast(d.mensaje, 'error');
+        }
+      } catch { toast('Error al activar Overload', 'error'); }
+    }
+
+    // ── BOTÓN DE PÁNICO ──
+    async function activarPanic() {
+      const btn = document.getElementById('panic-btn');
+      if (btn.classList.contains('cooling')) {
+        toast('⏳ Aún en período de enfriamiento', 'error');
+        return;
+      }
+      try {
+        const res = await fetch(`${API}/api/panic/extract`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ ApuestaActual: lastBet || 50 })
+        });
+        const d = await res.json();
+        if (d.exito) {
+          toast(`🚨 Emergencia: +${d.montoBloqueado} MAEVS rescatados`, 'gold');
+          loadUser();
+          // Bloquear botón durante enfriamiento
+          btn.classList.add('cooling');
+          let restante = Math.ceil(d.tiempoEnfriamiento);
+          btn.title = `Enfriamiento: ${restante}s`;
+          const interval = setInterval(() => {
+            restante--;
+            btn.title = restante > 0 ? `Enfriamiento: ${restante}s` : 'Retiro de Emergencia';
+            if (restante <= 0) { clearInterval(interval); btn.classList.remove('cooling'); }
+          }, 1000);
+        } else {
+          toast(d.mensaje, 'error');
+        }
+      } catch { toast('Error al activar retiro de emergencia', 'error'); }
+    }
+
+    // ── MERCADO NEGRO ──
+    function toggleMercado() {
+      const p = document.getElementById('mercado-panel');
+      p.classList.toggle('open');
+      if (p.classList.contains('open')) loadMercado();
+    }
+
+    async function loadMercado() {
+      try {
+        const res = await fetch(`${API}/api/mercado/precio`);
+        if (!res.ok) return;
+        const d = await res.json();
+        document.getElementById('precio-maevs').textContent = d.precioUSD.toFixed(4);
+      } catch {}
+    }
+
+    async function comprarTokens() {
+      const usd = parseFloat(document.getElementById('mercado-buy-usd').value);
+      if (!usd || usd <= 0) { toast('Ingresa un monto en USD', 'error'); return; }
+      try {
+        const res = await fetch(`${API}/api/mercado/comprar`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ USD: usd })
+        });
+        const d = await res.json();
+        if (res.ok) {
+          toast(`📈 Compraste ${d.tokensObtenidos.toFixed(0)} MAEVS a $${d.precioUsado.toFixed(4)}/token`, 'success');
+          loadUser(); loadMercado();
+        } else { toast(d.mensaje, 'error'); }
+      } catch { toast('Error en mercado', 'error'); }
+    }
+
+    async function venderTokens() {
+      const tokens = parseFloat(document.getElementById('mercado-sell-tokens').value);
+      if (!tokens || tokens <= 0) { toast('Ingresa cantidad de tokens', 'error'); return; }
+      try {
+        const res = await fetch(`${API}/api/mercado/vender`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ Tokens: tokens })
+        });
+        const d = await res.json();
+        if (res.ok) {
+          toast(`📉 Vendiste ${tokens} MAEVS por $${d.usdObtenidos.toFixed(4)} USD`, 'info');
+          loadUser(); loadMercado();
+        } else { toast(d.mensaje, 'error'); }
+      } catch { toast('Error en mercado', 'error'); }
+    }
+
+    // ── LOGROS ──
+    async function loadLogros() {
+      try {
+        const res = await fetch(`${API}/api/logros`);
+        if (!res.ok) return;
+        const d = await res.json();
+        if (d.logros && d.logros.length > 0) {
+          document.getElementById('logros-section').style.display = 'block';
+          document.getElementById('logros-lista').innerHTML = d.logros.map(l =>
+            `<span class="logro-tag">${l.icono} ${l.nombre}</span>`
+          ).join('');
+        }
+      } catch {}
     }
 
     // ── Logout ──
@@ -607,8 +1000,14 @@
       window.location.href = 'index.html';
     }
 
+    // ── Init ──
     loadUser();
-    setInterval(loadUser, 10000);
+    loadDistorsion();
+    loadLogros();
+    setInterval(loadUser, 15000);
+    setInterval(loadDistorsion, 30000);   // Actualiza distorsión cada 30 s
+    setInterval(loadMercado, 30000);      // Precio fluctúa cada 30 s
+    setInterval(loadLogros, 60000);
   </script>
 </body>
 </html>
