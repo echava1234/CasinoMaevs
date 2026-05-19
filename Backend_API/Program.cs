@@ -11,8 +11,6 @@ class Program
         clientId:       "AYSq3RDGsmBLJE-otTkBtM-jBRd1TCQwFf9RGfwddNXWz0uFU9ztymylOuICfZjL",
         clientSecret:   "EGnHDxD_qRPdaLdZz8iCr8N7_MnF7UGpaXplBqk_ANpJo47-FjwWVImRW15-4PCi",
         tasaConversion: 100
-
-        
     );
 
     private static DistorsionService distorsionService = new DistorsionService();
@@ -21,14 +19,11 @@ class Program
     private static BlackMarketService blackMarket = new BlackMarketService();
     private static OverloadMode overloadMode = new OverloadMode();
 
-
     private static CasinoController casino = new CasinoController();
     private static SlotsJuego slots = new SlotsJuego();
     private static BlackjackSimplificado blackjack = new BlackjackSimplificado();
     private static RuletaSuerte ruleta = new RuletaSuerte();
 
-    
-    
     private static AuthService authService = new AuthService();
 
     // Creamos un usuario global en memoria para simular las partidas en la web local
@@ -58,9 +53,9 @@ class Program
         Console.WriteLine("╚══════════════════════════════════════╝\n");
         Console.WriteLine($"🎮 Jugador activo en sesión: {usuario.Username}\n");
 
-        // ═════════════════════════════════════════════════════════════════════════════════[...]
+        // ═════════════════════════════════════════════════════════════
         // 🔐 ENDPOINTS DE AUTENTICACIÓN (Delegados a AuthService)
-        // ═════════════════════════════════════════════════════════════════════════════════[...]
+        // ═════════════════════════════════════════════════════════════
 
         // 🌐 ENDPOINT 1: Registrar nuevo usuario
         app.MapPost("/api/auth/registrar", (RegistroRequest req) => {
@@ -85,7 +80,7 @@ class Program
                     username = usuarioActual.Username,
                     tokens = usuarioActual.MaevsTokens
                 });
-            } catch (Exception) { // ✨ Corrección de la advertencia (warning CS0168) al remover la variable 'ex' que no se usaba
+            } catch (Exception) {
                 return Results.Unauthorized();
             }
         });
@@ -121,13 +116,12 @@ class Program
             }
         });
 
-        // ═════════════════════════════════════════════════════════════════════════════════[...]
+        // ═════════════════════════════════════════════════════════════
         // 🎮 ENDPOINTS DE JUEGO (Requieren autenticación)
-        // ═════════════════════════════════════════════════════════════════════════════════[...]
+        // ═════════════════════════════════════════════════════════════
 
         // 🌐 ENDPOINT 1: Obtener el estado del jugador en tiempo real
         app.MapGet("/api/usuario", () => {
-            // Modificación inteligente: Si el usuario ya inició sesión mediante authService, usamos ese. Si no, usamos el global por defecto.
             Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
 
             return Results.Ok(new {
@@ -148,45 +142,81 @@ class Program
             return Results.BadRequest(new { mensaje = "Error al procesar el pago" });
         });
 
-        // 🌐 ENDPOINT 3: Jugar a los Slots (Tragamonedas)
+        // ✅✅✅ 🌐 ENDPOINT 3: Jugar a los Slots (CON OVERLOAD INTEGRADO)
         app.MapPost("/api/jugar/slots", (ApuestaRequest req) => {
             try {
                 Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
                 double saldoAntes = usuarioActual.MaevsTokens;
                 double ganado = slots.Jugar(usuarioActual, req.Apuesta);
-                return Results.Ok(new { exito = true, juego = "Slots", saldoAntes, ganado, saldoActual = usuarioActual.MaevsTokens });
+                
+                // ✅ AÑADIR ENERGÍA AL OVERLOAD
+                overloadMode.AñadirEnergia(usuarioActual.Username, 20);
+                
+                return Results.Ok(new { 
+                    exito = true, 
+                    juego = "Slots", 
+                    saldoAntes, 
+                    ganado, 
+                    saldoActual = usuarioActual.MaevsTokens,
+                    energiaOverload = overloadMode.ObtenerEnergia(usuarioActual.Username),
+                    puedeActivarOverload = overloadMode.PuedeActivarOverload(usuarioActual.Username)
+                });
             } catch (Exception ex) {
                 return Results.BadRequest(new { exito = false, mensaje = ex.Message });
             }
         });
 
-        // 🌐 ENDPOINT: Jugar Blackjack
+        // ✅✅✅ 🌐 ENDPOINT: Jugar Blackjack (CON OVERLOAD INTEGRADO)
         app.MapPost("/api/jugar/blackjack", (ApuestaRequest req) => {
             try {
                 Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
                 double saldoAntes = usuarioActual.MaevsTokens;
                 double ganado = blackjack.Jugar(usuarioActual, req.Apuesta);
-                return Results.Ok(new { exito = true, juego = "Blackjack", saldoAntes, ganado, saldoActual = usuarioActual.MaevsTokens });
+                
+                // ✅ AÑADIR ENERGÍA AL OVERLOAD
+                overloadMode.AñadirEnergia(usuarioActual.Username, 20);
+                
+                return Results.Ok(new { 
+                    exito = true, 
+                    juego = "Blackjack", 
+                    saldoAntes, 
+                    ganado, 
+                    saldoActual = usuarioActual.MaevsTokens,
+                    energiaOverload = overloadMode.ObtenerEnergia(usuarioActual.Username),
+                    puedeActivarOverload = overloadMode.PuedeActivarOverload(usuarioActual.Username)
+                });
             } catch (Exception ex) {
                 return Results.BadRequest(new { exito = false, mensaje = ex.Message });
             }
         });
         
-        // 🌐 ENDPOINT: Jugar Ruleta
+        // ✅✅✅ 🌐 ENDPOINT: Jugar Ruleta (CON OVERLOAD INTEGRADO)
         app.MapPost("/api/jugar/ruleta", (ApuestaRequest req) => {
             try {
                 Usuario usuarioActual = authService.EstaAutenticado() ? authService.ObtenerUsuarioAutenticado() : usuario;
                 double saldoAntes = usuarioActual.MaevsTokens;
                 double ganado = ruleta.Jugar(usuarioActual, req.Apuesta);
-                return Results.Ok(new { exito = true, juego = "Ruleta", saldoAntes, ganado, saldoActual = usuarioActual.MaevsTokens });
+                
+                // ✅ AÑADIR ENERGÍA AL OVERLOAD
+                overloadMode.AñadirEnergia(usuarioActual.Username, 20);
+                
+                return Results.Ok(new { 
+                    exito = true, 
+                    juego = "Ruleta", 
+                    saldoAntes, 
+                    ganado, 
+                    saldoActual = usuarioActual.MaevsTokens,
+                    energiaOverload = overloadMode.ObtenerEnergia(usuarioActual.Username),
+                    puedeActivarOverload = overloadMode.PuedeActivarOverload(usuarioActual.Username)
+                });
             } catch (Exception ex) {
                 return Results.BadRequest(new { exito = false, mensaje = ex.Message });
             }
         });
 
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         // 🎁 ENDPOINTS DE CAJAS
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
 
         // 🌐 ENDPOINT: Verificar si puede abrir cajas hoy
         app.MapGet("/api/cajas/verificar-permiso", () => {
@@ -274,12 +304,17 @@ class Program
                 
                 // 🔑 MARCA QUE ABRIÓ CAJAS HOY (¡IMPORTANTE!)
                 cajasService.MarcarCajasAbridasHoy(usuarioActual);
+                
+                // ✅ AÑADIR ENERGÍA AL OVERLOAD (DOBLE porque es especial)
+                overloadMode.AñadirEnergia(usuarioActual.Username, 30);
         
                 return Results.Ok(new { 
                     exito = true, 
                     saldoActual = usuarioActual.MaevsTokens,
                     itemsTotales = usuarioActual.Avatar.ItemsEquipados.Select(i => i.ToString()).ToList(),
                     multiplicadorFinal = usuarioActual.Avatar.MultiplicadorTotal,
+                    energiaOverload = overloadMode.ObtenerEnergia(usuarioActual.Username),
+                    puedeActivarOverload = overloadMode.PuedeActivarOverload(usuarioActual.Username),
                     mensaje = "¡Cajas abiertas! Vuelve mañana para más."
                 });
             } catch (Exception ex) {
@@ -287,9 +322,9 @@ class Program
             }
         });
             
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         // 💻 ENDPOINTS DE HARDWARE
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         
         // 🌐 Obtener componentes de hardware disponibles
         app.MapGet("/api/hardware/componentes", () => {
@@ -324,9 +359,9 @@ class Program
             }
         });
         
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         // ⚡ ENDPOINTS DE DISTORSIÓN (Eventos Climáticos)
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         
         // 🌐 Obtener distorsión activa actual
         app.MapGet("/api/distorsion/actual", () => {
@@ -344,9 +379,9 @@ class Program
             });
         });
         
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         // 🚨 ENDPOINTS DE PÁNICO (Emergency Extract)
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         
         // 🌐 Activar retiro de emergencia
         app.MapPost("/api/panic/extract", (ExtractRequest req) => {
@@ -363,9 +398,9 @@ class Program
             });
         });
             
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         // 🏆 ENDPOINTS DE LOGROS
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         
         // 🌐 Obtener todos los logros del usuario
         app.MapGet("/api/logros", () => {
@@ -381,9 +416,9 @@ class Program
             return Results.Ok(new { desbloqueado });
         });
         
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         // 📈 ENDPOINTS DE MERCADO NEGRO
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         
         // 🌐 Obtener precio actual del token
         app.MapGet("/api/mercado/precio", () => {
@@ -426,9 +461,9 @@ class Program
             });
         });
         
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         // 🔴 ENDPOINTS DE OVERLOAD MODE
-        // ────────────────────────────────────────────────────────────[...]
+        // ────────────────────────────────────────────────────────────
         
         // 🌐 Obtener nivel de energía
         app.MapGet("/api/overload/energia/{username}", (string username) => {
@@ -488,10 +523,7 @@ public class CambiarContraseñaRequest
 public class RecargaRequest { public double MontoUsd { get; set; } }
 public class ApuestaRequest { public double Apuesta { get; set; } }
 public class AbrirCajasRequest { public List<int> IdsSeleccionados { get; set; } }
-
-
 public class ExtractRequest { public double ApuestaActual { get; set; } }
 public class CompraTokensRequest { public double USD { get; set; } }
 public class VenderTokensRequest { public double Tokens { get; set; } }
-
 public class IntentarTrampaRequest { public string PersonajeActual { get; set; } }
