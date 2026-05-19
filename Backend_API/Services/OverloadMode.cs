@@ -61,7 +61,7 @@ public class OverloadMode
     /// <summary>
     /// Penaliza al usuario que pierde en Overload (pierde un ítem).
     /// </summary>
-    public void AplicarPenalizaOv erload(Usuario usuario)
+    public void AplicarPenalizaOverload(Usuario usuario)
     {
         if (usuario.Avatar.ItemsEquipados.Count > 0)
         {
