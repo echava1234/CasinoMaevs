@@ -254,6 +254,24 @@
       color: var(--text-dim);
       font-style: italic;
     }
+
+    /* ── HARDWARE CARD ── */
+    .hw-item {
+      background: rgba(0,255,136,0.03);
+      border: 1px solid rgba(0,255,136,0.15);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    }
+    .hw-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .hw-info { flex: 1; min-width: 120px; }
+    .hw-name { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--neon-green); margin-bottom: 3px; }
+    .hw-level { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-secondary); }
+    .hw-bonus { font-family: var(--font-mono); font-size: 0.75rem; color: var(--neon-gold); }
+    .hw-track { flex: 1; min-width: 80px; }
+    .hw-bar { height: 5px; background: rgba(0,255,136,0.1); border-radius: 3px; overflow: hidden; }
+    .hw-fill { height: 100%; background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan)); border-radius: 3px; transition: width 0.4s ease; }
+    .hw-cost { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-dim); margin-top: 3px; }
   </style>
 </head>
 <body>
@@ -376,6 +394,19 @@
           </div>
         </div>
 
+        <!-- Hardware Upgrades (NUEVO) -->
+        <div class="card fade-in" style="animation-delay:0.3s; border-color:rgba(0,255,136,0.2);">
+          <h3 style="color:var(--neon-green);margin-bottom:0.5rem;font-size:0.75rem;letter-spacing:0.15em;">
+            🔧 HARDWARE — Mejoras de Multiplicador
+          </h3>
+          <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-dim);margin-bottom:1.25rem;">
+            Mejora componentes gastando tokens para aumentar tu multiplicador pasivo permanente.
+          </p>
+          <div id="hardware-list" style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="color:var(--text-dim);font-size:0.8rem;">⟳ Cargando componentes...</div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -473,8 +504,57 @@
       toast(`✅ Estilo "${name}" seleccionado`, 'success');
     }
 
+    // ── HARDWARE ──
+    async function loadHardware() {
+      try {
+        const res = await fetch(`${API}/api/hardware/componentes`);
+        if (!res.ok) return;
+        const componentes = await res.json();
+        const container = document.getElementById('hardware-list');
+        if (!componentes.length) {
+          container.innerHTML = '<div style="color:var(--text-dim);font-size:0.8rem;">Sin componentes disponibles</div>';
+          return;
+        }
+        const hwIcons = ['🖥️', '⚙️', '💾'];
+        container.innerHTML = componentes.map((c, i) => {
+          const pct = Math.round((c.nivel / c.nivelMaximo) * 100);
+          const maxed = c.nivel >= c.nivelMaximo;
+          return `
+            <div class="hw-item">
+              <span class="hw-icon">${hwIcons[i] || '🔧'}</span>
+              <div class="hw-info">
+                <div class="hw-name">${c.nombre}</div>
+                <div class="hw-level">Nivel ${c.nivel} / ${c.nivelMaximo}</div>
+                <div class="hw-bonus">+${(c.bonus * 100).toFixed(0)}% bonus</div>
+              </div>
+              <div class="hw-track">
+                <div class="hw-bar"><div class="hw-fill" style="width:${pct}%"></div></div>
+                <div class="hw-cost">${maxed ? '✅ Nivel máximo' : `Costo: ${Math.round(c.costoProxima)} tokens`}</div>
+              </div>
+              ${!maxed ? `<button class="btn btn-cyan btn-sm" style="flex-shrink:0;" onclick="mejorarHardware(${c.id})">▲ MEJORAR</button>` : '<span style="color:var(--neon-gold);font-size:0.65rem;font-family:var(--font-display);">MAX</span>'}
+            </div>
+          `;
+        }).join('');
+      } catch { document.getElementById('hardware-list').innerHTML = '<div style="color:var(--text-dim);font-size:0.8rem;">Error al cargar hardware</div>'; }
+    }
+
+    async function mejorarHardware(id) {
+      try {
+        const res = await fetch(`${API}/api/hardware/mejorar/${id}`, { method: 'POST' });
+        const d = await res.json();
+        if (res.ok && d.exito) {
+          toast(`🔧 ¡Componente mejorado! Multiplicador: ${d.multiplicadorTotal.toFixed(2)}x | Saldo: ${Math.round(d.saldoActual)} MAEVS`, 'success');
+          loadUser();
+          loadHardware();
+        } else {
+          toast(d.mensaje || '⚠ Sin fondos suficientes para mejorar', 'error');
+        }
+      } catch { toast('Error al mejorar componente', 'error'); }
+    }
+
     renderCatalog();
     loadUser();
+    loadHardware();
   </script>
 </body>
 </html>
