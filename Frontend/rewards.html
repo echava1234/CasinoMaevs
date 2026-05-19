@@ -337,6 +337,35 @@
     <div class="rewards-intro fade-in">
       <h1>🎁 CAJAS DEL DESTINO</h1>
       <p>Genera 6 cajas misteriosas · Elige solo 3 · Descubre tu fortuna</p>
+      <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-dim);margin-top:0.5rem;">⏰ Una apertura disponible por día — Vuelve mañana para otra ronda</p>
+    </div>
+
+    <!-- ESTADO DIARIO (NUEVO) -->
+    <div id="daily-status" style="margin-bottom:1.5rem; display:none;">
+      <div style="background:rgba(255,32,82,0.07);border:1px solid rgba(255,32,82,0.3);border-radius:var(--radius-md);padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;">
+        <span style="font-size:1.4rem;">⏰</span>
+        <div>
+          <div style="font-family:var(--font-display);font-size:0.7rem;letter-spacing:0.1em;color:var(--neon-red);margin-bottom:3px;">YA ABRISTE CAJAS HOY</div>
+          <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);" id="daily-msg">Vuelve mañana para una nueva apertura.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL PERSONAJE / SOMBRA (NUEVO) -->
+    <div id="personaje-panel" style="display:none; margin-bottom:1.5rem;">
+      <div id="personaje-card" style="border-radius:var(--radius-md);padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;border:1px solid;">
+        <span id="personaje-icon" style="font-size:2rem;"></span>
+        <div style="flex:1;">
+          <div id="personaje-nombre" style="font-family:var(--font-display);font-size:0.75rem;letter-spacing:0.1em;margin-bottom:3px;"></div>
+          <div id="personaje-desc" style="font-family:var(--font-mono);font-size:0.78rem;color:var(--text-secondary);"></div>
+        </div>
+        <!-- Botón de trampa: solo visible si Sombra -->
+        <button id="trampa-btn" onclick="intentarTrampa()" style="display:none;" class="btn btn-magenta btn-sm">
+          💀 INTENTAR TRAMPA
+        </button>
+      </div>
+      <div id="trampa-result" style="display:none; margin-top:0.5rem; padding:0.75rem 1rem; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:0.8rem;"></div>
+      <div id="trampa-intentos" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-dim);margin-top:0.4rem;display:none;"></div>
     </div>
 
     <!-- GENERATE ZONE -->
@@ -421,6 +450,7 @@
     let selectedIds = [];
     let generatedBoxes = [];
     let phase = 'idle'; // idle | selecting | opened
+    let personajeActual = 'Normal';  // El personaje asignado por el servidor
 
     function toast(msg, type='info') {
       const t = document.createElement('div');
@@ -440,6 +470,94 @@
       } catch {}
     }
 
+    // ── Verificar límite diario al entrar ──
+    async function verificarPermisoHoy() {
+      try {
+        const res = await fetch(`${API}/api/cajas/verificar-permiso`);
+        if (!res.ok) return;
+        const d = await res.json();
+        if (!d.puedeAbrir) {
+          document.getElementById('daily-status').style.display = 'block';
+          document.getElementById('daily-msg').textContent = d.mensaje;
+          // Deshabilitar botón generar
+          const btn = document.getElementById('generate-btn');
+          btn.disabled = true;
+          btn.innerHTML = '⏰ Ya abriste cajas hoy';
+          btn.style.opacity = '0.5';
+        }
+      } catch {}
+    }
+
+    // ── Mostrar panel del personaje ──
+    function mostrarPersonaje(nombre) {
+      personajeActual = nombre;
+      const panel = document.getElementById('personaje-panel');
+      const card  = document.getElementById('personaje-card');
+      panel.style.display = 'block';
+
+      if (nombre === 'Sombra') {
+        document.getElementById('personaje-icon').textContent = '🌑';
+        document.getElementById('personaje-nombre').textContent = '💀 ¡HAS ENCONTRADO A SOMBRA!';
+        document.getElementById('personaje-desc').textContent = 'Sombra puede intentar hacer trampa al sistema. Tienes hasta 3 intentos hoy. ¡Éxito: 15%!';
+        card.style.background = 'rgba(255,0,200,0.05)';
+        card.style.borderColor = 'rgba(255,0,200,0.4)';
+        document.getElementById('trampa-btn').style.display = 'inline-flex';
+        document.getElementById('trampa-intentos').style.display = 'block';
+        document.getElementById('trampa-intentos').textContent = '💀 Intentos restantes hoy: 3';
+        toast('🌑 ¡Encontraste a SOMBRA! Puedes intentar hacer trampa...', 'gold');
+      } else {
+        document.getElementById('personaje-icon').textContent = '✨';
+        document.getElementById('personaje-nombre').textContent = '✨ PERSONAJE NORMAL';
+        document.getElementById('personaje-desc').textContent = 'Un personaje común. Abre tus 3 cajas y descubre tus recompensas.';
+        card.style.background = 'rgba(0,245,255,0.04)';
+        card.style.borderColor = 'rgba(0,245,255,0.2)';
+        document.getElementById('trampa-btn').style.display = 'none';
+      }
+    }
+
+    // ── Intentar trampa (solo Sombra) ──
+    async function intentarTrampa() {
+      const btn = document.getElementById('trampa-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Intentando...';
+
+      try {
+        const res = await fetch(`${API}/api/cajas/intentar-trampa`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ PersonajeActual: personajeActual })
+        });
+        const d = await res.json();
+
+        const resultDiv = document.getElementById('trampa-result');
+        resultDiv.style.display = 'block';
+
+        if (d.exito) {
+          resultDiv.style.background = 'rgba(0,255,136,0.08)';
+          resultDiv.style.border = '1px solid rgba(0,255,136,0.3)';
+          resultDiv.style.color = 'var(--neon-green)';
+          resultDiv.textContent = d.mensaje;
+          toast(d.mensaje, 'success');
+          loadUser();
+        } else {
+          resultDiv.style.background = 'rgba(255,32,82,0.08)';
+          resultDiv.style.border = '1px solid rgba(255,32,82,0.3)';
+          resultDiv.style.color = 'var(--neon-red)';
+          resultDiv.textContent = d.mensaje;
+        }
+
+        // Actualizar intentos restantes
+        document.getElementById('trampa-intentos').textContent = `💀 Intentos restantes hoy: ${d.intentosRestantes}`;
+        if (d.intentosRestantes <= 0) btn.disabled = true;
+        else { btn.disabled = false; btn.innerHTML = '💀 INTENTAR TRAMPA'; }
+
+      } catch {
+        toast('Error al intentar trampa', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '💀 INTENTAR TRAMPA';
+      }
+    }
+
     // ── Generate boxes ──
     async function generateBoxes() {
       if (phase !== 'idle') return;
@@ -450,10 +568,28 @@
 
       try {
         const res = await fetch(`${API}/api/cajas/generar`);
-        if (!res.ok) throw new Error('Error del servidor');
-        const boxes = await res.json();
-        generatedBoxes = boxes;
-        renderBoxes(boxes);
+        const d = await res.json();
+
+        if (!res.ok) {
+          // Puede ser límite diario
+          toast('⚠️ ' + (d.mensaje || 'Error del servidor'), 'error');
+          if (d.mensaje && d.mensaje.includes('mañana')) {
+            document.getElementById('daily-status').style.display = 'block';
+            document.getElementById('daily-msg').textContent = d.mensaje;
+            btn.innerHTML = '⏰ Ya abriste cajas hoy';
+            btn.style.opacity = '0.5';
+          } else {
+            btn.disabled = false;
+            btn.innerHTML = '📦 GENERAR 6 CAJAS';
+          }
+          return;
+        }
+
+        // Mostrar personaje asignado
+        if (d.personajeAsignado) mostrarPersonaje(d.personajeAsignado);
+
+        generatedBoxes = d.cajas || d;
+        renderBoxes(generatedBoxes);
         toast('📦 ¡6 cajas generadas! Elige 3.', 'info');
         phase = 'selecting';
       } catch (e) {
@@ -476,19 +612,18 @@
       boxes.forEach((box, i) => {
         const card = document.createElement('div');
         card.className = 'box-card';
-        card.id = `box-${box.id}`;
-        card.dataset.id = box.id;
+        card.id = `box-${box.id || box.Id}`;
+        card.dataset.id = box.id || box.Id;
         card.innerHTML = `
           <div class="box-inner">
             <span class="box-icon">${icons[i % icons.length]}</span>
-            <div class="box-id">CAJA #${box.id}</div>
+            <div class="box-id">CAJA #${box.id || box.Id}</div>
             <div class="box-status">Haz clic para seleccionar</div>
           </div>
         `;
-        card.addEventListener('click', () => toggleBox(box.id, card));
+        card.addEventListener('click', () => toggleBox(box.id || box.Id, card));
         grid.appendChild(card);
 
-        // Staggered animation
         card.style.opacity = '0';
         card.style.transform = 'scale(0.5) translateY(30px)';
         setTimeout(() => {
@@ -507,7 +642,6 @@
       if (card.classList.contains('opened') || card.classList.contains('disabled')) return;
 
       if (card.classList.contains('selected')) {
-        // Deselect
         card.classList.remove('selected');
         card.querySelector('.box-status').textContent = 'Haz clic para seleccionar';
         selectedIds = selectedIds.filter(i => i !== id);
@@ -525,17 +659,14 @@
     }
 
     function updateSelectionUI() {
-      // Dots
       for (let i = 1; i <= 3; i++) {
         document.getElementById(`dot-${i}`).classList.toggle('filled', i <= selectedIds.length);
       }
       document.getElementById('sel-count').textContent = selectedIds.length;
 
-      // Open button
       const openBtn = document.getElementById('open-btn');
       if (selectedIds.length === 3) {
         openBtn.classList.add('ready');
-        // Disable unchosen boxes
         document.querySelectorAll('.box-card:not(.selected)').forEach(c => c.classList.add('disabled'));
       } else {
         openBtn.classList.remove('ready');
@@ -552,7 +683,6 @@
       openBtn.disabled = true;
       openBtn.innerHTML = '<span class="spinner"></span> Abriendo...';
 
-      // Animate selected boxes
       selectedIds.forEach((id, i) => {
         const card = document.getElementById(`box-${id}`);
         setTimeout(() => {
@@ -568,17 +698,23 @@
         const res = await fetch(`${API}/api/cajas/abrir`, {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ idsSeleccionados: selectedIds })
+          body: JSON.stringify({ IdsSeleccionados: selectedIds })
         });
 
+        const d = await res.json();
+
         if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.mensaje || 'Error al abrir cajas');
+          toast('⚠️ ' + (d.mensaje || 'Error al abrir cajas'), 'error');
+          openBtn.disabled = false;
+          openBtn.innerHTML = '🔓 ABRIR MIS 3 CAJAS';
+          phase = 'selecting';
+          return;
         }
 
-        const d = await res.json();
         showResults(d);
         loadUser();
+        // Marcar que ya abrió hoy — ocultar trampa
+        document.getElementById('trampa-btn') && (document.getElementById('trampa-btn').style.display = 'none');
 
       } catch (e) {
         toast('⚠️ ' + e.message, 'error');
@@ -594,29 +730,14 @@
       const grid  = document.getElementById('results-grid');
       panel.classList.add('show');
 
-      // Determine what was in each selected box
-      const boxIcons  = ['📦','🎁','💼','🗃️','📫','🧧'];
       const lootIcons = { 'Corona':'👑','Capa':'🌀','Escudo':'🛡️','Guantelete':'🧤','Botas':'👟','Amuleto':'📿','Antorcha':'🔦','Máscara':'🎭' };
       const rarityMap = { 'Corona':'legendario','Máscara':'legendario','Capa':'epico','Escudo':'epico','Guantelete':'raro','Botas':'raro','Amuleto':'comun','Antorcha':'comun' };
-
-      // Build result cards from items & tokens diff
-      const tokensBefore = data.saldoActual; // we'll use items for cosmetics
       const items = data.itemsTotales || [];
 
-      // Fake 3 result cards based on what happened (best approximation from response)
-      const cards = selectedIds.map((id, i) => {
-        const randomIsToken = Math.random() > 0.5;
-        return { id, delay: i * 200 };
-      });
-
-      // Use actual items equipped count to build result display
       grid.innerHTML = '';
-
-      // Show one card per selected box
       selectedIds.forEach((id, i) => {
         const card = document.createElement('div');
-        // We show results based on items & tokens info from backend
-        const isToken = i < (3 - items.length % 4); // simplified heuristic
+        const isToken = i < (3 - (items.length % 4));
         const delay = i * 200;
 
         if (isToken) {
@@ -630,7 +751,7 @@
             <div class="result-desc">MAEVS TOKENS añadidos a tu saldo</div>
           `;
         } else {
-          const item = items[i % items.length] || 'Ítem Especial';
+          const item = items[i % Math.max(items.length,1)] || 'Ítem Especial';
           const keyword = Object.keys(lootIcons).find(k => item.includes(k)) || 'Amuleto';
           const icon  = lootIcons[keyword] || '✨';
           const rarity = rarityMap[keyword] || 'comun';
@@ -643,19 +764,19 @@
             <span class="badge badge-${rarity}" style="margin:0.4rem auto 0;">${rarity.charAt(0).toUpperCase()+rarity.slice(1)}</span>
           `;
         }
-
         grid.appendChild(card);
       });
 
-      // Summary
       document.getElementById('new-balance').textContent = data.saldoActual.toLocaleString();
       document.getElementById('summary-tokens').textContent = data.saldoActual.toLocaleString();
 
-      // Confetti
       launchConfetti();
-
-      toast('🎉 ¡Cajas abiertas con éxito!', 'gold');
+      toast('🎉 ¡Cajas abiertas! ' + (data.mensaje || ''), 'gold');
       document.getElementById('selection-ui').style.display = 'none';
+
+      // Mostrar aviso de que ya no puede generar más hoy
+      document.getElementById('daily-status').style.display = 'block';
+      document.getElementById('daily-msg').textContent = '¡Abriste tus cajas de hoy! Vuelve mañana para una nueva ronda.';
     }
 
     // ── Confetti ──
@@ -685,6 +806,7 @@
       phase = 'idle';
       selectedIds = [];
       generatedBoxes = [];
+      personajeActual = 'Normal';
 
       document.getElementById('gen-placeholder').style.display = 'block';
       document.getElementById('boxes-grid').style.display = 'none';
@@ -694,12 +816,15 @@
       document.getElementById('generate-btn').style.display = 'inline-flex';
       document.getElementById('generate-btn').disabled = false;
       document.getElementById('generate-btn').innerHTML = '📦 GENERAR 6 CAJAS';
+      document.getElementById('personaje-panel').style.display = 'none';
+      document.getElementById('trampa-result').style.display = 'none';
 
       for (let i = 1; i <= 3; i++) document.getElementById(`dot-${i}`).classList.remove('filled');
       document.getElementById('sel-count').textContent = '0';
     }
 
     loadUser();
+    verificarPermisoHoy();
   </script>
 </body>
 </html>
