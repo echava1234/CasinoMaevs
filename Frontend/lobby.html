@@ -57,12 +57,8 @@
     }
 
     .balance-left h2 {
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.2em;
-      margin-bottom: 0.3rem;
+      font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.2em; margin-bottom: 0.3rem;
     }
-
     .balance-amount {
       font-family: var(--font-mono);
       font-size: clamp(2rem, 5vw, 3.5rem);
@@ -70,15 +66,10 @@
       text-shadow: var(--shadow-gold);
       line-height: 1;
     }
-
     .balance-sub {
       font-family: var(--font-display);
-      font-size: 0.6rem;
-      color: var(--neon-gold);
-      letter-spacing: 0.2em;
-      opacity: 0.6;
+      font-size: 0.6rem; color: var(--neon-gold); letter-spacing: 0.2em; opacity: 0.6;
     }
-
     .balance-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
     /* ── PAYPAL PANEL ── */
@@ -88,21 +79,7 @@
       border-radius: var(--radius-md);
       padding: 1rem 1.25rem;
       display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-    }
-
-    .paypal-logo {
-      font-family: var(--font-display);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      color: var(--neon-cyan);
-    }
-
-    .paypal-input-wrap { display: flex; gap: 0.5rem; align-items: center; flex: 1; min-width: 200px; }
-
-    .paypal-prefix {
-      font-family: var(--font-mono);
-      color: var(--neon-gold);
-      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
     }
 
     /* ── GAMES GRID ── */
@@ -119,7 +96,6 @@
       overflow: hidden;
       border: 1px solid rgba(0,245,255,0.15);
       transition: var(--transition);
-      cursor: pointer;
     }
 
     .game-card:hover {
@@ -129,10 +105,7 @@
     }
 
     .game-header {
-      padding: 1.75rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+      padding: 1.75rem; text-align: center; position: relative; overflow: hidden;
     }
 
     .game-header::before {
@@ -141,67 +114,25 @@
       background: radial-gradient(circle at 50% 100%, var(--game-color, rgba(0,245,255,0.12)) 0%, transparent 70%);
     }
 
-    .game-icon {
-      font-size: 3.5rem;
-      display: block;
-      position: relative;
-      z-index: 1;
-      filter: drop-shadow(0 0 12px var(--game-glow, rgba(0,245,255,0.6)));
-    }
-
-    .game-name {
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      color: var(--neon-cyan);
-      margin-top: 0.75rem;
-      position: relative; z-index: 1;
-    }
+    .game-icon { font-size: 3.5rem; display: block; position: relative; z-index: 1; filter: drop-shadow(0 0 12px var(--game-glow, rgba(0,245,255,0.6))); }
+    .game-name { font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.15em; color: var(--neon-cyan); margin-top: 0.75rem; position: relative; z-index: 1; }
 
     .game-card:nth-child(2) .game-name { color: var(--neon-magenta); }
     .game-card:nth-child(3) .game-name { color: var(--neon-gold); }
+    .game-card:nth-child(4) .game-name { color: var(--neon-red); }
 
     .game-body { padding: 1.25rem; }
+    .game-desc { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; }
 
-    .game-desc {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-
-    .game-stats {
-      display: flex; gap: 0.75rem; margin-bottom: 1.25rem;
-    }
-
-    .game-stat {
-      flex: 1; text-align: center;
-      background: rgba(0,0,0,0.3);
-      border-radius: var(--radius-sm);
-      padding: 0.5rem;
-    }
-
-    .game-stat-val {
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      color: var(--neon-cyan);
-    }
-
+    .game-stats { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .game-stat { flex: 1; text-align: center; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 0.5rem; }
+    .game-stat-val { font-family: var(--font-mono); font-size: 0.9rem; color: var(--neon-cyan); }
     .game-card:nth-child(2) .game-stat-val { color: var(--neon-magenta); }
     .game-card:nth-child(3) .game-stat-val { color: var(--neon-gold); }
+    .game-card:nth-child(4) .game-stat-val { color: var(--neon-red); }
+    .game-stat-lbl { font-family: var(--font-display); font-size: 0.5rem; letter-spacing: 0.12em; color: var(--text-dim); margin-top: 0.1rem; }
 
-    .game-stat-lbl {
-      font-family: var(--font-display);
-      font-size: 0.5rem;
-      letter-spacing: 0.12em;
-      color: var(--text-dim);
-      margin-top: 0.1rem;
-    }
-
-    /* ── BET INPUT ── */
-    .bet-row {
-      display: flex; gap: 0.5rem; align-items: center;
-    }
-
+    .bet-row { display: flex; gap: 0.5rem; align-items: center; }
     .bet-input {
       flex: 1;
       background: rgba(0,0,0,0.4);
@@ -214,235 +145,138 @@
       outline: none;
       transition: var(--transition);
     }
-
     .bet-input:focus { border-color: var(--neon-gold); box-shadow: 0 0 0 2px rgba(255,215,0,0.1); }
 
-    /* ── RESULT BOX ── */
     .result-box {
-      margin-top: 1rem;
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      border: 1px solid rgba(0,245,255,0.2);
-      background: rgba(0,0,0,0.3);
-      color: var(--text-secondary);
-      min-height: 2.5rem;
-      transition: var(--transition);
-      display: none;
+      margin-top: 1rem; padding: 0.75rem 1rem; border-radius: var(--radius-sm);
+      font-family: var(--font-mono); font-size: 0.8rem;
+      border: 1px solid rgba(0,245,255,0.2); background: rgba(0,0,0,0.3);
+      color: var(--text-secondary); min-height: 2.5rem; transition: var(--transition); display: none;
     }
-
     .result-box.win  { border-color: var(--neon-green); color: var(--neon-green); background: rgba(57,255,20,0.05); display: block; }
     .result-box.lose { border-color: var(--neon-red);   color: var(--neon-red);   background: rgba(255,32,82,0.05); display: block; }
     .result-box.tie  { border-color: var(--neon-gold);  color: var(--neon-gold);  background: rgba(255,215,0,0.05); display: block; }
     .result-box.show { display: block; }
 
+    /* Slots visual inside card */
+    .slots-mini { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1rem; }
+    .slot-mini-reel {
+      width: 64px; height: 64px;
+      background: var(--bg-deep);
+      border: 1px solid rgba(0,245,255,0.3);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      transition: all 0.15s;
+    }
+    .slot-mini-reel.spinning { animation: miniReelSpin 0.08s linear infinite; }
+    @keyframes miniReelSpin {
+      from { transform: scaleY(0.1); }
+      to   { transform: scaleY(1); }
+    }
+    .slot-mini-reel.jackpot { border-color: var(--neon-gold); box-shadow: var(--shadow-gold); }
+
+    /* Ruleta color bet buttons */
+    .color-bet-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .color-btn {
+      flex: 1; padding: 0.5rem; border-radius: var(--radius-sm);
+      font-family: var(--font-display); font-size: 0.55rem; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer; border: 2px solid transparent;
+      transition: var(--transition);
+    }
+    .color-btn.red-btn   { background: rgba(255,32,82,0.15); color: var(--neon-red); border-color: rgba(255,32,82,0.4); }
+    .color-btn.black-btn { background: rgba(100,100,120,0.15); color: #aaa; border-color: rgba(150,150,170,0.4); }
+    .color-btn.green-btn { background: rgba(57,255,20,0.1); color: var(--neon-green); border-color: rgba(57,255,20,0.4); }
+    .color-btn.selected  { transform: scale(1.05); filter: brightness(1.3); }
+
     /* ── HISTORY ── */
     .history-section { margin-bottom: 2rem; }
-
-    .history-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-
+    .history-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     .history-table th {
-      font-family: var(--font-display);
-      font-size: 0.55rem;
-      letter-spacing: 0.15em;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      padding: 0.6rem 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(0,245,255,0.1);
+      font-family: var(--font-display); font-size: 0.55rem; letter-spacing: 0.15em;
+      color: var(--text-dim); text-transform: uppercase; padding: 0.6rem 0.75rem;
+      text-align: left; border-bottom: 1px solid rgba(0,245,255,0.1);
     }
-
     .history-table td {
-      padding: 0.6rem 0.75rem;
-      border-bottom: 1px solid rgba(0,0,0,0.3);
-      color: var(--text-secondary);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
+      padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.3);
+      color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem;
     }
-
     .hist-win  { color: var(--neon-green) !important; }
     .hist-lose { color: var(--neon-red) !important; }
     .hist-tie  { color: var(--neon-gold) !important; }
 
     /* ── QUICK ACTIONS ── */
-    .quick-nav {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-
+    .quick-nav { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
     .quick-btn {
-      flex: 1; min-width: 160px;
+      flex: 1; min-width: 130px;
       display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
       padding: 1.25rem;
       background: rgba(0,0,0,0.3);
       border: 1px solid rgba(0,245,255,0.12);
       border-radius: var(--radius-md);
       color: var(--text-secondary);
-      cursor: pointer;
-      transition: var(--transition);
-      text-decoration: none;
+      cursor: pointer; transition: var(--transition); text-decoration: none;
     }
-
-    .quick-btn:hover {
-      border-color: var(--neon-cyan);
-      color: var(--neon-cyan);
-      background: rgba(0,245,255,0.04);
-      transform: translateY(-3px);
-    }
-
+    .quick-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,245,255,0.04); transform: translateY(-3px); }
     .quick-btn-icon { font-size: 1.8rem; }
     .quick-btn-label { font-family: var(--font-display); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; }
 
-    /* ── DISTORSIÓN BANNER ── */
-    .distorsion-banner {
-      display: none;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.85rem 1.25rem;
-      border-radius: var(--radius-md);
-      border: 1px solid;
-      margin-bottom: 1.5rem;
-      font-size: 0.85rem;
-      animation: fadeIn 0.4s ease;
-      flex-wrap: wrap;
-    }
-    .distorsion-banner.activa { display: flex; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.05); color: var(--neon-gold); }
-    .distorsion-banner .dist-icon { font-size: 1.5rem; flex-shrink: 0; }
-    .distorsion-banner .dist-info { flex: 1; }
-    .distorsion-banner .dist-nombre { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 2px; }
-    .distorsion-banner .dist-desc { font-size: 0.8rem; color: var(--text-secondary); }
-    .distorsion-banner .dist-timer { font-family: var(--font-mono); font-size: 0.8rem; color: var(--neon-gold); white-space: nowrap; }
-
-    /* ── OVERLOAD BAR ── */
-    .overload-wrap {
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,32,82,0.2);
-      border-radius: var(--radius-md);
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-    .overload-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 0.6rem;
-    }
-    .overload-label {
-      font-family: var(--font-display);
-      font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--neon-red);
-    }
-    .overload-pct { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); }
-    .overload-track {
-      height: 8px; border-radius: 4px;
-      background: rgba(255,32,82,0.12);
-      overflow: hidden; position: relative;
-    }
-    .overload-fill {
-      height: 100%; border-radius: 4px;
-      background: linear-gradient(90deg, var(--neon-red), #ff6600);
-      transition: width 0.5s ease;
-      box-shadow: 0 0 8px rgba(255,32,82,0.5);
-      width: 0%;
-    }
-    .overload-fill.full {
-      background: linear-gradient(90deg, #ff6600, var(--neon-gold));
-      animation: pulse-glow 1s infinite;
-    }
-    .overload-btn {
-      margin-top: 0.75rem; width: 100%;
-      display: none;
-    }
-    .overload-btn.visible { display: block; }
-
-    /* ── PANIC BUTTON ── */
-    .panic-btn {
-      position: fixed;
-      bottom: 1.5rem; right: 1.5rem;
-      z-index: 50;
-      width: 62px; height: 62px;
-      border-radius: 50%;
-      background: rgba(255,32,82,0.15);
-      border: 2px solid var(--neon-red);
-      color: var(--neon-red);
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition);
-      box-shadow: 0 0 16px rgba(255,32,82,0.3);
-    }
-    .panic-btn:hover {
-      background: rgba(255,32,82,0.3);
-      box-shadow: 0 0 28px rgba(255,32,82,0.6);
-      transform: scale(1.1);
-    }
-    .panic-btn.cooling {
-      opacity: 0.4; cursor: not-allowed;
-      animation: none; border-color: var(--text-muted);
-    }
-    .panic-label {
-      position: fixed; bottom: 1.5rem; right: 5.5rem;
-      font-family: var(--font-display); font-size: 0.55rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--neon-red); opacity: 0;
-      transition: opacity 0.2s ease;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-    .panic-btn:hover ~ .panic-label { opacity: 1; }
-
-    /* ── MERCADO NEGRO PANEL ── */
-    .mercado-panel {
-      background: rgba(150,0,255,0.04);
-      border: 1px solid rgba(150,0,255,0.25);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
-      display: none;
-    }
-    .mercado-panel.open { display: block; animation: fadeIn 0.3s ease; }
+    /* ── MERCADO ── */
     .mercado-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.75rem 1.25rem;
+      background: rgba(200,122,255,0.08); border-bottom: 1px solid rgba(200,122,255,0.2);
     }
-    .mercado-title {
-      font-family: var(--font-display); font-size: 0.7rem;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: #c87aff;
-    }
-    .mercado-price {
-      font-family: var(--font-mono); font-size: 0.8rem; color: var(--neon-gold);
-    }
-    .mercado-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .mercado-title { font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.12em; color: #c87aff; }
+    .mercado-price { font-family: var(--font-mono); font-size: 0.8rem; color: var(--neon-gold); }
+    .mercado-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; padding: 1.25rem; }
     .mercado-group { display: flex; flex-direction: column; gap: 0.35rem; flex: 1; min-width: 140px; }
-    .mercado-group label {
-      font-family: var(--font-display); font-size: 0.55rem;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim);
-    }
+    .mercado-group label { font-family: var(--font-display); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
     .mercado-row { display: flex; gap: 0.5rem; }
     .mercado-row .bet-input { flex: 1; }
 
-    /* ── LOGROS MINI ── */
-    .logros-mini {
-      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem;
-    }
+    /* Mini price chart */
+    .price-chart-wrap { padding: 0 1.25rem 0.5rem; }
+    .price-chart-canvas { width: 100%; height: 50px; display: block; }
+
+    /* ── LOGROS ── */
+    .logros-mini { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
     .logro-tag {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 10px;
-      background: rgba(255,215,0,0.07);
-      border: 1px solid rgba(255,215,0,0.2);
-      border-radius: 3px;
-      font-family: var(--font-display);
-      font-size: 0.58rem; letter-spacing: 0.06em;
-      color: var(--neon-gold);
+      display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
+      background: rgba(255,215,0,0.07); border: 1px solid rgba(255,215,0,0.2); border-radius: 3px;
+      font-family: var(--font-display); font-size: 0.58rem; letter-spacing: 0.06em; color: var(--neon-gold);
     }
+
+    /* ── MUTE BUTTON ── */
+    .mute-btn {
+      position: fixed;
+      bottom: 7rem; right: 2rem;
+      width: 40px; height: 40px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(0,245,255,0.3);
+      border-radius: 50%;
+      color: var(--neon-cyan);
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .mute-btn:hover { background: rgba(0,245,255,0.1); }
+
+    /* Hardware toggle btn */
+    .hw-toggle-row {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      background: rgba(0,245,255,0.05); border-bottom: 1px solid rgba(0,245,255,0.15);
+    }
+    .hw-toggle-row h4 { font-family: var(--font-display); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--neon-cyan); }
+    .hw-subtitle { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim); }
   </style>
 </head>
 <body>
 
+  <canvas id="particles-canvas"></canvas>
   <div class="lobby-bg"></div>
   <div class="grid-bg"></div>
   <div id="toast-container"></div>
@@ -456,7 +290,15 @@
       <a href="avatar.html" class="nav-link">👤 Avatar</a>
       <a href="rewards.html" class="nav-link">🎁 Cajas</a>
     </div>
-    <div class="navbar-tokens">⚡ <span id="nav-tokens">0</span> MAEVS</div>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <div class="theme-switcher" title="Cambiar tema visual">
+        <div class="theme-dot cyan"   onclick="setTheme('')"        title="Cyan"></div>
+        <div class="theme-dot matrix" onclick="setTheme('matrix')"  title="Matrix"></div>
+        <div class="theme-dot red"    onclick="setTheme('red-alert')" title="Alerta Roja"></div>
+        <div class="theme-dot purple" onclick="setTheme('purple')"  title="Púrpura"></div>
+      </div>
+      <div class="navbar-tokens">⚡ <span id="nav-tokens">0</span> MAEVS</div>
+    </div>
   </nav>
 
   <div class="page-content">
@@ -482,7 +324,7 @@
       </div>
       <div class="stat-box fade-in">
         <div class="stat-value" id="stat-items">0</div>
-        <div class="stat-label">Ítems equipados</div>
+        <div class="stat-label">Ítems activos</div>
       </div>
       <div class="stat-box fade-in">
         <div class="stat-value" id="stat-avatar">—</div>
@@ -491,14 +333,14 @@
     </div>
 
     <!-- PAYPAL PANEL -->
-    <div class="paypal-panel" id="paypal-panel" style="display:none; margin-bottom:2rem;">
-      <div class="paypal-logo">💳 PAYPAL SANDBOX</div>
-      <div class="paypal-input-wrap">
-        <span class="paypal-prefix">$</span>
+    <div class="paypal-panel" id="paypal-panel" style="display:none;">
+      <div style="font-family:var(--font-display);font-size:0.7rem;letter-spacing:0.1em;color:var(--neon-cyan);">💳 PAYPAL SANDBOX</div>
+      <div style="display:flex;align-items:center;gap:0.5rem;flex:1;min-width:200px;">
+        <span style="font-family:var(--font-mono);color:var(--neon-gold);">$</span>
         <input type="number" id="paypal-amount" class="input-neon" placeholder="0.00" min="1" max="1000" style="flex:1;" />
       </div>
       <button class="btn btn-gold" onclick="doRecharge()">💰 CONVERTIR A TOKENS</button>
-      <small style="color:var(--text-dim); font-family:var(--font-mono); font-size:0.7rem;">1 USD = 100 MAEVS</small>
+      <small style="color:var(--text-dim);font-family:var(--font-mono);font-size:0.7rem;">1 USD = 100 MAEVS</small>
     </div>
 
     <!-- DISTORSIÓN ACTIVA BANNER -->
@@ -525,11 +367,38 @@
       </button>
     </div>
 
-    <!-- MERCADO NEGRO (toggle desde quick nav) -->
+    <!-- INVENTARIO -->
+    <div class="inventory-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-family:var(--font-display);font-size:0.65rem;letter-spacing:0.12em;color:var(--neon-purple);text-transform:uppercase;">📦 Inventario de Ítems</div>
+        <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);">Clic para activar antes de jugar</span>
+      </div>
+      <div class="inventory-grid" id="inventory-grid">
+        <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);padding:0.5rem;">Sin ítems — abre cajas en la sección de recompensas</div>
+      </div>
+    </div>
+
+    <!-- HARDWARE UPGRADE (toggle) -->
+    <div class="hardware-panel" id="hw-panel">
+      <div class="hw-toggle-row">
+        <span>🔧</span>
+        <div>
+          <h4>MEJORA DE HARDWARE — Aumenta tu Multiplicador</h4>
+          <div class="hw-subtitle">Instala componentes virtuales para potenciar tus ganancias</div>
+        </div>
+        <button class="btn btn-cyan btn-sm" onclick="toggleHardware()">✕ CERRAR</button>
+      </div>
+      <div class="hardware-grid" id="hw-grid"></div>
+    </div>
+
+    <!-- MERCADO NEGRO -->
     <div class="mercado-panel" id="mercado-panel">
       <div class="mercado-header">
         <span class="mercado-title">📈 Mercado Negro de Tokens</span>
         <span class="mercado-price">1 MAEVS = $<span id="precio-maevs">1.0000</span> USD</span>
+      </div>
+      <div class="price-chart-wrap">
+        <canvas class="price-chart-canvas" id="price-chart"></canvas>
       </div>
       <div class="mercado-actions">
         <div class="mercado-group">
@@ -553,28 +422,32 @@
     <div class="quick-nav">
       <a href="avatar.html" class="quick-btn">
         <span class="quick-btn-icon">👤</span>
-        <span class="quick-btn-label">Personalizar Avatar</span>
+        <span class="quick-btn-label">Avatar</span>
       </a>
       <a href="rewards.html" class="quick-btn">
         <span class="quick-btn-icon">📦</span>
-        <span class="quick-btn-label">Abrir Cajas</span>
+        <span class="quick-btn-label">Cajas</span>
       </a>
       <div class="quick-btn" onclick="toggleMercado()">
         <span class="quick-btn-icon">📈</span>
-        <span class="quick-btn-label">Mercado Negro</span>
+        <span class="quick-btn-label">Mercado</span>
       </div>
-      <div class="quick-btn" onclick="loadHistory()">
-        <span class="quick-btn-icon">📊</span>
-        <span class="quick-btn-label">Ver Historial</span>
+      <div class="quick-btn" onclick="toggleHardware()">
+        <span class="quick-btn-icon">🔧</span>
+        <span class="quick-btn-label">Hardware</span>
+      </div>
+      <div class="quick-btn" onclick="openRuletaRusa()">
+        <span class="quick-btn-icon">🎯</span>
+        <span class="quick-btn-label">Ruleta Rusa</span>
       </div>
       <div class="quick-btn" onclick="doLogout()">
         <span class="quick-btn-icon">🚪</span>
-        <span class="quick-btn-label">Cerrar Sesión</span>
+        <span class="quick-btn-label">Salir</span>
       </div>
     </div>
 
-    <!-- LOGROS DESBLOQUEADOS -->
-    <div id="logros-section" style="margin-bottom:1.5rem; display:none;">
+    <!-- LOGROS -->
+    <div id="logros-section" style="margin-bottom:1.5rem;display:none;">
       <div class="section-header" style="margin-bottom:0.75rem;">
         <div class="section-icon">🏆</div>
         <h2>LOGROS DESBLOQUEADOS</h2>
@@ -582,7 +455,7 @@
       <div class="logros-mini" id="logros-lista"></div>
     </div>
 
-    <!-- GAMES -->
+    <!-- GAMES SECTION -->
     <div class="section-header">
       <div class="section-icon">🎮</div>
       <h2>JUEGOS DEL NEXO</h2>
@@ -597,15 +470,21 @@
           <div class="game-name">SLOTS FORTUNA</div>
         </div>
         <div class="game-body">
+          <div class="slots-mini" id="slots-reels">
+            <div class="slot-mini-reel" id="reel-0">🎰</div>
+            <div class="slot-mini-reel" id="reel-1">🎰</div>
+            <div class="slot-mini-reel" id="reel-2">🎰</div>
+          </div>
           <p class="game-desc">Gira los carretes y combina símbolos. ¡3 iguales = 5x jackpot!</p>
           <div class="game-stats">
             <div class="game-stat"><div class="game-stat-val">5x</div><div class="game-stat-lbl">Jackpot</div></div>
             <div class="game-stat"><div class="game-stat-val">1.5x</div><div class="game-stat-lbl">2 iguales</div></div>
             <div class="game-stat"><div class="game-stat-val">10</div><div class="game-stat-lbl">Apuesta mín.</div></div>
           </div>
+          <div id="active-item-slots" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--neon-purple);margin-bottom:0.5rem;display:none;"></div>
           <div class="bet-row">
             <input type="number" class="bet-input" id="slots-bet" placeholder="Tokens" min="10" />
-            <button class="btn btn-cyan" onclick="playSlots()">🎰 GIRAR</button>
+            <button class="btn btn-cyan" onclick="playSlots()" id="slots-btn">🎰 GIRAR</button>
           </div>
           <div class="result-box" id="slots-result"></div>
         </div>
@@ -626,7 +505,7 @@
           </div>
           <div class="bet-row">
             <input type="number" class="bet-input" id="bj-bet" placeholder="Tokens" min="20" style="color:var(--neon-magenta);" />
-            <button class="btn btn-magenta" onclick="playBlackjack()">🃏 JUGAR</button>
+            <button class="btn btn-magenta" onclick="openBlackjack()">🃏 JUGAR MESA</button>
           </div>
           <div class="result-box" id="bj-result"></div>
         </div>
@@ -639,15 +518,20 @@
           <div class="game-name">RULETA DE SUERTE</div>
         </div>
         <div class="game-body">
-          <p class="game-desc">45% de probabilidad de duplicar tu apuesta al color correcto.</p>
+          <p class="game-desc">Elige rojo, negro o verde y gira la rueda del destino.</p>
+          <div class="color-bet-row">
+            <button class="color-btn red-btn"   id="col-red"   onclick="selectColor('red')">🔴 Rojo (2x)</button>
+            <button class="color-btn black-btn" id="col-black" onclick="selectColor('black')">⚫ Negro (2x)</button>
+            <button class="color-btn green-btn" id="col-green" onclick="selectColor('green')">🟢 Verde (10x)</button>
+          </div>
           <div class="game-stats">
-            <div class="game-stat"><div class="game-stat-val">2x</div><div class="game-stat-lbl">Victoria</div></div>
-            <div class="game-stat"><div class="game-stat-val">45%</div><div class="game-stat-lbl">Win rate</div></div>
+            <div class="game-stat"><div class="game-stat-val">2x</div><div class="game-stat-lbl">Rojo/Negro</div></div>
+            <div class="game-stat"><div class="game-stat-val">10x</div><div class="game-stat-lbl">Verde</div></div>
             <div class="game-stat"><div class="game-stat-val">15</div><div class="game-stat-lbl">Apuesta mín.</div></div>
           </div>
           <div class="bet-row">
             <input type="number" class="bet-input" id="rul-bet" placeholder="Tokens" min="15" style="color:var(--neon-gold);" />
-            <button class="btn btn-gold" onclick="playRuleta()">🎡 GIRAR</button>
+            <button class="btn btn-gold" onclick="openRuleta()">🎡 GIRAR RUEDA</button>
           </div>
           <div class="result-box" id="rul-result"></div>
         </div>
@@ -655,7 +539,7 @@
 
     </div>
 
-    <!-- HISTORY -->
+    <!-- HISTORIAL -->
     <div class="history-section">
       <div class="section-header">
         <div class="section-icon">📊</div>
@@ -664,9 +548,7 @@
       <div class="card">
         <table class="history-table">
           <thead>
-            <tr>
-              <th>Juego</th><th>Apuesta</th><th>Resultado</th><th>Ganado</th><th>Saldo</th>
-            </tr>
+            <tr><th>Juego</th><th>Apuesta</th><th>Resultado</th><th>Ganado</th><th>Saldo</th></tr>
           </thead>
           <tbody id="history-body">
             <tr><td colspan="5" style="color:var(--text-dim);text-align:center;padding:1.5rem;">Sin partidas aún</td></tr>
@@ -675,339 +557,1317 @@
       </div>
     </div>
 
+  </div><!-- /page-content -->
+
+  <!-- PANIC BUTTON -->
+  <button class="panic-btn" id="panic-btn" onclick="activarPanic()" title="Retiro de Emergencia">🚨</button>
+  <span class="panic-label">RETIRO DE EMERGENCIA</span>
+  <button class="mute-btn" id="mute-btn" onclick="toggleMute()" title="Silenciar">🔊</button>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- BLACKJACK MODAL                                          -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="bj-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🃏 MESA DE BLACKJACK — NEXO</h3>
+        <button class="modal-close" onclick="closeBjModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="bj-table">
+          <!-- Dealer -->
+          <div class="bj-dealer-zone">
+            <div class="bj-zone-label">🤖 DEALER DEL NEXO</div>
+            <div class="bj-cards" id="bj-dealer-cards"></div>
+            <div class="bj-score">Puntuación: <span id="bj-dealer-score">0</span></div>
+          </div>
+          <div class="bj-divider"></div>
+          <!-- Player -->
+          <div class="bj-player-zone">
+            <div class="bj-zone-label">⚡ TU MANO</div>
+            <div class="bj-cards" id="bj-player-cards"></div>
+            <div class="bj-score">Puntuación: <span id="bj-player-score">0</span></div>
+          </div>
+        </div>
+        <div class="bj-status info" id="bj-status">Ingresa tu apuesta y presiona DEAL para comenzar</div>
+        <div class="bj-controls" style="margin-top:1rem;">
+          <div style="display:flex;gap:0.5rem;align-items:center;flex:1;">
+            <input type="number" class="bet-input" id="bj-modal-bet" placeholder="Apuesta (mín 20)" min="20" style="color:var(--neon-magenta);" />
+            <button class="btn btn-magenta" id="bj-deal-btn" onclick="bjDeal()">🃏 DEAL</button>
+          </div>
+          <button class="btn btn-cyan" id="bj-hit-btn" onclick="bjHit()" disabled>➕ HIT</button>
+          <button class="btn btn-gold" id="bj-stand-btn" onclick="bjStand()" disabled>✋ STAND</button>
+          <button class="btn btn-danger btn-sm" id="bj-double-btn" onclick="bjDouble()" disabled>⚡ DOUBLE</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- BOTÓN DE PÁNICO FIJO -->
-  <button class="panic-btn" id="panic-btn" onclick="activarPanic()" title="Retiro de Emergencia — rescata 50% de tu última apuesta">🚨</button>
-  <span class="panic-label">RETIRO DE EMERGENCIA</span>
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- RULETA MODAL                                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay ruleta-modal" id="rul-modal">
+    <div class="modal-box" style="max-width:480px;">
+      <div class="modal-header" style="border-color:rgba(255,215,0,0.2);">
+        <h3 style="color:var(--neon-gold);">🎡 RULETA DE SUERTE</h3>
+        <button class="modal-close" onclick="closeRulModal()">✕</button>
+      </div>
+      <div class="modal-body" style="text-align:center;">
+        <div class="ruleta-wheel-wrap" style="position:relative;">
+          <div class="ruleta-pointer"></div>
+          <canvas id="ruleta-canvas" width="240" height="240" style="border-radius:50%;"></canvas>
+        </div>
+        <div style="margin:1rem 0;font-family:var(--font-mono);font-size:0.85rem;color:var(--text-dim);" id="rul-spin-info">
+          Color elegido: <span id="rul-color-display" style="color:var(--neon-gold);">—</span>
+        </div>
+        <div class="bj-status info" id="rul-status">Elige un color y presiona GIRAR</div>
+        <div class="color-bet-row" style="margin-top:1rem;">
+          <button class="color-btn red-btn"   onclick="selectColorModal('red')">🔴 Rojo (2x)</button>
+          <button class="color-btn black-btn" onclick="selectColorModal('black')">⚫ Negro (2x)</button>
+          <button class="color-btn green-btn" onclick="selectColorModal('green')">🟢 Verde (10x)</button>
+        </div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+          <input type="number" class="bet-input" id="rul-modal-bet" placeholder="Apuesta (mín 15)" min="15" />
+          <button class="btn btn-gold" id="rul-spin-btn" onclick="spinRuleta()">🎡 GIRAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- RULETA RUSA MODAL                                        -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="rr-modal">
+    <div class="modal-box" style="max-width:520px;border-color:rgba(255,32,82,0.4);">
+      <div class="modal-header" style="border-color:rgba(255,32,82,0.2);background:linear-gradient(135deg,rgba(255,32,82,0.06),transparent);">
+        <h3 style="color:var(--neon-red);">🎯 RULETA RUSA DEL NEXO</h3>
+        <button class="modal-close" onclick="closeRRModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">
+          6 nodos de red. 5 contienen tokens. 1 es un <span style="color:var(--neon-red);">FIREWALL</span>.<br>
+          Selecciona nodos para acumular tokens. Retírate cuando quieras.<br>
+          <span style="color:var(--neon-red);">Si tocas el Firewall: pierdes todo y se cierra tu sesión.</span>
+        </p>
+        <div style="text-align:center;margin-bottom:1rem;">
+          <span style="font-family:var(--font-display);font-size:0.6rem;color:var(--text-dim);">BOTÍN ACUMULADO:</span>
+          <div style="font-family:var(--font-mono);font-size:2rem;color:var(--neon-gold);text-shadow:var(--shadow-gold);" id="rr-pot">0</div>
+        </div>
+        <div class="russian-grid" id="rr-grid"></div>
+        <div class="bj-status info" id="rr-status" style="margin-top:1rem;">Selecciona un nodo para comenzar</div>
+        <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+          <button class="btn btn-green" id="rr-withdraw-btn" onclick="rrWithdraw()" style="flex:1;display:none;color:var(--neon-green);border:1px solid var(--neon-green);background:rgba(57,255,20,0.08);">
+            💰 RETIRAR BOTÍN
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="closeRRModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGRO POPUP (se inyecta en JS) -->
 
   <script>
-    const API = 'http://localhost:5000';
-    let history = [];
-    let currentUsername = '';
-    let lastBet = 0;                 // Para el botón de pánico
-    let overloadActive = false;      // Overload Mode activo
-    let overloadTirosRestantes = 0;  // Tiros con x3 restantes
-    let distorsionTimer = null;      // Interval del countdown
+  // ═══════════════════════════════════════════════════════
+  //  CASINO MAEVS — LOBBY SCRIPT v2.0
+  // ═══════════════════════════════════════════════════════
+  const API = 'http://localhost:5000';
+  let historyData = [];
+  let currentUsername = '';
+  let lastBet = 0;
+  let overloadActive = false;
+  let overloadTirosRestantes = 0;
+  let distorsionTimer = null;
+  let isMuted = false;
+  let selectedColor = null;
+  let selectedColorModal = null;
+  let activeItem = null;       // item activado del inventario
 
-    // ── Toast ──
-    function toast(msg, type='info') {
-      const t = document.createElement('div');
-      t.className = `toast toast-${type}`;
-      t.textContent = msg;
-      document.getElementById('toast-container').appendChild(t);
-      setTimeout(() => t.remove(), 3500);
+  // Precio mercado negro
+  let precioHistory = [];
+  let precioActual = 1.0;
+
+  // Blackjack state
+  let bjDeck = [];
+  let bjPlayerHand = [];
+  let bjDealerHand = [];
+  let bjBet = 0;
+  let bjGameActive = false;
+
+  // Ruleta rusa state
+  let rrFirewallIndex = -1;
+  let rrNodesSelected = 0;
+  let rrPot = 0;
+  let rrRewards = [];
+  let rrActive = false;
+
+  // Hardware components
+  const HW_COMPONENTS = [
+    { id: 'gpu',    icon: '🖥️',  name: 'GPU Cuántica',   bonus: '+0.10x', cost: 200,  mult: 0.10 },
+    { id: 'ram',    icon: '💾',  name: 'RAM Neuronal',    bonus: '+0.08x', cost: 150,  mult: 0.08 },
+    { id: 'cpu',    icon: '⚙️',  name: 'CPU Hexacore',    bonus: '+0.15x', cost: 350,  mult: 0.15 },
+    { id: 'cooler', icon: '❄️',  name: 'Cryo-Cooler',     bonus: '+0.05x', cost: 80,   mult: 0.05 },
+    { id: 'psu',    icon: '⚡',  name: 'PSU Turbo',       bonus: '+0.12x', cost: 250,  mult: 0.12 },
+    { id: 'nvme',   icon: '💿',  name: 'NVMe Hyperdrive', bonus: '+0.07x', cost: 120,  mult: 0.07 },
+  ];
+
+  let ownedHardware = JSON.parse(localStorage.getItem('maevs_hw') || '[]');
+
+  // ── AUDIO ───────────────────────────────────────────────
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx;
+
+  function initAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+  }
+
+  function playTone(freq, type='sine', duration=0.15, vol=0.15) {
+    if (isMuted || !audioCtx) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = type; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.start(); osc.stop(audioCtx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playWin()    { playTone(523, 'sine',   0.1); setTimeout(()=>playTone(659,'sine',0.1),100); setTimeout(()=>playTone(784,'sine',0.25),200); }
+  function playLose()   { playTone(220, 'sawtooth', 0.3, 0.1); }
+  function playClick()  { playTone(800, 'square', 0.05, 0.05); }
+  function playCard()   { playTone(600, 'triangle', 0.08, 0.1); }
+  function playJackpot(){ for(let i=0;i<5;i++) setTimeout(()=>{playTone(400+i*100,'sine',0.15);},i*80); }
+  function playSpin()   { playTone(300,'sawtooth',0.5,0.08); }
+
+  function toggleMute() {
+    isMuted = !isMuted;
+    document.getElementById('mute-btn').textContent = isMuted ? '🔇' : '🔊';
+  }
+
+  // ── PARTICLES ───────────────────────────────────────────
+  const canvas = document.getElementById('particles-canvas');
+  const ctx2d = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function spawnParticle(x, y, color) {
+    for(let i=0; i<6; i++) {
+      particles.push({
+        x: x || Math.random()*canvas.width,
+        y: y || canvas.height + 10,
+        vx: (Math.random()-0.5) * (x ? 4 : 1),
+        vy: x ? -(Math.random()*4+2) : -(Math.random()*2+0.5),
+        size: Math.random()*3+1,
+        color: color || (Math.random()>0.5?'#00f5ff':'#ff00c8'),
+        alpha: 0.8,
+        life: 1
+      });
     }
+  }
 
-    // ── Load user data ──
-    async function loadUser() {
-      try {
-        const res = await fetch(`${API}/api/usuario`);
-        if (!res.ok) return;
-        const d = await res.json();
-        currentUsername = d.username;
-        document.getElementById('balance-display').textContent = d.tokens.toLocaleString();
-        document.getElementById('nav-tokens').textContent = d.tokens.toLocaleString();
-        document.getElementById('stat-mult').textContent = (1 + d.multiplicador).toFixed(2) + 'x';
-        document.getElementById('stat-items').textContent = d.itemsEquipados.length;
-        document.getElementById('stat-avatar').textContent = d.avatarEstilo;
-        // Cargar energía overload
-        loadOverload(d.username);
-      } catch { /* servidor offline */ }
+  function animParticles() {
+    ctx2d.clearRect(0,0,canvas.width,canvas.height);
+    // Background ambient particles
+    if(Math.random()<0.05) spawnParticle();
+
+    particles = particles.filter(p => p.life > 0);
+    for(const p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      p.life -= 0.015;
+      p.alpha = p.life;
+      ctx2d.save();
+      ctx2d.globalAlpha = p.alpha;
+      ctx2d.fillStyle = p.color;
+      ctx2d.shadowBlur = 6;
+      ctx2d.shadowColor = p.color;
+      ctx2d.beginPath();
+      ctx2d.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx2d.fill();
+      ctx2d.restore();
     }
+    requestAnimationFrame(animParticles);
+  }
 
-    // ── PayPal toggle ──
-    function togglePaypal() {
-      const p = document.getElementById('paypal-panel');
-      p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  animParticles();
+
+  // ── THEME ───────────────────────────────────────────────
+  function setTheme(t) {
+    document.body.className = document.body.className
+      .replace(/theme-\S+/g,'').trim();
+    if(t) document.body.classList.add('theme-' + t);
+    playClick();
+    localStorage.setItem('maevs_theme', t);
+  }
+
+  // ── TOAST ────────────────────────────────────────────────
+  function toast(msg, type='info') {
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.textContent = msg;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  }
+
+  function jackpotToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast toast-jackpot';
+    t.textContent = '🏆 ' + msg;
+    document.getElementById('toast-container').appendChild(t);
+    // Glitch effect on page
+    document.body.querySelectorAll('.balance-amount, .navbar-logo').forEach(el => {
+      el.classList.add('glitch-active');
+      setTimeout(()=>el.classList.remove('glitch-active'), 800);
+    });
+    // Particle burst
+    for(let i=0;i<8;i++) spawnParticle(Math.random()*window.innerWidth, Math.random()*window.innerHeight*0.3, '#ffd700');
+    setTimeout(() => t.remove(), 5000);
+  }
+
+  // ── LOGRO POPUP ─────────────────────────────────────────
+  function showLogroPopup(icon, nombre) {
+    const p = document.createElement('div');
+    p.className = 'logro-popup';
+    p.innerHTML = `<div class="logro-popup-icon">${icon}</div>
+      <div class="logro-popup-title">¡Logro desbloqueado!</div>
+      <div class="logro-popup-name">${nombre}</div>`;
+    document.body.appendChild(p);
+    playWin();
+    setTimeout(() => { p.style.animation = 'none'; p.style.transform = 'translate(-50%,-50%) scale(0)'; setTimeout(()=>p.remove(),300); }, 3000);
+  }
+
+  // ── USER DATA ────────────────────────────────────────────
+  async function loadUser() {
+    try {
+      const res = await fetch(`${API}/api/usuario`);
+      if(!res.ok) return;
+      const d = await res.json();
+      currentUsername = d.username;
+      document.getElementById('balance-display').textContent = d.tokens.toLocaleString();
+      document.getElementById('nav-tokens').textContent = d.tokens.toLocaleString();
+      document.getElementById('stat-mult').textContent = (1 + d.multiplicador).toFixed(2) + 'x';
+      document.getElementById('stat-items').textContent = d.itemsEquipados?.length || 0;
+      document.getElementById('stat-avatar').textContent = d.avatarEstilo || '—';
+      loadOverload(d.username);
+      loadInventario(d);
+    } catch {}
+  }
+
+  // ── INVENTARIO ───────────────────────────────────────────
+  function loadInventario(userData) {
+    const grid = document.getElementById('inventory-grid');
+    const items = userData?.itemsEquipados || [];
+    if(items.length === 0) {
+      grid.innerHTML = '<div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);padding:0.5rem;">Sin ítems — abre cajas para obtenerlos</div>';
+      return;
     }
+    grid.innerHTML = items.map((item, i) => {
+      const icons = {'Chip de Suerte':'🍀','Batería de Respaldo':'🔋','Amuleto de Neón':'✨','Escudo de Red':'🛡️'};
+      const ic = icons[item.nombre] || '📦';
+      return `<div class="inv-item ${activeItem===i?'active':''}" onclick="activateItem(${i}, '${item.nombre}')" title="${item.descripcion||''}">
+        ${ic}
+        <span class="inv-item-name">${item.nombre}</span>
+        <span class="inv-item-tooltip">${item.descripcion||item.nombre}</span>
+      </div>`;
+    }).join('');
+  }
 
-    // ── Recharge ──
-    async function doRecharge() {
-      const amount = parseFloat(document.getElementById('paypal-amount').value);
-      if (!amount || amount <= 0) { toast('Ingresa un monto válido', 'error'); return; }
-      try {
-        const res = await fetch(`${API}/api/paypal/recargar`, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ MontoUsd: amount })
-        });
-        const d = await res.json();
-        if (res.ok) {
-          toast(`💰 +${amount*100} MAEVS añadidos!`, 'gold');
-          loadUser();
-        } else { toast(d.mensaje || 'Error en recarga', 'error'); }
-      } catch { toast('No se pudo conectar al servidor', 'error'); }
+  function activateItem(i, nombre) {
+    activeItem = activeItem === i ? null : i;
+    playClick();
+    const info = document.getElementById('active-item-slots');
+    if(activeItem !== null) {
+      info.style.display = 'block';
+      info.textContent = `✨ Activo: ${nombre} — próximo giro garantizado sin pérdida`;
+      toast(`✨ ${nombre} activado`, 'gold');
+    } else {
+      info.style.display = 'none';
     }
+    // re-render
+    document.querySelectorAll('.inv-item').forEach((el,idx)=>el.classList.toggle('active',idx===activeItem));
+  }
 
-    // ── Generic play (con soporte Overload) ──
-    async function playGame(endpoint, betId, resultId, gameName) {
-      const bet = parseFloat(document.getElementById(betId).value);
-      const box = document.getElementById(resultId);
-      if (!bet || bet <= 0) { toast('Ingresa una apuesta válida', 'error'); return; }
-      lastBet = bet;
+  // ── HARDWARE UPGRADE ─────────────────────────────────────
+  function toggleHardware() {
+    const p = document.getElementById('hw-panel');
+    const isOpen = p.classList.toggle('open');
+    if(isOpen) renderHardware();
+    playClick();
+  }
 
-      box.className = 'result-box show';
-      box.textContent = overloadActive ? '🔴 OVERLOAD ACTIVO — ⟳ Procesando...' : '⟳ Procesando...';
+  function renderHardware() {
+    const grid = document.getElementById('hw-grid');
+    grid.innerHTML = HW_COMPONENTS.map(c => {
+      const owned = ownedHardware.includes(c.id);
+      return `<div class="hw-component ${owned?'owned':''}" onclick="buyHardware('${c.id}')">
+        <span class="hw-icon">${c.icon}</span>
+        <div class="hw-name">${c.name}</div>
+        <div class="hw-bonus">${owned ? '✅ INSTALADO' : c.bonus}</div>
+        <div class="hw-cost">${owned ? 'Activo' : c.cost + ' MAEVS'}</div>
+      </div>`;
+    }).join('');
+  }
 
-      try {
-        const res = await fetch(`${API}/api/jugar/${endpoint}`, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ Apuesta: bet })
-        });
-        const d = await res.json();
+  async function buyHardware(id) {
+    if(ownedHardware.includes(id)) { toast('Componente ya instalado', 'info'); return; }
+    const comp = HW_COMPONENTS.find(c=>c.id===id);
+    try {
+      const res = await fetch(`${API}/api/hardware/comprar`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ ComponenteId: id, Costo: comp.cost })
+      });
+      if(res.ok) {
+        ownedHardware.push(id);
+        localStorage.setItem('maevs_hw', JSON.stringify(ownedHardware));
+        toast(`🔧 ${comp.name} instalada! +${comp.bonus}`, 'success');
+        playWin();
+        renderHardware();
+        loadUser();
+      } else {
+        // Fallback local si API no existe aún
+        const balance = parseInt(document.getElementById('balance-display').textContent.replace(/,/g,''));
+        if(balance >= comp.cost) {
+          ownedHardware.push(id);
+          localStorage.setItem('maevs_hw', JSON.stringify(ownedHardware));
+          toast(`🔧 ${comp.name} instalada! ${comp.bonus}`, 'success');
+          playWin();
+          renderHardware();
+        } else { toast('Saldo insuficiente', 'error'); }
+      }
+    } catch {
+      toast('No se pudo conectar al servidor', 'error');
+    }
+  }
 
-        if (res.ok) {
-          // Si Overload activo, multiplicar ganancia visualmente (ya se aplica server-side si implementado)
-          let gananciaDisplay = d.ganado;
-          if (overloadActive && d.ganado > 0) {
-            gananciaDisplay = d.ganado; // el server aplica x3 internamente
-            overloadTirosRestantes--;
-            if (overloadTirosRestantes <= 0) {
-              overloadActive = false;
-              toast('⚡ Overload Mode terminado', 'info');
-            } else {
-              toast(`🔴 Overload: ${overloadTirosRestantes} tiro${overloadTirosRestantes !== 1 ? 's' : ''} restante${overloadTirosRestantes !== 1 ? 's' : ''}`, 'info');
-            }
-          }
+  // ── PAYPAL ───────────────────────────────────────────────
+  function togglePaypal() {
+    const p = document.getElementById('paypal-panel');
+    p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+    playClick();
+  }
 
-          const won = d.ganado > bet;
-          const tied = d.ganado === bet && d.ganado > 0;
-          box.className = `result-box ${won ? 'win' : tied ? 'tie' : 'lose'}`;
-          if (d.ganado > 0) {
-            box.textContent = `✅ Ganaste ${gananciaDisplay.toLocaleString()} MAEVS! Saldo: ${d.saldoActual.toLocaleString()}`;
-            toast(`🏆 +${gananciaDisplay} MAEVS en ${gameName}!`, 'success');
-          } else {
-            box.textContent = `❌ Sin ganancia. Saldo: ${d.saldoActual.toLocaleString()} MAEVS`;
-            toast(`💨 No hubo suerte en ${gameName}`, 'error');
-          }
-          addHistory(gameName, bet, d.ganado, d.saldoActual);
-          loadUser();
+  async function doRecharge() {
+    const amount = parseFloat(document.getElementById('paypal-amount').value);
+    if(!amount || amount <= 0) { toast('Ingresa un monto válido', 'error'); return; }
+    try {
+      const res = await fetch(`${API}/api/paypal/recargar`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ MontoUsd: amount })
+      });
+      const d = await res.json();
+      if(res.ok) { toast(`💰 +${amount*100} MAEVS añadidos!`, 'gold'); loadUser(); }
+      else toast(d.mensaje || 'Error en recarga', 'error');
+    } catch { toast('No se pudo conectar al servidor', 'error'); }
+  }
 
-          // Sumar energía al overload (+20 por partida)
-          if (currentUsername) loadOverload(currentUsername);
-        } else {
-          box.className = 'result-box lose';
-          box.textContent = `⚠️ ${d.mensaje}`;
-          toast(d.mensaje, 'error');
+  // ── GENERIC GAME ─────────────────────────────────────────
+  async function playGame(endpoint, betId, resultId, gameName) {
+    const bet = parseFloat(document.getElementById(betId).value);
+    const box = document.getElementById(resultId);
+    if(!bet || bet <= 0) { toast('Ingresa una apuesta válida', 'error'); return; }
+    lastBet = bet;
+    initAudio();
+
+    box.className = 'result-box show';
+    box.textContent = overloadActive ? '🔴 OVERLOAD ACTIVO — ⟳ Procesando...' : '⟳ Procesando...';
+
+    try {
+      const payload = { Apuesta: bet };
+      if(activeItem !== null) payload.ItemActivado = true;
+
+      const res = await fetch(`${API}/api/jugar/${endpoint}`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const d = await res.json();
+
+      if(res.ok) {
+        let gananciaDisplay = d.ganado;
+        if(overloadActive && d.ganado > 0) {
+          overloadTirosRestantes--;
+          if(overloadTirosRestantes <= 0) { overloadActive = false; toast('⚡ Overload Mode terminado', 'info'); }
+          else toast(`🔴 Overload: ${overloadTirosRestantes} tiro(s) restante(s)`, 'info');
         }
-      } catch {
+
+        if(activeItem !== null) { activeItem = null; document.getElementById('active-item-slots').style.display='none'; }
+
+        const won = d.ganado > bet;
+        const tied = d.ganado === bet && d.ganado > 0;
+        box.className = `result-box ${won ? 'win' : tied ? 'tie' : 'lose'}`;
+
+        if(d.ganado > 0) {
+          box.textContent = `✅ Ganaste ${gananciaDisplay.toLocaleString()} MAEVS! Saldo: ${d.saldoActual.toLocaleString()}`;
+          if(d.ganado >= bet * 4) { jackpotToast(`JACKPOT! +${gananciaDisplay} MAEVS en ${gameName}!`); playJackpot(); }
+          else { toast(`🏆 +${gananciaDisplay} MAEVS en ${gameName}!`, 'success'); playWin(); }
+          // Particle burst on win
+          spawnParticle(null, null, '#ffd700');
+        } else {
+          box.textContent = `❌ Sin ganancia. Saldo: ${d.saldoActual.toLocaleString()} MAEVS`;
+          toast(`💨 No hubo suerte en ${gameName}`, 'error');
+          playLose();
+        }
+        addHistory(gameName, bet, d.ganado, d.saldoActual);
+        loadUser();
+        if(currentUsername) loadOverload(currentUsername);
+      } else {
         box.className = 'result-box lose';
-        box.textContent = '⚠️ Error de conexión con el servidor';
-        toast('Error de conexión', 'error');
+        box.textContent = `⚠️ ${d.mensaje}`;
+        toast(d.mensaje, 'error');
+      }
+    } catch {
+      box.className = 'result-box lose';
+      box.textContent = '⚠️ Error de conexión';
+      toast('Error de conexión', 'error');
+    }
+  }
+
+  // ── SLOTS VISUAL ──────────────────────────────────────────
+  const SLOT_SYMBOLS = ['🍒','💎','🔔','⭐','🎰','🍋','🍇','💰'];
+
+  async function playSlots() {
+    const bet = parseFloat(document.getElementById('slots-bet').value);
+    if(!bet || bet <= 0) { toast('Ingresa una apuesta válida', 'error'); return; }
+    initAudio();
+
+    const btn = document.getElementById('slots-btn');
+    btn.disabled = true;
+    playSpin();
+    lastBet = bet;
+
+    // Animate reels
+    const reelEls = [document.getElementById('reel-0'), document.getElementById('reel-1'), document.getElementById('reel-2')];
+    reelEls.forEach(r => r.classList.add('spinning'));
+
+    const spinInterval = setInterval(() => {
+      reelEls.forEach(r => r.textContent = SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)]);
+    }, 80);
+
+    const box = document.getElementById('slots-result');
+    box.className = 'result-box show';
+    box.textContent = '⟳ Girando...';
+
+    try {
+      const payload = { Apuesta: bet };
+      if(activeItem !== null) payload.ItemActivado = true;
+
+      const res = await fetch(`${API}/api/jugar/slots`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const d = await res.json();
+
+      await new Promise(r => setTimeout(r, 1500));
+      clearInterval(spinInterval);
+      reelEls.forEach(r => r.classList.remove('spinning'));
+
+      if(res.ok) {
+        // Determine symbols based on result
+        let finalSymbols;
+        if(d.ganado >= bet * 4) {
+          // Jackpot - all same
+          const s = SLOT_SYMBOLS[Math.floor(Math.random()*4)];
+          finalSymbols = [s, s, s];
+          reelEls.forEach(r => r.classList.add('jackpot'));
+          setTimeout(()=>reelEls.forEach(r=>r.classList.remove('jackpot')), 2000);
+          jackpotToast(`JACKPOT! +${d.ganado} MAEVS!`);
+          playJackpot();
+        } else if(d.ganado > 0) {
+          // Partial win - 2 same
+          const s = SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)];
+          finalSymbols = [s, s, SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)]];
+          finalSymbols.sort(()=>Math.random()-0.5);
+          playWin();
+          toast(`🏆 +${d.ganado} MAEVS!`, 'success');
+          spawnParticle(null, null, '#ffd700');
+        } else {
+          // Lose - all different
+          const used = new Set();
+          finalSymbols = Array.from({length:3}, () => {
+            let s;
+            do { s = SLOT_SYMBOLS[Math.floor(Math.random()*SLOT_SYMBOLS.length)]; } while(used.has(s) && used.size < SLOT_SYMBOLS.length);
+            used.add(s); return s;
+          });
+          playLose();
+          toast('💨 Sin suerte esta vez', 'error');
+        }
+
+        reelEls.forEach((r,i) => { r.textContent = finalSymbols[i]; });
+
+        if(activeItem !== null) { activeItem = null; document.getElementById('active-item-slots').style.display='none'; }
+
+        const won = d.ganado > bet;
+        box.className = `result-box ${won ? 'win' : d.ganado > 0 ? 'tie' : 'lose'}`;
+        box.textContent = d.ganado > 0
+          ? `✅ Ganaste ${d.ganado.toLocaleString()} MAEVS! Saldo: ${d.saldoActual.toLocaleString()}`
+          : `❌ Sin ganancia. Saldo: ${d.saldoActual.toLocaleString()} MAEVS`;
+
+        addHistory('Slots', bet, d.ganado, d.saldoActual);
+        loadUser();
+        if(currentUsername) loadOverload(currentUsername);
+      } else {
+        clearInterval(spinInterval);
+        box.className = 'result-box lose';
+        box.textContent = `⚠️ ${d.mensaje}`;
+        toast(d.mensaje, 'error');
+      }
+    } catch {
+      clearInterval(spinInterval);
+      reelEls.forEach(r => r.classList.remove('spinning'));
+      box.className = 'result-box lose';
+      box.textContent = '⚠️ Error de conexión';
+    }
+
+    btn.disabled = false;
+  }
+
+  // ── RULETA COLOR SELECT ───────────────────────────────────
+  function selectColor(c) {
+    selectedColor = c;
+    ['red','black','green'].forEach(col => {
+      document.getElementById('col-'+col)?.classList.toggle('selected', col===c);
+    });
+    playClick();
+  }
+
+  function selectColorModal(c) {
+    selectedColorModal = c;
+    document.querySelectorAll('#rul-modal .color-btn').forEach(b => b.classList.remove('selected'));
+    event.target.classList.add('selected');
+    document.getElementById('rul-color-display').textContent = c === 'red' ? '🔴 Rojo' : c === 'black' ? '⚫ Negro' : '🟢 Verde';
+    playClick();
+  }
+
+  function openRuleta() {
+    const bet = parseFloat(document.getElementById('rul-bet').value);
+    document.getElementById('rul-modal-bet').value = bet || '';
+    selectedColorModal = selectedColor;
+    document.getElementById('rul-color-display').textContent = selectedColor
+      ? (selectedColor==='red'?'🔴 Rojo':selectedColor==='black'?'⚫ Negro':'🟢 Verde') : '—';
+    document.getElementById('rul-modal').classList.add('open');
+    document.getElementById('rul-status').className = 'bj-status info';
+    document.getElementById('rul-status').textContent = 'Elige un color y presiona GIRAR';
+    document.getElementById('rul-spin-btn').disabled = false;
+    drawRuletaWheel(0);
+    playClick();
+  }
+
+  function closeRulModal() {
+    document.getElementById('rul-modal').classList.remove('open');
+  }
+
+  // Draw static roulette wheel
+  function drawRuletaWheel(rotation) {
+    const cvs = document.getElementById('ruleta-canvas');
+    if(!cvs) return;
+    const ctx = cvs.getContext('2d');
+    const cx = 120, cy = 120, r = 115;
+    const segments = [
+      {color:'#cc0000',label:'R'},{color:'#111',label:'N'},{color:'#cc0000',label:'R'},
+      {color:'#111',label:'N'},{color:'#1a7a2a',label:'V'},{color:'#cc0000',label:'R'},
+      {color:'#111',label:'N'},{color:'#cc0000',label:'R'},{color:'#111',label:'N'},
+      {color:'#cc0000',label:'R'},{color:'#111',label:'N'},{color:'#cc0000',label:'R'},
+      {color:'#111',label:'N'},{color:'#cc0000',label:'R'},{color:'#111',label:'N'},
+      {color:'#cc0000',label:'R'},{color:'#111',label:'N'},{color:'#1a7a2a',label:'V'},
+      {color:'#cc0000',label:'R'},{color:'#111',label:'N'},{color:'#cc0000',label:'R'},
+      {color:'#111',label:'N'},{color:'#cc0000',label:'R'},{color:'#111',label:'N'},
+      {color:'#cc0000',label:'R'},{color:'#111',label:'N'},{color:'#cc0000',label:'R'},
+      {color:'#111',label:'N'},{color:'#cc0000',label:'R'},{color:'#111',label:'N'},
+      {color:'#cc0000',label:'R'},{color:'#111',label:'N'},{color:'#cc0000',label:'R'},
+      {color:'#111',label:'N'},{color:'#cc0000',label:'R'},{color:'#111',label:'N'},
+      {color:'#1a7a2a',label:'V'}
+    ];
+    const anglePerSeg = (Math.PI * 2) / segments.length;
+
+    ctx.clearRect(0,0,240,240);
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(rotation);
+
+    segments.forEach((seg, i) => {
+      const startA = i * anglePerSeg - Math.PI/2;
+      const endA   = startA + anglePerSeg;
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.arc(0,0,r,startA,endA);
+      ctx.closePath();
+      ctx.fillStyle = seg.color;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,215,0,0.3)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+      // Label
+      ctx.save();
+      ctx.rotate(startA + anglePerSeg/2);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 9px Orbitron, monospace';
+      ctx.fillText(seg.label, r*0.7, 4);
+      ctx.restore();
+    });
+
+    // Center circle
+    ctx.beginPath();
+    ctx.arc(0,0,18,0,Math.PI*2);
+    ctx.fillStyle = '#ffd700';
+    ctx.fill();
+    ctx.strokeStyle = '#111';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  async function spinRuleta() {
+    if(!selectedColorModal) { toast('Elige un color primero', 'error'); return; }
+    const bet = parseFloat(document.getElementById('rul-modal-bet').value);
+    if(!bet || bet < 15) { toast('Apuesta mínima 15 MAEVS', 'error'); return; }
+    initAudio();
+
+    document.getElementById('rul-spin-btn').disabled = true;
+    document.getElementById('rul-status').className = 'bj-status info';
+    document.getElementById('rul-status').textContent = '🎡 Girando...';
+    playSpin();
+
+    // Animate wheel
+    let angle = 0;
+    const totalRotation = (Math.PI * 2 * 8) + Math.random() * Math.PI * 2; // 8+ full spins
+    const duration = 3000;
+    const start = performance.now();
+
+    function animWheel(now) {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1-t, 3);
+      const currentAngle = ease * totalRotation;
+      drawRuletaWheel(currentAngle);
+      if(t < 1) { requestAnimationFrame(animWheel); }
+    }
+    requestAnimationFrame(animWheel);
+
+    try {
+      const res = await fetch(`${API}/api/jugar/ruleta`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ Apuesta: bet })
+      });
+      const d = await res.json();
+
+      await new Promise(r => setTimeout(r, 3200));
+
+      const statusEl = document.getElementById('rul-status');
+      const won = d.ganado > 0;
+
+      if(res.ok) {
+        statusEl.className = `bj-status ${won?'win':'lose'}`;
+        statusEl.textContent = won
+          ? `✅ ¡Ganaste ${d.ganado.toLocaleString()} MAEVS! Saldo: ${d.saldoActual.toLocaleString()}`
+          : `❌ Sin suerte. Saldo: ${d.saldoActual.toLocaleString()} MAEVS`;
+
+        document.getElementById('rul-result').className = `result-box ${won?'win':'lose'}`;
+        document.getElementById('rul-result').textContent = won
+          ? `✅ +${d.ganado} MAEVS en Ruleta!` : `❌ Perdiste en Ruleta`;
+
+        if(won) { playWin(); spawnParticle(null,null,'#ffd700'); toast(`🎡 +${d.ganado} MAEVS en Ruleta!`, 'success'); }
+        else { playLose(); toast('💨 La rueda no fue a tu favor', 'error'); }
+
+        addHistory('Ruleta', bet, d.ganado, d.saldoActual);
+        loadUser();
+        lastBet = bet;
+      } else {
+        statusEl.className = 'bj-status lose';
+        statusEl.textContent = `⚠️ ${d.mensaje}`;
+      }
+    } catch {
+      document.getElementById('rul-status').textContent = '⚠️ Error de conexión';
+    }
+
+    document.getElementById('rul-spin-btn').disabled = false;
+  }
+
+  // ── BLACKJACK ──────────────────────────────────────────────
+  const SUITS = ['♠','♥','♦','♣'];
+  const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+  function buildDeck() {
+    const d = [];
+    for(const s of SUITS) for(const r of RANKS) d.push({rank:r, suit:s});
+    // shuffle
+    for(let i=d.length-1;i>0;i--) {
+      const j=Math.floor(Math.random()*(i+1));
+      [d[i],d[j]]=[d[j],d[i]];
+    }
+    return d;
+  }
+
+  function cardValue(card) {
+    if(['J','Q','K'].includes(card.rank)) return 10;
+    if(card.rank==='A') return 11;
+    return parseInt(card.rank);
+  }
+
+  function handValue(hand) {
+    let val = hand.reduce((a,c) => a + cardValue(c), 0);
+    let aces = hand.filter(c=>c.rank==='A').length;
+    while(val > 21 && aces > 0) { val -= 10; aces--; }
+    return val;
+  }
+
+  function renderCard(card, hidden=false) {
+    const red = ['♥','♦'].includes(card.suit);
+    return `<div class="playing-card ${hidden?'hidden':red?'red':''}">
+      ${hidden ? '' : `<span class="card-rank">${card.rank}</span><span class="card-suit">${card.suit}</span>`}
+    </div>`;
+  }
+
+  function renderHand(handId, hand, hideSecond=false) {
+    const el = document.getElementById(handId);
+    el.innerHTML = hand.map((c,i) => renderCard(c, hideSecond && i===1)).join('');
+  }
+
+  function openBlackjack() {
+    playClick();
+    initAudio();
+    const betVal = document.getElementById('bj-bet').value;
+    document.getElementById('bj-modal-bet').value = betVal;
+    document.getElementById('bj-modal').classList.add('open');
+    document.getElementById('bj-dealer-cards').innerHTML = '';
+    document.getElementById('bj-player-cards').innerHTML = '';
+    document.getElementById('bj-dealer-score').textContent = '0';
+    document.getElementById('bj-player-score').textContent = '0';
+    document.getElementById('bj-status').className = 'bj-status info';
+    document.getElementById('bj-status').textContent = 'Ingresa tu apuesta y presiona DEAL para comenzar';
+    document.getElementById('bj-hit-btn').disabled = true;
+    document.getElementById('bj-stand-btn').disabled = true;
+    document.getElementById('bj-double-btn').disabled = true;
+    document.getElementById('bj-deal-btn').disabled = false;
+    bjGameActive = false;
+  }
+
+  function closeBjModal() {
+    document.getElementById('bj-modal').classList.remove('open');
+    bjGameActive = false;
+  }
+
+  async function bjDeal() {
+    bjBet = parseFloat(document.getElementById('bj-modal-bet').value);
+    if(!bjBet || bjBet < 20) { toast('Apuesta mínima 20 MAEVS', 'error'); return; }
+    lastBet = bjBet;
+    initAudio();
+
+    // Build fresh deck and deal
+    bjDeck = buildDeck();
+    bjPlayerHand = [bjDeck.pop(), bjDeck.pop()];
+    bjDealerHand = [bjDeck.pop(), bjDeck.pop()];
+    bjGameActive = true;
+
+    document.getElementById('bj-deal-btn').disabled = true;
+
+    // Animate card dealing
+    document.getElementById('bj-dealer-cards').innerHTML = '';
+    document.getElementById('bj-player-cards').innerHTML = '';
+
+    await delay(100);
+    renderHand('bj-player-cards', bjPlayerHand);
+    playCard();
+    await delay(200);
+    renderHand('bj-dealer-cards', bjDealerHand, true); // hide dealer's 2nd card
+    playCard();
+
+    document.getElementById('bj-player-score').textContent = handValue(bjPlayerHand);
+    document.getElementById('bj-dealer-score').textContent = cardValue(bjDealerHand[0]) + ' + ?';
+
+    document.getElementById('bj-status').className = 'bj-status info';
+    document.getElementById('bj-status').textContent = '¿Hit (otra carta) o Stand (plantarse)?';
+
+    document.getElementById('bj-hit-btn').disabled = false;
+    document.getElementById('bj-stand-btn').disabled = false;
+    document.getElementById('bj-double-btn').disabled = false;
+
+    // Check natural blackjack
+    if(handValue(bjPlayerHand) === 21) {
+      document.getElementById('bj-status').textContent = '🎴 ¡BLACKJACK! Esperando resultado del dealer...';
+      await delay(500);
+      bjStand();
+    }
+  }
+
+  async function bjHit() {
+    if(!bjGameActive) return;
+    playCard();
+    bjPlayerHand.push(bjDeck.pop());
+    renderHand('bj-player-cards', bjPlayerHand);
+    const pv = handValue(bjPlayerHand);
+    document.getElementById('bj-player-score').textContent = pv;
+
+    if(pv > 21) {
+      document.getElementById('bj-double-btn').disabled = true;
+      await bjResolve('bust');
+    } else if(pv === 21) {
+      await bjStand();
+    }
+  }
+
+  async function bjDouble() {
+    if(!bjGameActive) return;
+    bjBet *= 2;
+    document.getElementById('bj-modal-bet').value = bjBet;
+    document.getElementById('bj-double-btn').disabled = true;
+    toast(`⚡ Apuesta doblada: ${bjBet} MAEVS`, 'gold');
+    await bjHit();
+    if(bjGameActive) await bjStand();
+  }
+
+  async function bjStand() {
+    if(!bjGameActive) return;
+    document.getElementById('bj-hit-btn').disabled = true;
+    document.getElementById('bj-stand-btn').disabled = true;
+    document.getElementById('bj-double-btn').disabled = true;
+
+    // Reveal dealer's hidden card
+    renderHand('bj-dealer-cards', bjDealerHand);
+    playCard();
+    document.getElementById('bj-dealer-score').textContent = handValue(bjDealerHand);
+    await delay(400);
+
+    // Dealer draws until >= 17
+    while(handValue(bjDealerHand) < 17) {
+      await delay(600);
+      bjDealerHand.push(bjDeck.pop());
+      renderHand('bj-dealer-cards', bjDealerHand);
+      playCard();
+      document.getElementById('bj-dealer-score').textContent = handValue(bjDealerHand);
+    }
+
+    await bjResolve();
+  }
+
+  async function bjResolve(reason) {
+    bjGameActive = false;
+    const pv = handValue(bjPlayerHand);
+    const dv = handValue(bjDealerHand);
+    const statusEl = document.getElementById('bj-status');
+    let resultText, won, tied;
+
+    if(reason === 'bust') {
+      resultText = `💥 Te pasaste de 21 (${pv}). Perdiste ${bjBet} MAEVS`;
+      won = false; tied = false;
+    } else if(pv > 21) {
+      resultText = `💥 Bust (${pv}). Perdiste ${bjBet} MAEVS`;
+      won = false; tied = false;
+    } else if(dv > 21) {
+      resultText = `🏆 Dealer bust (${dv})! Ganaste ${bjBet} MAEVS`;
+      won = true; tied = false;
+    } else if(pv > dv) {
+      resultText = `🏆 Ganaste! Tu ${pv} vs dealer ${dv}. +${bjBet} MAEVS`;
+      won = true; tied = false;
+    } else if(pv === dv) {
+      resultText = `🤝 Empate (${pv}). Se devuelve tu apuesta`;
+      won = false; tied = true;
+    } else {
+      resultText = `❌ Perdiste. Tu ${pv} vs dealer ${dv}. -${bjBet} MAEVS`;
+      won = false; tied = false;
+    }
+
+    statusEl.className = `bj-status ${won?'win':tied?'tie':'lose'}`;
+    statusEl.textContent = resultText;
+
+    // Call backend to commit result
+    try {
+      const res = await fetch(`${API}/api/jugar/blackjack`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ Apuesta: bjBet })
+      });
+      const d = await res.json();
+      if(res.ok) {
+        const ganado = won ? bjBet : tied ? 0 : -bjBet;
+        addHistory('Blackjack', bjBet, won ? bjBet*2 : tied ? bjBet : 0, d.saldoActual);
+        document.getElementById('bj-result').className = `result-box ${won?'win':tied?'tie':'lose'}`;
+        document.getElementById('bj-result').textContent = won ? `✅ +${bjBet} en Blackjack` : tied ? `🤝 Empate` : `❌ -${bjBet} en Blackjack`;
+        loadUser();
+      }
+    } catch {}
+
+    if(won) { playWin(); spawnParticle(null,null,'#00f5ff'); }
+    else if(tied) { playTone(440,'sine',0.2); }
+    else { playLose(); }
+
+    document.getElementById('bj-deal-btn').disabled = false;
+  }
+
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  // ── RULETA RUSA ───────────────────────────────────────────
+  function openRuletaRusa() {
+    initAudio();
+    playClick();
+    rrFirewallIndex = Math.floor(Math.random() * 6);
+    rrNodesSelected = 0;
+    rrPot = 0;
+    rrActive = true;
+    rrRewards = [50,80,120,200,350,500].sort(()=>Math.random()-0.5);
+
+    document.getElementById('rr-pot').textContent = '0';
+    document.getElementById('rr-status').className = 'bj-status info';
+    document.getElementById('rr-status').textContent = 'Selecciona un nodo para comenzar';
+    document.getElementById('rr-withdraw-btn').style.display = 'none';
+    document.getElementById('rr-modal').classList.add('open');
+    renderRRGrid();
+  }
+
+  function renderRRGrid() {
+    const grid = document.getElementById('rr-grid');
+    grid.innerHTML = Array.from({length:6}, (_,i) =>
+      `<div class="rr-node" id="rr-node-${i}" onclick="selectRRNode(${i})">
+        <span>💻</span>
+        <span class="rr-reward">NODO ${i+1}</span>
+      </div>`
+    ).join('');
+  }
+
+  async function selectRRNode(i) {
+    if(!rrActive) return;
+    const nodeEl = document.getElementById('rr-node-' + i);
+    nodeEl.onclick = null;
+
+    if(i === rrFirewallIndex) {
+      // FIREWALL!
+      nodeEl.classList.add('selected-firewall');
+      nodeEl.innerHTML = '<span>🔥</span><span class="rr-reward" style="color:var(--neon-red);">FIREWALL!</span>';
+      playLose();
+      document.getElementById('rr-status').className = 'bj-status lose';
+      document.getElementById('rr-status').textContent = `🔥 ¡FIREWALL! Perdiste ${rrPot} MAEVS acumulados`;
+      rrActive = false;
+      rrPot = 0;
+      document.getElementById('rr-pot').textContent = '0';
+      // Reveal all nodes
+      revealAllNodes();
+      // Logout after 3 seconds
+      setTimeout(() => {
+        toast('🔐 Sesión terminada por seguridad del Firewall...', 'error');
+        setTimeout(() => doLogout(), 2000);
+      }, 3000);
+    } else {
+      const reward = rrRewards[rrNodesSelected];
+      rrPot += reward;
+      rrNodesSelected++;
+      nodeEl.classList.add('selected-safe');
+      nodeEl.innerHTML = `<span>💰</span><span class="rr-reward">+${reward} MAEVS</span>`;
+      playWin();
+      document.getElementById('rr-pot').textContent = rrPot.toLocaleString();
+      document.getElementById('rr-status').className = 'bj-status win';
+      document.getElementById('rr-status').textContent = `✅ +${reward} MAEVS! Total: ${rrPot} — ¿Continúas o retiras?`;
+      document.getElementById('rr-withdraw-btn').style.display = 'block';
+      spawnParticle(null,null,'#39ff14');
+
+      if(rrNodesSelected === 5) {
+        // Only firewall left, auto-win
+        revealAllNodes();
+        rrActive = false;
+        document.getElementById('rr-status').textContent = `🏆 ¡Encontraste todos los tokens! +${rrPot} MAEVS`;
+        await rrWithdraw();
       }
     }
+  }
 
-    function playSlots()     { playGame('slots',    'slots-bet', 'slots-result', 'Slots'); }
-    function playBlackjack() { playGame('blackjack', 'bj-bet',   'bj-result',   'Blackjack'); }
-    function playRuleta()    { playGame('ruleta',    'rul-bet',   'rul-result',  'Ruleta'); }
-
-    // ── History ──
-    function addHistory(juego, apuesta, ganado, saldo) {
-      history.unshift({ juego, apuesta, ganado, saldo, ts: new Date().toLocaleTimeString() });
-      renderHistory();
-    }
-
-    function renderHistory() {
-      const tbody = document.getElementById('history-body');
-      if (history.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-dim);text-align:center;padding:1.5rem;">Sin partidas aún</td></tr>';
-        return;
+  function revealAllNodes() {
+    for(let i=0; i<6; i++) {
+      const n = document.getElementById('rr-node-'+i);
+      if(n) {
+        n.onclick = null;
+        n.classList.add('disabled');
+        if(i === rrFirewallIndex && !n.classList.contains('selected-firewall')) {
+          n.innerHTML = '<span>🔥</span><span class="rr-reward" style="color:var(--neon-red);">FIREWALL</span>';
+          n.classList.add('selected-firewall');
+        }
       }
-      tbody.innerHTML = history.slice(0, 10).map(h => {
-        const cls = h.ganado > h.apuesta ? 'hist-win' : (h.ganado === h.apuesta ? 'hist-tie' : 'hist-lose');
-        const label = h.ganado > h.apuesta ? '✅ Victoria' : (h.ganado > 0 ? '🤝 Empate' : '❌ Derrota');
-        return `<tr>
-          <td>${h.juego}</td>
-          <td>${h.apuesta}</td>
-          <td class="${cls}">${label}</td>
-          <td class="${cls}">${h.ganado > 0 ? '+' : ''}${h.ganado}</td>
-          <td>${h.saldo.toLocaleString()}</td>
-        </tr>`;
-      }).join('');
     }
+  }
 
-    function loadHistory() { toast('Historial actualizado', 'info'); renderHistory(); }
+  async function rrWithdraw() {
+    if(rrPot <= 0) { closeRRModal(); return; }
+    playWin();
+    toast(`💰 Retiraste ${rrPot} MAEVS de la Ruleta Rusa!`, 'gold');
+    jackpotToast(`+${rrPot} MAEVS rescatados del Nexo!`);
+    rrActive = false;
 
-    // ── DISTORSIÓN DE RED ──
-    async function loadDistorsion() {
-      try {
-        const res = await fetch(`${API}/api/distorsion/actual`);
-        if (!res.ok) return;
-        const d = await res.json();
-        const banner = document.getElementById('distorsion-banner');
-        if (d.activa) {
-          banner.classList.add('activa');
-          document.getElementById('dist-nombre').textContent = `⚡ ${d.nombre}`;
-          document.getElementById('dist-desc').textContent = d.descripcion;
-          // Countdown en vivo
-          if (distorsionTimer) clearInterval(distorsionTimer);
-          let restante = d.tiempoRestante;
-          const timerEl = document.getElementById('dist-timer');
-          timerEl.textContent = formatSeconds(restante);
-          distorsionTimer = setInterval(() => {
-            restante = Math.max(0, restante - 1);
-            timerEl.textContent = restante > 0 ? formatSeconds(restante) : '⏰ Expirada';
-            if (restante <= 0) { clearInterval(distorsionTimer); banner.classList.remove('activa'); }
-          }, 1000);
-        } else {
-          banner.classList.remove('activa');
-          if (distorsionTimer) clearInterval(distorsionTimer);
-        }
-      } catch {}
-    }
+    try {
+      await fetch(`${API}/api/jugar/ruleta-rusa-retiro`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ MontoGanado: rrPot })
+      });
+    } catch {}
 
-    function formatSeconds(s) {
-      const m = Math.floor(s / 60), sec = Math.floor(s % 60);
-      return `${m}:${sec.toString().padStart(2,'0')} restante`;
-    }
-
-    // ── OVERLOAD MODE ──
-    async function loadOverload(username) {
-      if (!username) return;
-      try {
-        const res = await fetch(`${API}/api/overload/energia/${encodeURIComponent(username)}`);
-        if (!res.ok) return;
-        const d = await res.json();
-        const pct = Math.min(100, d.porcentaje);
-        document.getElementById('overload-pct').textContent = `${Math.round(pct)} / 100`;
-        const fill = document.getElementById('overload-fill');
-        fill.style.width = pct + '%';
-        fill.classList.toggle('full', pct >= 100);
-        const btn = document.getElementById('overload-btn');
-        btn.classList.toggle('visible', d.puedeActivar && !overloadActive);
-      } catch {}
-    }
-
-    async function activarOverload() {
-      try {
-        const res = await fetch(`${API}/api/overload/activar`, { method: 'POST' });
-        const d = await res.json();
-        if (d.activado) {
-          overloadActive = true;
-          overloadTirosRestantes = d.tirosRestantes;
-          document.getElementById('overload-fill').style.width = '0%';
-          document.getElementById('overload-pct').textContent = '0 / 100';
-          document.getElementById('overload-btn').classList.remove('visible');
-          toast(`🔴 OVERLOAD MODE ACTIVADO — x${d.multiplicador} por ${d.tirosRestantes} tiros!`, 'gold');
-        } else {
-          toast(d.mensaje, 'error');
-        }
-      } catch { toast('Error al activar Overload', 'error'); }
-    }
-
-    // ── BOTÓN DE PÁNICO ──
-    async function activarPanic() {
-      const btn = document.getElementById('panic-btn');
-      if (btn.classList.contains('cooling')) {
-        toast('⏳ Aún en período de enfriamiento', 'error');
-        return;
-      }
-      try {
-        const res = await fetch(`${API}/api/panic/extract`, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ ApuestaActual: lastBet || 50 })
-        });
-        const d = await res.json();
-        if (d.exito) {
-          toast(`🚨 Emergencia: +${d.montoBloqueado} MAEVS rescatados`, 'gold');
-          loadUser();
-          // Bloquear botón durante enfriamiento
-          btn.classList.add('cooling');
-          let restante = Math.ceil(d.tiempoEnfriamiento);
-          btn.title = `Enfriamiento: ${restante}s`;
-          const interval = setInterval(() => {
-            restante--;
-            btn.title = restante > 0 ? `Enfriamiento: ${restante}s` : 'Retiro de Emergencia';
-            if (restante <= 0) { clearInterval(interval); btn.classList.remove('cooling'); }
-          }, 1000);
-        } else {
-          toast(d.mensaje, 'error');
-        }
-      } catch { toast('Error al activar retiro de emergencia', 'error'); }
-    }
-
-    // ── MERCADO NEGRO ──
-    function toggleMercado() {
-      const p = document.getElementById('mercado-panel');
-      p.classList.toggle('open');
-      if (p.classList.contains('open')) loadMercado();
-    }
-
-    async function loadMercado() {
-      try {
-        const res = await fetch(`${API}/api/mercado/precio`);
-        if (!res.ok) return;
-        const d = await res.json();
-        document.getElementById('precio-maevs').textContent = d.precioUSD.toFixed(4);
-      } catch {}
-    }
-
-    async function comprarTokens() {
-      const usd = parseFloat(document.getElementById('mercado-buy-usd').value);
-      if (!usd || usd <= 0) { toast('Ingresa un monto en USD', 'error'); return; }
-      try {
-        const res = await fetch(`${API}/api/mercado/comprar`, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ USD: usd })
-        });
-        const d = await res.json();
-        if (res.ok) {
-          toast(`📈 Compraste ${d.tokensObtenidos.toFixed(0)} MAEVS a $${d.precioUsado.toFixed(4)}/token`, 'success');
-          loadUser(); loadMercado();
-        } else { toast(d.mensaje, 'error'); }
-      } catch { toast('Error en mercado', 'error'); }
-    }
-
-    async function venderTokens() {
-      const tokens = parseFloat(document.getElementById('mercado-sell-tokens').value);
-      if (!tokens || tokens <= 0) { toast('Ingresa cantidad de tokens', 'error'); return; }
-      try {
-        const res = await fetch(`${API}/api/mercado/vender`, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ Tokens: tokens })
-        });
-        const d = await res.json();
-        if (res.ok) {
-          toast(`📉 Vendiste ${tokens} MAEVS por $${d.usdObtenidos.toFixed(4)} USD`, 'info');
-          loadUser(); loadMercado();
-        } else { toast(d.mensaje, 'error'); }
-      } catch { toast('Error en mercado', 'error'); }
-    }
-
-    // ── LOGROS ──
-    async function loadLogros() {
-      try {
-        const res = await fetch(`${API}/api/logros`);
-        if (!res.ok) return;
-        const d = await res.json();
-        if (d.logros && d.logros.length > 0) {
-          document.getElementById('logros-section').style.display = 'block';
-          document.getElementById('logros-lista').innerHTML = d.logros.map(l =>
-            `<span class="logro-tag">${l.icono} ${l.nombre}</span>`
-          ).join('');
-        }
-      } catch {}
-    }
-
-    // ── Logout ──
-    async function doLogout() {
-      await fetch(`${API}/api/auth/logout`, { method: 'POST' }).catch(() => {});
-      window.location.href = 'index.html';
-    }
-
-    // ── Init ──
     loadUser();
-    loadDistorsion();
-    loadLogros();
-    setInterval(loadUser, 15000);
-    setInterval(loadDistorsion, 30000);   // Actualiza distorsión cada 30 s
-    setInterval(loadMercado, 30000);      // Precio fluctúa cada 30 s
-    setInterval(loadLogros, 60000);
+    closeRRModal();
+  }
+
+  function closeRRModal() {
+    document.getElementById('rr-modal').classList.remove('open');
+    rrActive = false;
+  }
+
+  // ── HISTORY ──────────────────────────────────────────────
+  function addHistory(juego, apuesta, ganado, saldo) {
+    historyData.unshift({ juego, apuesta, ganado, saldo, ts: new Date().toLocaleTimeString() });
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const tbody = document.getElementById('history-body');
+    if(historyData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-dim);text-align:center;padding:1.5rem;">Sin partidas aún</td></tr>';
+      return;
+    }
+    tbody.innerHTML = historyData.slice(0,10).map(h => {
+      const cls = h.ganado > h.apuesta ? 'hist-win' : (h.ganado === h.apuesta && h.ganado > 0) ? 'hist-tie' : 'hist-lose';
+      const label = h.ganado > h.apuesta ? '✅ Victoria' : (h.ganado > 0 ? '🤝 Empate' : '❌ Derrota');
+      return `<tr>
+        <td>${h.juego}</td><td>${h.apuesta}</td>
+        <td class="${cls}">${label}</td>
+        <td class="${cls}">${h.ganado > 0?'+':''}${h.ganado}</td>
+        <td>${h.saldo.toLocaleString()}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── DISTORSIÓN ───────────────────────────────────────────
+  async function loadDistorsion() {
+    try {
+      const res = await fetch(`${API}/api/distorsion/actual`);
+      if(!res.ok) return;
+      const d = await res.json();
+      const banner = document.getElementById('distorsion-banner');
+      if(d.activa) {
+        banner.classList.add('activa');
+        document.body.classList.add('distorsion-activa');
+        document.getElementById('dist-nombre').textContent = `⚡ ${d.nombre}`;
+        document.getElementById('dist-desc').textContent = d.descripcion;
+        if(distorsionTimer) clearInterval(distorsionTimer);
+        let restante = d.tiempoRestante;
+        const timerEl = document.getElementById('dist-timer');
+        timerEl.textContent = formatSeconds(restante);
+        distorsionTimer = setInterval(() => {
+          restante = Math.max(0, restante - 1);
+          timerEl.textContent = restante > 0 ? formatSeconds(restante) : '⏰ Expirada';
+          if(restante <= 0) {
+            clearInterval(distorsionTimer);
+            banner.classList.remove('activa');
+            document.body.classList.remove('distorsion-activa');
+          }
+        }, 1000);
+      } else {
+        banner.classList.remove('activa');
+        document.body.classList.remove('distorsion-activa');
+        if(distorsionTimer) clearInterval(distorsionTimer);
+      }
+    } catch {}
+  }
+
+  function formatSeconds(s) {
+    const m = Math.floor(s/60), sec = Math.floor(s%60);
+    return `${m}:${sec.toString().padStart(2,'0')} restante`;
+  }
+
+  // ── OVERLOAD ─────────────────────────────────────────────
+  async function loadOverload(username) {
+    if(!username) return;
+    try {
+      const res = await fetch(`${API}/api/overload/energia/${encodeURIComponent(username)}`);
+      if(!res.ok) return;
+      const d = await res.json();
+      const pct = Math.min(100, d.porcentaje);
+      document.getElementById('overload-pct').textContent = `${Math.round(pct)} / 100`;
+      const fill = document.getElementById('overload-fill');
+      fill.style.width = pct + '%';
+      fill.classList.toggle('full', pct >= 100);
+      const btn = document.getElementById('overload-btn');
+      btn.classList.toggle('visible', d.puedeActivar && !overloadActive);
+    } catch {}
+  }
+
+  async function activarOverload() {
+    try {
+      const res = await fetch(`${API}/api/overload/activar`, { method: 'POST' });
+      const d = await res.json();
+      if(d.activado) {
+        overloadActive = true;
+        overloadTirosRestantes = d.tirosRestantes;
+        document.getElementById('overload-fill').style.width = '0%';
+        document.getElementById('overload-pct').textContent = '0 / 100';
+        document.getElementById('overload-btn').classList.remove('visible');
+        document.body.classList.add('overload-screen');
+        setTimeout(() => document.body.classList.remove('overload-screen'), 5000);
+        toast(`🔴 OVERLOAD MODE ACTIVADO — x${d.multiplicador} por ${d.tirosRestantes} tiros!`, 'gold');
+        playJackpot();
+      } else toast(d.mensaje, 'error');
+    } catch { toast('Error al activar Overload', 'error'); }
+  }
+
+  // ── PANIC BUTTON ─────────────────────────────────────────
+  async function activarPanic() {
+    const btn = document.getElementById('panic-btn');
+    if(btn.classList.contains('cooling')) { toast('⏳ Aún en período de enfriamiento', 'error'); return; }
+    initAudio();
+    try {
+      const res = await fetch(`${API}/api/panic/extract`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ ApuestaActual: lastBet || 50 })
+      });
+      const d = await res.json();
+      if(d.exito) {
+        toast(`🚨 Emergencia: +${d.montoBloqueado} MAEVS rescatados`, 'gold');
+        playWin();
+        loadUser();
+        btn.classList.add('cooling');
+        let restante = Math.ceil(d.tiempoEnfriamiento);
+        btn.title = `Enfriamiento: ${restante}s`;
+        const interval = setInterval(() => {
+          restante--;
+          btn.title = restante > 0 ? `Enfriamiento: ${restante}s` : 'Retiro de Emergencia';
+          if(restante <= 0) { clearInterval(interval); btn.classList.remove('cooling'); }
+        }, 1000);
+      } else toast(d.mensaje, 'error');
+    } catch { toast('Error al activar retiro de emergencia', 'error'); }
+  }
+
+  // ── MERCADO NEGRO ─────────────────────────────────────────
+  function toggleMercado() {
+    const p = document.getElementById('mercado-panel');
+    p.classList.toggle('open');
+    if(p.classList.contains('open')) loadMercado();
+    playClick();
+  }
+
+  async function loadMercado() {
+    try {
+      const res = await fetch(`${API}/api/mercado/precio`);
+      if(!res.ok) return;
+      const d = await res.json();
+      precioActual = d.precioUSD;
+      document.getElementById('precio-maevs').textContent = d.precioUSD.toFixed(4);
+      precioHistory.push(d.precioUSD);
+      if(precioHistory.length > 30) precioHistory.shift();
+      drawPriceChart();
+    } catch {
+      // Simulate price locally if API unavailable
+      precioActual = Math.max(0.1, precioActual * (1 + (Math.random()-0.5)*0.1));
+      document.getElementById('precio-maevs').textContent = precioActual.toFixed(4);
+      precioHistory.push(precioActual);
+      if(precioHistory.length > 30) precioHistory.shift();
+      drawPriceChart();
+    }
+  }
+
+  function drawPriceChart() {
+    const cvs = document.getElementById('price-chart');
+    if(!cvs || precioHistory.length < 2) return;
+    const ctx = cvs.getContext('2d');
+    const w = cvs.offsetWidth || 600, h = 50;
+    cvs.width = w; cvs.height = h;
+
+    const min = Math.min(...precioHistory);
+    const max = Math.max(...precioHistory);
+    const range = max - min || 0.001;
+
+    ctx.clearRect(0,0,w,h);
+    ctx.beginPath();
+    ctx.strokeStyle = '#c87aff';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 6;
+    ctx.shadowColor = '#c87aff';
+
+    precioHistory.forEach((p, i) => {
+      const x = (i / (precioHistory.length-1)) * w;
+      const y = h - ((p - min) / range) * (h - 6) - 3;
+      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+  }
+
+  async function comprarTokens() {
+    const usd = parseFloat(document.getElementById('mercado-buy-usd').value);
+    if(!usd||usd<=0) { toast('Ingresa un monto en USD','error'); return; }
+    try {
+      const res = await fetch(`${API}/api/mercado/comprar`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ USD: usd })
+      });
+      const d = await res.json();
+      if(res.ok) { toast(`📈 Compraste ${d.tokensObtenidos.toFixed(0)} MAEVS a $${d.precioUsado.toFixed(4)}/token`,'success'); loadUser(); loadMercado(); }
+      else toast(d.mensaje,'error');
+    } catch { toast('Error en mercado','error'); }
+  }
+
+  async function venderTokens() {
+    const tokens = parseFloat(document.getElementById('mercado-sell-tokens').value);
+    if(!tokens||tokens<=0) { toast('Ingresa cantidad de tokens','error'); return; }
+    try {
+      const res = await fetch(`${API}/api/mercado/vender`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ Tokens: tokens })
+      });
+      const d = await res.json();
+      if(res.ok) { toast(`📉 Vendiste ${tokens} MAEVS por $${d.usdObtenidos.toFixed(4)} USD`,'info'); loadUser(); loadMercado(); }
+      else toast(d.mensaje,'error');
+    } catch { toast('Error en mercado','error'); }
+  }
+
+  // ── LOGROS ───────────────────────────────────────────────
+  let lastLogros = [];
+  async function loadLogros() {
+    try {
+      const res = await fetch(`${API}/api/logros`);
+      if(!res.ok) return;
+      const d = await res.json();
+      if(d.logros && d.logros.length > 0) {
+        document.getElementById('logros-section').style.display = 'block';
+        document.getElementById('logros-lista').innerHTML = d.logros.map(l =>
+          `<span class="logro-tag">${l.icono} ${l.nombre}</span>`
+        ).join('');
+        // Detect new logros
+        d.logros.forEach(l => {
+          if(!lastLogros.includes(l.nombre)) showLogroPopup(l.icono, l.nombre);
+        });
+        lastLogros = d.logros.map(l=>l.nombre);
+      }
+    } catch {}
+  }
+
+  // ── LOGOUT ──────────────────────────────────────────────
+  async function doLogout() {
+    await fetch(`${API}/api/auth/logout`, { method:'POST' }).catch(()=>{});
+    window.location.href = 'index.html';
+  }
+
+  // ── INIT ─────────────────────────────────────────────────
+  // Restore theme
+  const savedTheme = localStorage.getItem('maevs_theme');
+  if(savedTheme) setTheme(savedTheme);
+
+  loadUser();
+  loadDistorsion();
+  loadLogros();
+  loadMercado();
+
+  setInterval(loadUser, 15000);
+  setInterval(loadDistorsion, 30000);
+  setInterval(loadMercado, 30000);
+  setInterval(loadLogros, 60000);
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') {
+      closeBjModal();
+      closeRulModal();
+      closeRRModal();
+    }
+  });
   </script>
 </body>
 </html>
